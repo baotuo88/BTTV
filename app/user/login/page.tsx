@@ -1,10 +1,10 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function UserLoginPage() {
+function UserLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
@@ -98,5 +98,21 @@ export default function UserLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function UserLoginFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#141414]">
+      <div className="text-[#b3b3b3]">加载中...</div>
+    </div>
+  );
+}
+
+export default function UserLoginPage() {
+  return (
+    <Suspense fallback={<UserLoginFallback />}>
+      <UserLoginContent />
+    </Suspense>
   );
 }
