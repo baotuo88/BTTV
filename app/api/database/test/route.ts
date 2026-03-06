@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
+import { ensureAdminApiAuth } from '@/lib/api-auth';
 
 /**
  * 数据库连接测试 API
@@ -8,6 +9,9 @@ import { MongoClient } from 'mongodb';
  * 创建新连接进行测试，不影响现有连接池
  */
 export async function POST() {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   const startTime = Date.now();
   const uri = process.env.MONGODB_URI;
   
