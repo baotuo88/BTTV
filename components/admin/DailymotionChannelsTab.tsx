@@ -338,7 +338,7 @@ export function DailymotionChannelsTab({
     <div className="space-y-6">
       {/* Sources List Container - matching VodSourcesTab */}
       <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333]">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-bold text-white">
               Dailymotion 频道管理
@@ -349,7 +349,7 @@ export function DailymotionChannelsTab({
               </span>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {channels.length > 0 && (
               <button
                 onClick={handleDeleteAll}
@@ -446,7 +446,7 @@ export function DailymotionChannelsTab({
               </div>
 
               {/* Modal Footer */}
-              <div className="flex justify-end gap-3 p-6 border-t border-[#333]">
+              <div className="flex flex-col sm:flex-row sm:justify-end gap-3 p-6 border-t border-[#333]">
                 <button
                   onClick={resetForm}
                   className="px-6 py-2 bg-[#333] hover:bg-[#444] text-white rounded-lg transition"
@@ -482,8 +482,8 @@ export function DailymotionChannelsTab({
                     : "bg-[#141414] border-[#333] hover:border-[#555]"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-4 min-w-0">
                     {channel.avatarUrl ? (
                       <img
                         src={channel.avatarUrl}
@@ -513,7 +513,7 @@ export function DailymotionChannelsTab({
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                     {channel.id !== defaultChannelId && (
                       <button
                         onClick={() => handleSetDefault(channel.id)}
