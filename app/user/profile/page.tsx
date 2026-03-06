@@ -14,6 +14,12 @@ const LIBRARY_LABELS: Record<LibraryType, string> = {
   watch_later: "稍后再看",
 };
 
+const LIBRARY_SECTION_IDS: Record<LibraryType, string> = {
+  favorite: "profile-favorite",
+  follow: "profile-follow",
+  watch_later: "profile-watch-later",
+};
+
 export default function UserProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<UserPublic | null>(null);
@@ -222,7 +228,10 @@ export default function UserProfilePage() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6">
+          <div
+            id="profile-account"
+            className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 scroll-mt-24"
+          >
             <h2 className="text-lg font-semibold text-white mb-4">基础资料</h2>
             <form onSubmit={saveProfile} className="space-y-4">
               <div>
@@ -251,7 +260,10 @@ export default function UserProfilePage() {
             </form>
           </div>
 
-          <div className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6">
+          <div
+            id="profile-security"
+            className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 scroll-mt-24"
+          >
             <h2 className="text-lg font-semibold text-white mb-4">修改密码</h2>
             <form onSubmit={changePassword} className="space-y-4">
               <input
@@ -286,7 +298,10 @@ export default function UserProfilePage() {
           </div>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 space-y-5">
+        <div
+          id="profile-library"
+          className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 space-y-5 scroll-mt-24"
+        >
           <h2 className="text-lg font-semibold text-white">我的清单</h2>
 
           {!hasLibraryData && (
@@ -295,7 +310,11 @@ export default function UserProfilePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {(Object.keys(LIBRARY_LABELS) as LibraryType[]).map((listType) => (
-              <div key={listType} className="bg-[#111] border border-[#2a2a2a] rounded-lg p-4">
+              <div
+                key={listType}
+                id={LIBRARY_SECTION_IDS[listType]}
+                className="bg-[#111] border border-[#2a2a2a] rounded-lg p-4 scroll-mt-24"
+              >
                 <div className="flex items-center gap-2 text-white font-medium mb-3">
                   {listType === "favorite" && <Heart size={16} className="text-red-400" />}
                   {listType === "follow" && <ListChecks size={16} className="text-blue-400" />}
@@ -334,7 +353,10 @@ export default function UserProfilePage() {
           </div>
         </div>
 
-        <div className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 space-y-4">
+        <div
+          id="profile-progress"
+          className="bg-[#1a1a1a] rounded-xl border border-[#333] p-6 space-y-4 scroll-mt-24"
+        >
           <h2 className="text-lg font-semibold text-white">云端续播</h2>
           {progressItems.length === 0 ? (
             <p className="text-sm text-[#8c8c8c]">暂无云端播放进度。</p>
