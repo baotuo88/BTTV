@@ -143,6 +143,59 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
+  const userMenuSections = [
+    {
+      title: "账号设置",
+      items: [
+        { label: "个人资料", href: "/user/profile#profile-account" },
+        { label: "密码安全", href: "/user/profile#profile-security" },
+      ],
+    },
+    {
+      title: "我的清单",
+      items: [
+        { label: "收藏", href: "/user/profile#profile-favorite" },
+        { label: "追剧清单", href: "/user/profile#profile-follow" },
+        { label: "稍后再看", href: "/user/profile#profile-watch-later" },
+      ],
+    },
+    {
+      title: "观看记录",
+      items: [{ label: "云端续播", href: "/user/profile#profile-progress" }],
+    },
+  ];
+
+  const renderLoggedInMenu = (closeMenu: () => void) => (
+    <>
+      <div className="px-3 py-2 border-b border-zinc-800 text-sm text-gray-300 truncate">
+        {currentUser?.username}
+      </div>
+      {userMenuSections.map((section) => (
+        <div key={section.title} className="border-b border-zinc-800/60 last:border-b-0">
+          <div className="px-3 pt-2 pb-1 text-[11px] text-zinc-500">{section.title}</div>
+          {section.items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={closeMenu}
+              className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      ))}
+      <button
+        onClick={handleUserLogout}
+        disabled={loggingOut}
+        className="w-full px-3 py-2 text-left text-sm text-gray-200 hover:bg-zinc-800 disabled:opacity-60 transition-colors inline-flex items-center gap-2"
+      >
+        <LogOut className="w-4 h-4" />
+        {loggingOut ? "退出中..." : "退出登录"}
+      </button>
+    </>
+  );
+
   return (
     <>
       <nav
@@ -269,25 +322,9 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
               </button>
 
               {isMobileUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden">
+                <div className="absolute right-0 mt-2 w-56 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden">
                   {currentUser ? (
-                    <>
-                      <Link
-                        href="/user/profile"
-                        onClick={() => setIsMobileUserMenuOpen(false)}
-                        className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
-                      >
-                        个人中心
-                      </Link>
-                      <button
-                        onClick={handleUserLogout}
-                        disabled={loggingOut}
-                        className="w-full px-3 py-2 text-left text-sm text-gray-200 hover:bg-zinc-800 disabled:opacity-60 transition-colors inline-flex items-center gap-2"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        {loggingOut ? "退出中..." : "退出登录"}
-                      </button>
-                    </>
+                    renderLoggedInMenu(() => setIsMobileUserMenuOpen(false))
                   ) : (
                     <>
                       <Link
@@ -332,25 +369,9 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
                 </button>
 
                 {isDesktopUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden z-20">
+                  <div className="absolute right-0 mt-2 w-56 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden z-20">
                     {currentUser ? (
-                      <>
-                        <Link
-                          href="/user/profile"
-                          onClick={() => setIsDesktopUserMenuOpen(false)}
-                          className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
-                        >
-                          个人中心
-                        </Link>
-                        <button
-                          onClick={handleUserLogout}
-                          disabled={loggingOut}
-                          className="w-full px-3 py-2 text-left text-sm text-gray-200 hover:bg-zinc-800 disabled:opacity-60 transition-colors inline-flex items-center gap-2"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          {loggingOut ? "退出中..." : "退出登录"}
-                        </button>
-                      </>
+                      renderLoggedInMenu(() => setIsDesktopUserMenuOpen(false))
                     ) : (
                       <>
                         <Link
