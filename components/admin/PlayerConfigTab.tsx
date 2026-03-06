@@ -224,7 +224,7 @@ export function PlayerConfigTab({
         </div>
 
         {/* 代理设置 */}
-        <div className="mb-6 flex items-center justify-between p-4 bg-[#141414] rounded-lg border border-[#333]">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 bg-[#141414] rounded-lg border border-[#333]">
           <div>
             <h3 className="text-white font-medium mb-1">启用视频代理</h3>
             <p className="text-xs text-slate-400">
@@ -247,9 +247,9 @@ export function PlayerConfigTab({
 
         {/* iframe播放器列表 */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
             <h3 className="text-white font-medium">iframe播放器列表</h3>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={handleResetPlayers}
                 className="px-4 py-2 bg-[#333] hover:bg-orange-600 text-slate-300 hover:text-white text-sm rounded-lg transition"
@@ -271,9 +271,9 @@ export function PlayerConfigTab({
                 key={player.id}
                 className="p-4 bg-[#141414] rounded-lg border border-[#333] hover:border-[#555] transition"
               >
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
                       <span className="text-white font-medium">
                         {player.name}
                       </span>
@@ -288,7 +288,7 @@ export function PlayerConfigTab({
                       {player.url}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 ml-4">
+                  <div className="flex flex-wrap items-center gap-2 sm:ml-4">
                     <button
                       onClick={() =>
                         handleTogglePlayerEnabled(player.id, !player.enabled)
@@ -458,7 +458,7 @@ export function PlayerConfigTab({
             />
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={handleSavePlayer}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-medium"
