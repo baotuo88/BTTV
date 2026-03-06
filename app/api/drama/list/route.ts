@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, DramaListData, VodSource } from '@/types/drama';
+import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 interface DramaListItem {
   vod_id: number;
@@ -67,6 +68,9 @@ function formatDramaList(list: DramaListItem[]) {
 }
 
 export async function POST(request: NextRequest) {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const source: VodSource = body.source;
