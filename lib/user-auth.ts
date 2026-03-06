@@ -100,6 +100,12 @@ export function validateRegisterInput(username: string, email: string, password:
   return null;
 }
 
+export function validateProfileUsername(username: string): string | null {
+  if (!username) return "用户名不能为空";
+  if (!isValidUsername(username)) return "用户名需为 2-20 位（支持中英文、数字、下划线）";
+  return null;
+}
+
 export async function registerUser(username: string, email: string, password: string): Promise<UserPublic> {
   const db = await getDatabase();
   const users = db.collection<UserDoc>(COLLECTIONS.USERS);
@@ -287,6 +293,101 @@ export async function resetUserPassword(userId: string, newPassword: string): Pr
 
   // 密码重置后清除所有会话，强制重新登录
   await sessions.deleteMany({ user_id: targetId });
+}
+
+export async function updateUserProfileUsername(
+  userId: string,
+  username: string
+): Promise<UserPublic> {
+  const trimmed = username.trim();
+  const validationError = validateProfileUsername(trimmed);
+  if (validationError) {
+    throw new Error(validationError);
+  }
+
+  const db = await getDatabase();
+  const users = db.collection<UserDoc>(COLLECTIONS.USERS);
+  const targetId = new ObjectId(userId);
+  const usernameLower = normalizeUsername(trimmed);
+
+  const duplicated = await users.findOne({
+    _id: { $ne: targetId },
+    username_lower: usernameLower,
+  });
+  if (duplicated) {
+    throw new Error("该用户名已被占用");
+  }
+
+  const result = await users.findOneAndUpdate(
+    { _id: targetId },
+    {
+      $set: {
+        username: trimmed,
+        username_lower: usernameLower,
+        updated_at: new Date().toISOString(),
+      },
+    },
+    { returnDocument: "after" }
+  );
+
+  if (!result) {
+    throw new Error("用户不存在");
+  }
+
+  return toPublicUser(result);
+}
+
+export async function changeOwnPassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<void> {
+  if (!currentPassword || !newPassword) {
+    throw new Error("请完整填写当前密码和新密码");
+  }
+  if (newPassword.length < 6) {
+    throw new Error("新密码至少 6 位");
+  }
+
+  const db = await getDatabase();
+  const users = db.collection<UserDoc>(COLLECTIONS.USERS);
+  const sessions = db.collection<UserSessionDoc>(COLLECTIONS.USER_SESSIONS);
+  const targetId = new ObjectId(userId);
+
+  const user = await users.findOne({ _id: targetId });
+  if (!user) {
+    throw new Error("用户不存在");
+  }
+
+  const valid = await verifyPassword(currentPassword, user.password_hash);
+  if (!valid) {
+    throw new Error("当前密码错误");
+  }
+
+  const sameAsOld = await verifyPassword(newPassword, user.password_hash);
+  if (sameAsOld) {
+    throw new Error("新密码不能与当前密码相同");
+  }
+
+  const nextHash = await hashPassword(newPassword);
+  await users.updateOne(
+    { _id: targetId },
+    {
+      $set: {
+        password_hash: nextHash,
+        updated_at: new Date().toISOString(),
+      },
+    }
+  );
+
+  // 改密后下线其他会话，当前会话由 cookie 维持
+  const cookieStore = await cookies();
+  const currentToken = cookieStore.get(USER_SESSION_COOKIE)?.value;
+  const currentTokenHash = currentToken ? hashToken(currentToken) : "";
+  await sessions.deleteMany({
+    user_id: targetId,
+    ...(currentTokenHash ? { token_hash: { $ne: currentTokenHash } } : {}),
+  });
 }
 
 export async function createUserSession(userId: string): Promise<void> {
