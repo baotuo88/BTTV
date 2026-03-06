@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { ensureAdminApiAuth } from '@/lib/api-auth';
 
 const PBKDF2_ITERATIONS = 100000;
 
@@ -105,6 +106,9 @@ function parseEncryptedString(input: string): EncryptedPackage {
 
 // POST - 解密配置
 export async function POST(request: NextRequest) {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const { password, encryptedData, subscriptionUrl } = body;
