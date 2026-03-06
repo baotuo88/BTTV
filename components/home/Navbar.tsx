@@ -205,7 +205,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
             : "bg-gradient-to-b from-black/80 to-transparent"
         }`}
       >
-        <div className="px-4 md:px-12 py-3 md:py-4 flex items-center justify-between">
+        <div className="px-3 sm:px-4 md:px-12 py-3 md:py-4 flex items-center justify-between">
           {/* 左侧：汉堡菜单（移动端）+ Logo */}
           <div className="flex items-center space-x-2 md:space-x-8">
             {/* 汉堡菜单按钮 - 仅移动端 */}
@@ -225,17 +225,17 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
             </button>
 
             {/* Logo */}
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-1"
+              className="flex items-center gap-1.5 min-w-0"
             >
               <img
-                className="w-8 h-8 md:w-10 md:h-10"
+                className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0"
                 src="/logo.png"
                 alt="logo"
               />
-              <span className="text-red-600 text-xl md:text-2xl lg:text-3xl font-bold tracking-tight hover:text-red-500 transition-colors">
+              <span className="text-red-600 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-none whitespace-nowrap hover:text-red-500 transition-colors">
                 宝拓影视
               </span>
             </Link>
@@ -307,11 +307,11 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
             <div ref={mobileUserMenuRef} className="md:hidden relative">
               <button
                 onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1.5"
+                className="px-2 py-1.5 rounded-lg text-[11px] font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1"
                 aria-label="移动端用户菜单"
               >
                 <UserRound className="w-3.5 h-3.5" />
-                <span className="max-w-[70px] truncate">
+                <span className="max-w-[56px] truncate">
                   {currentUser ? currentUser.username : "账号"}
                 </span>
                 <ChevronDown
@@ -438,7 +438,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
 
         {/* 侧边栏内容 */}
         <div
-          className={`absolute top-0 left-0 h-full w-[280px] bg-gradient-to-b from-gray-900 to-black shadow-2xl transform transition-transform duration-300 ease-out ${
+          className={`absolute top-0 left-0 h-full w-[280px] bg-gradient-to-b from-gray-900 to-black shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -453,7 +453,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
           </div>
 
           {/* 导航菜单 */}
-          <nav className="p-4 space-y-2">
+          <nav className="flex-1 overflow-y-auto p-4 space-y-2 pb-6">
             {navItems.map((item) => {
               const Icon = item.icon;
               if (item.children) {
@@ -496,7 +496,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
           </nav>
 
           {/* 侧边栏底部 */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-800">
+          <div className="px-6 py-4 border-t border-gray-800">
             <p className="text-xs text-gray-500 text-center">
               © 2026 宝拓影视 · 海量影视随心看
             </p>
