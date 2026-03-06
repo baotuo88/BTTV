@@ -1,6 +1,7 @@
 // 获取默认播放器配置API
 import { NextResponse } from 'next/server';
 import type { PlayerConfig } from '../route';
+import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 // 默认配置
 const DEFAULT_CONFIG: PlayerConfig = {
@@ -72,6 +73,9 @@ const DEFAULT_CONFIG: PlayerConfig = {
 };
 
 export async function GET() {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   return NextResponse.json({
     code: 200,
     data: DEFAULT_CONFIG,
