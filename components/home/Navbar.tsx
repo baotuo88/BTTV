@@ -15,6 +15,7 @@ import {
   Calendar,
   History,
   UserRound,
+  User,
   LogOut,
 } from "lucide-react";
 import { HistoryPopup } from "./HistoryPopup";
@@ -250,6 +251,13 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
                       <div className="px-3 py-2 border-b border-zinc-800 text-sm text-gray-300 truncate">
                         {currentUser.username}
                       </div>
+                      <Link
+                        href="/user/profile"
+                        onClick={() => setIsMobileUserMenuOpen(false)}
+                        className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
+                      >
+                        个人中心
+                      </Link>
                       <button
                         onClick={handleUserLogout}
                         disabled={loggingOut}
@@ -285,6 +293,13 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
             <div className="hidden md:flex items-center gap-2 mr-1">
               {currentUser ? (
                 <>
+                  <Link
+                    href="/user/profile"
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1"
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    个人中心
+                  </Link>
                   <span className="text-sm text-gray-300 max-w-[120px] truncate">
                     {currentUser.username}
                   </span>
