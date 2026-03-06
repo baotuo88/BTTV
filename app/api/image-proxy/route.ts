@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ensureUserOrAdminCookieAuth } from '@/lib/api-auth';
 
 // 代理池配置
 const PROXY_POOL = [
@@ -94,6 +95,9 @@ async function fetchImageWithProxy(url: string): Promise<Response> {
 }
 
 export async function GET(request: NextRequest) {
+  const authError = ensureUserOrAdminCookieAuth(request);
+  if (authError) return authError;
+
   try {
     const url = request.nextUrl.searchParams.get('url');
     
