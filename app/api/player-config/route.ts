@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/db';
 import { COLLECTIONS } from '@/lib/constants/db';
+import { ensureAdminApiAuth, ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 export interface PlayerConfig {
   mode: 'iframe' | 'local' | 'auto'; // 播放器模式
@@ -101,6 +102,9 @@ const DEFAULT_CONFIG: PlayerConfig = {
 
 // 获取配置
 export async function GET() {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const db = await getDatabase();
     const configCollection = db.collection<PlayerConfigDocument>(COLLECTIONS.PLAYER_CONFIG);
@@ -149,6 +153,9 @@ export async function GET() {
 
 // 更新配置
 export async function POST(request: NextRequest) {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const config: Partial<PlayerConfig> = await request.json();
 
