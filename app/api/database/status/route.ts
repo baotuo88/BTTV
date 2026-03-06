@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDatabase, getMongoClient } from '@/lib/db';
+import { ensureAdminApiAuth } from '@/lib/api-auth';
 
 /**
  * 数据库状态 API
@@ -8,6 +9,9 @@ import { getDatabase, getMongoClient } from '@/lib/db';
  * 返回数据库连接状态、延迟、基本信息
  */
 export async function GET() {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   const startTime = Date.now();
   
   try {
