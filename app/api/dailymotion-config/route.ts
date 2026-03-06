@@ -6,9 +6,13 @@ import {
   deleteDailymotionChannelFromDB,
   setDefaultDailymotionChannelInDB,
 } from '@/lib/dailymotion-config-db';
+import { ensureAdminApiAuth, ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 // GET - 获取所有频道配置（带 Redis 缓存）
 export async function GET() {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const config = await getDailymotionConfigFromDB();
     return NextResponse.json({
@@ -31,6 +35,9 @@ export async function GET() {
 
 // POST - 更新配置（使用 MongoDB + Redis 缓存）
 export async function POST(request: NextRequest) {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
 
