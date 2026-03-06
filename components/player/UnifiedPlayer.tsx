@@ -40,6 +40,7 @@ interface UnifiedPlayerProps {
   currentIframePlayerIndex?: number;
   vodSource?: VodSource | null;
   externalDanmaku?: import("@/lib/player/danmaku-service").DanmakuItem[];
+  initialProgressSeconds?: number;
   onDanmakuCountChange?: (count: number) => void;
   onProgress?: (time: number) => void;
   onEnded?: () => void;
@@ -53,6 +54,7 @@ export function UnifiedPlayer({
   currentIframePlayerIndex,
   vodSource,
   externalDanmaku,
+  initialProgressSeconds = 0,
   onDanmakuCountChange,
   onProgress,
   onEnded,
@@ -362,6 +364,7 @@ export function UnifiedPlayer({
           title={title}
           settings={playerConfig.localPlayerSettings}
           externalDanmaku={externalDanmaku}
+          initialTime={initialProgressSeconds}
           onDanmakuCountChange={onDanmakuCountChange}
           onProgress={onProgress}
           onEnded={onEnded}
