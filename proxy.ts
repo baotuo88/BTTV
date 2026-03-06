@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 const USER_AUTH_PUBLIC_PATHS = new Set([
   '/user/login',
   '/user/register',
+  '/user/forgot-password',
   '/login', // 管理员登录页
 ]);
 
