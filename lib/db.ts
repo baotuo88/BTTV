@@ -158,6 +158,35 @@ async function initializeDatabase(db: Db) {
     await userSessionsCollection.createIndex({ user_id: 1 });
     await userSessionsCollection.createIndex({ expires_at: 1 }, { expireAfterSeconds: 0 });
 
+    // 创建密码重置验证码集合索引
+    const userPasswordResetCodesCollection = db.collection(
+      COLLECTIONS.USER_PASSWORD_RESET_CODES
+    );
+    await userPasswordResetCodesCollection.createIndex(
+      { email_lower: 1 },
+      { unique: true }
+    );
+    await userPasswordResetCodesCollection.createIndex(
+      { expires_at: 1 },
+      { expireAfterSeconds: 0 }
+    );
+
+    // 创建用户收藏/清单集合索引
+    const userLibraryCollection = db.collection(COLLECTIONS.USER_LIBRARY);
+    await userLibraryCollection.createIndex(
+      { user_id: 1, list_type: 1, item_id: 1 },
+      { unique: true }
+    );
+    await userLibraryCollection.createIndex({ user_id: 1, list_type: 1, updated_at: -1 });
+
+    // 创建用户云进度集合索引
+    const userProgressCollection = db.collection(COLLECTIONS.USER_PROGRESS);
+    await userProgressCollection.createIndex(
+      { user_id: 1, drama_id: 1, source_key: 1 },
+      { unique: true }
+    );
+    await userProgressCollection.createIndex({ user_id: 1, updated_at: -1 });
+
     globalForMongo.initialized = true;
     console.log('✅ MongoDB 数据库初始化完成');
   } catch (error) {
