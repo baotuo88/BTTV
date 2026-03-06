@@ -15,6 +15,16 @@ interface UnifiedImportPreview {
   dailymotionChannels?: Omit<DailymotionChannelConfig, "id" | "createdAt">[];
 }
 
+interface SourceHealthResult {
+  key: string;
+  name: string;
+  api: string;
+  ok: boolean;
+  statusCode?: number;
+  latencyMs: number;
+  error?: string;
+}
+
 export function VodSourcesTab({
   sources,
   selectedKey,
@@ -47,6 +57,10 @@ export function VodSourcesTab({
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [decryptError, setDecryptError] = useState("");
+  const [healthLoading, setHealthLoading] = useState(false);
+  const [healthResults, setHealthResults] = useState<SourceHealthResult[] | null>(
+    null
+  );
   // 导入模式: "replace" = 替换全部, "merge" = 保留并合并
   const [importMode, setImportMode] = useState<"replace" | "merge">("merge");
 
@@ -484,6 +498,43 @@ export function VodSourcesTab({
     });
   };
 
+  const handleCheckSourceHealth = async () => {
+    if (!sources.length || healthLoading) return;
+    setHealthLoading(true);
+    try {
+      const response = await fetch("/api/admin/source-health", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sources }),
+      });
+      const result = await response.json();
+      if (!response.ok || result.code !== 200) {
+        throw new Error(result.message || "健康检测失败");
+      }
+
+      const results = Array.isArray(result?.data?.results)
+        ? (result.data.results as SourceHealthResult[])
+        : [];
+      setHealthResults(results);
+
+      const unhealthy = results.filter((item) => !item.ok).length;
+      onShowToast({
+        type: unhealthy > 0 ? "warning" : "success",
+        message:
+          unhealthy > 0
+            ? `检测完成：${unhealthy}/${results.length} 个线路异常`
+            : `检测完成：${results.length} 个线路全部正常`,
+      });
+    } catch (error) {
+      onShowToast({
+        type: "error",
+        message: error instanceof Error ? error.message : "健康检测失败",
+      });
+    } finally {
+      setHealthLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Edit/Add Modal */}
@@ -641,6 +692,13 @@ export function VodSourcesTab({
               </svg>
               导入配置
             </button>
+            <button
+              onClick={handleCheckSourceHealth}
+              disabled={healthLoading || sources.length === 0}
+              className="px-4 py-2 bg-[#333] hover:bg-[#444] disabled:bg-[#2a2a2a] disabled:text-slate-500 text-slate-200 rounded-lg transition font-medium text-sm flex items-center gap-2"
+            >
+              {healthLoading ? "检测中..." : "健康检测"}
+            </button>
             {sources.length > 0 && (
               <button
                 onClick={handleDeleteAll}
@@ -665,6 +723,45 @@ export function VodSourcesTab({
             )}
           </div>
         </div>
+
+        {healthResults && healthResults.length > 0 && (
+          <div className="mb-4 bg-[#141414] border border-[#333] rounded-lg overflow-hidden">
+            <div className="px-3 py-2 border-b border-[#333] text-sm text-slate-300 font-medium">
+              视频源健康报告
+            </div>
+            <div className="max-h-64 overflow-auto">
+              {healthResults.map((item) => (
+                <div
+                  key={item.key}
+                  className="px-3 py-2 border-b border-[#2a2a2a] last:border-0 flex items-start justify-between gap-3 text-xs"
+                >
+                  <div className="min-w-0">
+                    <div className="text-white truncate">
+                      {item.name} ({item.key})
+                    </div>
+                    <div className="text-slate-400 truncate">{item.api}</div>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <div
+                      className={
+                        item.ok
+                          ? "text-green-400 font-medium"
+                          : "text-red-400 font-medium"
+                      }
+                    >
+                      {item.ok ? "正常" : item.error || "异常"}
+                    </div>
+                    <div className="text-slate-500 mt-0.5">
+                      {item.latencyMs}ms
+                      {item.statusCode ? ` · ${item.statusCode}` : ""}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="space-y-3">
           {sources.map((source) => (
             <div
