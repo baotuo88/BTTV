@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { DramaDetail, VodSource } from "@/types/drama";
 import { UnifiedPlayer } from "@/components/player/UnifiedPlayer";
@@ -9,7 +9,7 @@ import { PlayerSettingsPanel } from "@/components/player/PlayerSettingsPanel";
 import { DanmakuSelector } from "@/components/player/DanmakuSelector";
 import type { DanmakuItem } from "@/lib/player/danmaku-service";
 import type { PlayerConfig } from "@/app/api/player-config/route";
-import { ArrowLeft, X, ChevronLeft } from "lucide-react";
+import { ArrowLeft, X, ChevronLeft, Heart, ListChecks, Clock3 } from "lucide-react";
 
 interface AvailableSource {
   source_key: string;
@@ -17,6 +17,14 @@ interface AvailableSource {
   vod_id: string | number;
   vod_name: string;
   match_confidence: "high" | "medium" | "low";
+}
+
+type LibraryType = "favorite" | "follow" | "watch_later";
+
+interface LibraryStatus {
+  favorite: boolean;
+  follow: boolean;
+  watch_later: boolean;
 }
 
 export default function PlayPage() {
@@ -56,6 +64,32 @@ export default function PlayPage() {
   // 弹幕状态
   const [danmakuList, setDanmakuList] = useState<DanmakuItem[]>([]);
   const [danmakuCount, setDanmakuCount] = useState(0);
+  const [libraryStatus, setLibraryStatus] = useState<LibraryStatus>({
+    favorite: false,
+    follow: false,
+    watch_later: false,
+  });
+  const [libraryLoading, setLibraryLoading] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
+  const [initialProgressTime, setInitialProgressTime] = useState(0);
+  const progressInitRef = useRef(false);
+  const lastProgressSyncAtRef = useRef(0);
+  const actionMessageTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    progressInitRef.current = false;
+    lastProgressSyncAtRef.current = 0;
+    setInitialProgressTime(0);
+  }, [dramaId, currentSourceKey]);
+
+  useEffect(() => {
+    return () => {
+      if (actionMessageTimerRef.current) {
+        clearTimeout(actionMessageTimerRef.current);
+        actionMessageTimerRef.current = null;
+      }
+    };
+  }, []);
 
   // 从 API 获取视频源配置
   useEffect(() => {
@@ -246,6 +280,165 @@ export default function PlayPage() {
     selectedVodSource,
   ]);
 
+  // 加载用户收藏状态与云端进度
+  useEffect(() => {
+    if (!dramaDetail) return;
+
+    const itemId = String(dramaDetail.id);
+    const sourceKey = currentVodSource?.key || currentSourceKey || "";
+    let mounted = true;
+
+    const loadUserData = async () => {
+      try {
+        const [statusRes, progressRes] = await Promise.all([
+          fetch(`/api/user/library/status?itemId=${encodeURIComponent(itemId)}`, {
+            cache: "no-store",
+          }),
+          fetch(
+            `/api/user/progress?dramaId=${encodeURIComponent(itemId)}&sourceKey=${encodeURIComponent(sourceKey)}`,
+            { cache: "no-store" }
+          ),
+        ]);
+
+        if (!mounted) return;
+
+        const [statusJson, progressJson] = await Promise.all([
+          statusRes.json(),
+          progressRes.json(),
+        ]);
+
+        if (statusRes.ok && statusJson?.code === 200 && statusJson?.data?.status) {
+          setLibraryStatus({
+            favorite: !!statusJson.data.status.favorite,
+            follow: !!statusJson.data.status.follow,
+            watch_later: !!statusJson.data.status.watch_later,
+          });
+        }
+
+        const progressItem = progressJson?.data?.item;
+        if (
+          progressRes.ok &&
+          progressJson?.code === 200 &&
+          progressItem &&
+          !progressInitRef.current
+        ) {
+          const episodeIndex = Number(progressItem.episodeIndex || 0);
+          const safeEpisodeIndex =
+            episodeIndex >= 0 && episodeIndex < dramaDetail.episodes.length
+              ? episodeIndex
+              : 0;
+          const savedPosition = Number(progressItem.positionSeconds || 0);
+
+          setCurrentEpisode(safeEpisodeIndex);
+          setInitialProgressTime(savedPosition > 0 ? savedPosition : 0);
+          progressInitRef.current = true;
+        }
+      } catch {
+        // 用户数据加载失败不影响播放
+      }
+    };
+
+    loadUserData();
+    return () => {
+      mounted = false;
+    };
+  }, [dramaDetail, currentVodSource?.key, currentSourceKey]);
+
+  const showActionMessage = useCallback((message: string) => {
+    if (actionMessageTimerRef.current) {
+      clearTimeout(actionMessageTimerRef.current);
+    }
+    setActionMessage(message);
+    actionMessageTimerRef.current = setTimeout(() => {
+      setActionMessage("");
+      actionMessageTimerRef.current = null;
+    }, 1500);
+  }, []);
+
+  const toggleLibrary = useCallback(
+    async (listType: LibraryType) => {
+      if (!dramaDetail || libraryLoading) return;
+
+      const itemId = String(dramaDetail.id);
+      const enabled = libraryStatus[listType];
+      setLibraryLoading(true);
+      try {
+        const response = await fetch("/api/user/library", {
+          method: enabled ? "DELETE" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(
+            enabled
+              ? { listType, itemId }
+              : {
+                  listType,
+                  itemId,
+                  title: dramaDetail.name,
+                  cover: dramaDetail.pic || "",
+                  mediaType: dramaDetail.type || "",
+                  sourceKey: currentVodSource?.key || currentSourceKey || "",
+                  sourceName: currentVodSource?.name || "",
+                }
+          ),
+        });
+        const result = await response.json();
+        if (!response.ok || result.code !== 200) {
+          throw new Error(result.message || "操作失败");
+        }
+
+        setLibraryStatus((prev) => ({ ...prev, [listType]: !enabled }));
+        showActionMessage(enabled ? "已移出清单" : "已加入清单");
+      } catch (error) {
+        showActionMessage(error instanceof Error ? error.message : "操作失败");
+      } finally {
+        setLibraryLoading(false);
+      }
+    },
+    [
+      dramaDetail,
+      libraryLoading,
+      libraryStatus,
+      currentVodSource?.key,
+      currentVodSource?.name,
+      currentSourceKey,
+      showActionMessage,
+    ]
+  );
+
+  const syncCloudProgress = useCallback(
+    async (positionSeconds: number) => {
+      if (!dramaDetail) return;
+
+      const now = Date.now();
+      if (now - lastProgressSyncAtRef.current < 10_000) return;
+      lastProgressSyncAtRef.current = now;
+
+      try {
+        await fetch("/api/user/progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dramaId: String(dramaDetail.id),
+            dramaName: dramaDetail.name,
+            cover: dramaDetail.pic || "",
+            sourceKey: currentVodSource?.key || currentSourceKey || "",
+            sourceName: currentVodSource?.name || "",
+            episodeIndex: currentEpisode,
+            episodeName: dramaDetail.episodes[currentEpisode]?.name || "",
+            positionSeconds: Number.isFinite(positionSeconds) ? positionSeconds : 0,
+          }),
+        });
+      } catch {
+        // 云同步失败时静默降级
+      }
+    },
+    [dramaDetail, currentVodSource?.key, currentVodSource?.name, currentSourceKey, currentEpisode]
+  );
+
+  useEffect(() => {
+    if (!dramaDetail) return;
+    syncCloudProgress(0);
+  }, [dramaDetail?.id, currentEpisode, currentVodSource?.key, syncCloudProgress]);
+
   // 切换视频源
   const switchSource = useCallback(
     (newSourceKey: string, newVodId: string | number) => {
@@ -259,6 +452,8 @@ export default function PlayPage() {
   const selectEpisode = useCallback(
     (index: number) => {
       if (index >= 0 && dramaDetail && index < dramaDetail.episodes.length) {
+        setInitialProgressTime(0);
+        lastProgressSyncAtRef.current = 0;
         setCurrentEpisode(index);
         // 切换集数时重置弹幕状态，让新集数可以自动加载
         setDanmakuList([]);
@@ -480,10 +675,9 @@ export default function PlayPage() {
                 currentIframePlayerIndex={currentIframePlayerIndex}
                 vodSource={currentVodSource}
                 externalDanmaku={danmakuList}
+                initialProgressSeconds={initialProgressTime}
                 onDanmakuCountChange={setDanmakuCount}
-                onProgress={() => {
-                  // 播放进度更新
-                }}
+                onProgress={(time) => syncCloudProgress(time)}
                 onEnded={() => {
                   if (currentEpisode < dramaDetail.episodes.length - 1) {
                     selectEpisode(currentEpisode + 1);
@@ -520,6 +714,41 @@ export default function PlayPage() {
                   </span>
                 </>
               )}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <button
+                onClick={() => toggleLibrary("favorite")}
+                disabled={libraryLoading}
+                className={`px-2.5 py-1.5 rounded text-xs border transition ${
+                  libraryStatus.favorite
+                    ? "bg-red-600/20 border-red-500/60 text-red-300"
+                    : "bg-white/5 border-white/15 text-gray-300"
+                }`}
+              >
+                收藏
+              </button>
+              <button
+                onClick={() => toggleLibrary("follow")}
+                disabled={libraryLoading}
+                className={`px-2.5 py-1.5 rounded text-xs border transition ${
+                  libraryStatus.follow
+                    ? "bg-blue-600/20 border-blue-500/60 text-blue-300"
+                    : "bg-white/5 border-white/15 text-gray-300"
+                }`}
+              >
+                追剧
+              </button>
+              <button
+                onClick={() => toggleLibrary("watch_later")}
+                disabled={libraryLoading}
+                className={`px-2.5 py-1.5 rounded text-xs border transition ${
+                  libraryStatus.watch_later
+                    ? "bg-amber-600/20 border-amber-500/60 text-amber-300"
+                    : "bg-white/5 border-white/15 text-gray-300"
+                }`}
+              >
+                稍后看
+              </button>
             </div>
           </div>
         </div>
@@ -620,6 +849,50 @@ export default function PlayPage() {
                         </>
                       )}
                     </div>
+                  </div>
+
+                  <div className="border-t border-white/10 pt-4">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => toggleLibrary("favorite")}
+                        disabled={libraryLoading}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs border transition ${
+                          libraryStatus.favorite
+                            ? "bg-red-600/20 border-red-500/60 text-red-300"
+                            : "bg-white/5 border-white/15 text-gray-300 hover:text-white"
+                        }`}
+                      >
+                        <Heart size={14} />
+                        收藏
+                      </button>
+                      <button
+                        onClick={() => toggleLibrary("follow")}
+                        disabled={libraryLoading}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs border transition ${
+                          libraryStatus.follow
+                            ? "bg-blue-600/20 border-blue-500/60 text-blue-300"
+                            : "bg-white/5 border-white/15 text-gray-300 hover:text-white"
+                        }`}
+                      >
+                        <ListChecks size={14} />
+                        追剧清单
+                      </button>
+                      <button
+                        onClick={() => toggleLibrary("watch_later")}
+                        disabled={libraryLoading}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs border transition ${
+                          libraryStatus.watch_later
+                            ? "bg-amber-600/20 border-amber-500/60 text-amber-300"
+                            : "bg-white/5 border-white/15 text-gray-300 hover:text-white"
+                        }`}
+                      >
+                        <Clock3 size={14} />
+                        稍后再看
+                      </button>
+                    </div>
+                    {actionMessage && (
+                      <p className="text-xs text-[#E50914] mt-2">{actionMessage}</p>
+                    )}
                   </div>
 
                   {/* 演职人员 */}
