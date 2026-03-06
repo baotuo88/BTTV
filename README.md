@@ -27,6 +27,10 @@
 - 📱 **响应式设计** - 完美支持移动端和桌面端
 - 🎨 **现代化 UI** - Netflix 风格界面设计
 - 🔐 **后台管理** - 视频源配置、频道管理 (`/login`)
+- 👤 **用户系统** - 注册/登录、个人中心、密码找回
+- ❤️ **用户清单** - 收藏、追剧清单、稍后再看
+- ☁️ **云端续播** - 播放进度跨设备同步
+- 🩺 **源健康检测** - 后台一键检测视频源可用性
 - 🚀 **多种部署** - 支持 Vercel、Docker、VPS 一键部署
 
 ## 📸 界面预览
@@ -173,6 +177,8 @@ cd ~/kerkerker
 | `MONGODB_DB_NAME`             | 数据库名称     | `kerkerker`                          |
 | `NEXT_PUBLIC_DANMU_API_URL`   | 弹幕 API 地址  | `https://danmuapi1-eight.vercel.app` |
 | `NEXT_PUBLIC_DANMU_API_TOKEN` | 弹幕 API Token | -                                    |
+| `RESEND_API_KEY`              | Resend 邮件 Key（找回密码） | -                     |
+| `RESEND_FROM_EMAIL`           | 发件人邮箱（找回密码）      | -                     |
 
 ### MongoDB URI 示例
 
