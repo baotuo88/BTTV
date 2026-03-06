@@ -213,8 +213,8 @@ export function UserManagementTab({
             </p>
           </div>
 
-          <div className="flex gap-2">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+            <div className="relative flex-1 sm:flex-none">
               <Search
                 size={16}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-[#888]"
@@ -227,29 +227,127 @@ export function UserManagementTab({
                   if (event.key === "Enter") handleSearch();
                 }}
                 placeholder="搜索用户名或邮箱"
-                className="w-56 bg-[#111] border border-[#333] text-white rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-[#E50914]"
+                className="w-full sm:w-56 bg-[#111] border border-[#333] text-white rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-[#E50914]"
               />
             </div>
-            <button
-              onClick={handleSearch}
-              className="px-4 py-2 rounded-lg bg-[#E50914] hover:bg-[#B20710] text-white text-sm transition"
-            >
-              搜索
-            </button>
-            <button
-              onClick={handleRefresh}
-              disabled={loading}
-              className="px-3 py-2 rounded-lg bg-[#333] hover:bg-[#444] text-white text-sm transition disabled:opacity-60"
-              title="刷新"
-            >
-              <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleSearch}
+                className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#E50914] hover:bg-[#B20710] text-white text-sm transition"
+              >
+                搜索
+              </button>
+              <button
+                onClick={handleRefresh}
+                disabled={loading}
+                className="px-3 py-2 rounded-lg bg-[#333] hover:bg-[#444] text-white text-sm transition disabled:opacity-60"
+                title="刷新"
+              >
+                <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="bg-[#1a1a1a] rounded-xl border border-[#333] overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="md:hidden divide-y divide-[#2a2a2a]">
+          {loading ? (
+            <div className="px-4 py-8 text-center text-[#888]">
+              <span className="inline-flex items-center gap-2">
+                <RefreshCw size={16} className="animate-spin" />
+                加载中...
+              </span>
+            </div>
+          ) : users.length === 0 ? (
+            <div className="px-4 py-8 text-center text-[#888]">暂无用户</div>
+          ) : (
+            users.map((user) => (
+              <div key={user.id} className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-white flex items-center gap-2">
+                      <UserCheck size={15} className="text-[#aaa]" />
+                      <span className="truncate">{user.username}</span>
+                    </div>
+                    <div className="text-[#999] text-xs flex items-center gap-1 mt-1">
+                      <Mail size={13} />
+                      <span className="truncate">{user.email}</span>
+                    </div>
+                  </div>
+                  {user.disabled ? (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-900/40 text-red-300 border border-red-700/40 shrink-0">
+                      已禁用
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-900/30 text-green-300 border border-green-700/40 shrink-0">
+                      正常
+                    </span>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                  <div className="bg-[#111] border border-[#2a2a2a] rounded px-2 py-2 text-[#bbb]">
+                    会话数: <span className="text-white">{user.activeSessionCount}</span>
+                  </div>
+                  <div className="bg-[#111] border border-[#2a2a2a] rounded px-2 py-2 text-[#bbb]">
+                    注册: <span className="text-white">{formatDate(user.createdAt)}</span>
+                  </div>
+                  <div className="bg-[#111] border border-[#2a2a2a] rounded px-2 py-2 text-[#bbb]">
+                    最近登录:{" "}
+                    <span className="text-white">{formatDate(user.lastLoginAt)}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    disabled={submittingUserId === user.id}
+                    onClick={() => updateUserStatus(user, !user.disabled)}
+                    className={`px-3 py-1.5 rounded text-xs transition disabled:opacity-60 ${
+                      user.disabled
+                        ? "bg-green-700 hover:bg-green-600 text-white"
+                        : "bg-yellow-700 hover:bg-yellow-600 text-white"
+                    }`}
+                  >
+                    {user.disabled ? (
+                      <span className="inline-flex items-center gap-1">
+                        <UserCheck size={14} />
+                        启用
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1">
+                        <Ban size={14} />
+                        禁用
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    disabled={submittingUserId === user.id}
+                    onClick={() => resetUserPassword(user)}
+                    className="px-3 py-1.5 rounded text-xs bg-blue-700 hover:bg-blue-600 text-white transition disabled:opacity-60"
+                  >
+                    <span className="inline-flex items-center gap-1">
+                      <KeyRound size={14} />
+                      重置密码
+                    </span>
+                  </button>
+                  <button
+                    disabled={submittingUserId === user.id}
+                    onClick={() => deleteUser(user)}
+                    className="px-3 py-1.5 rounded text-xs bg-red-700 hover:bg-red-600 text-white transition disabled:opacity-60"
+                  >
+                    <span className="inline-flex items-center gap-1">
+                      <Trash2 size={14} />
+                      删除
+                    </span>
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead className="bg-[#202020] border-b border-[#333]">
               <tr className="text-left text-[#999]">
