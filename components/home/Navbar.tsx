@@ -253,20 +253,25 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
             {/* 用户入口（移动端右上角） */}
             <div ref={mobileUserMenuRef} className="md:hidden relative">
               <button
-              onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
-              className="p-2 hover:bg-white/10 rounded-full transition-colors"
-              aria-label="用户菜单"
-            >
-                <UserRound className="w-5 h-5 text-white" />
+                onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1.5"
+                aria-label="移动端用户菜单"
+              >
+                <UserRound className="w-3.5 h-3.5" />
+                <span className="max-w-[70px] truncate">
+                  {currentUser ? currentUser.username : "账号"}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform ${
+                    isMobileUserMenuOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
 
               {isMobileUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden">
                   {currentUser ? (
                     <>
-                      <div className="px-3 py-2 border-b border-zinc-800 text-sm text-gray-300 truncate">
-                        {currentUser.username}
-                      </div>
                       <Link
                         href="/user/profile"
                         onClick={() => setIsMobileUserMenuOpen(false)}
