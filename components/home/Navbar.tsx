@@ -147,21 +147,21 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
     {
       title: "账号设置",
       items: [
-        { label: "个人资料", href: "/user/profile#profile-account" },
-        { label: "密码安全", href: "/user/profile#profile-security" },
+        { label: "个人资料", href: "/user/profile/account" },
+        { label: "密码安全", href: "/user/profile/security" },
       ],
     },
     {
       title: "我的清单",
       items: [
-        { label: "收藏", href: "/user/profile#profile-favorite" },
-        { label: "追剧清单", href: "/user/profile#profile-follow" },
-        { label: "稍后再看", href: "/user/profile#profile-watch-later" },
+        { label: "收藏", href: "/user/profile/favorite" },
+        { label: "追剧清单", href: "/user/profile/follow" },
+        { label: "稍后再看", href: "/user/profile/watch-later" },
       ],
     },
     {
       title: "观看记录",
-      items: [{ label: "云端续播", href: "/user/profile#profile-progress" }],
+      items: [{ label: "云端续播", href: "/user/profile/progress" }],
     },
   ];
 
