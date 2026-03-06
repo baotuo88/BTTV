@@ -307,62 +307,66 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
 
             {/* 用户入口（桌面） */}
             <div className="hidden md:flex items-center gap-2 mr-1">
-              {currentUser ? (
-                <div ref={desktopUserMenuRef} className="relative">
-                  <button
-                    onClick={() =>
-                      setIsDesktopUserMenuOpen((prev) => !prev)
-                    }
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1.5"
-                    aria-label="桌面用户菜单"
-                  >
-                    <UserRound className="w-3.5 h-3.5" />
-                    <span className="max-w-[100px] truncate">
-                      {currentUser.username}
-                    </span>
-                    <ChevronDown
-                      className={`w-3.5 h-3.5 transition-transform ${
-                        isDesktopUserMenuOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
+              <div ref={desktopUserMenuRef} className="relative">
+                <button
+                  onClick={() =>
+                    setIsDesktopUserMenuOpen((prev) => !prev)
+                  }
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1.5"
+                  aria-label="桌面用户菜单"
+                >
+                  <UserRound className="w-3.5 h-3.5" />
+                  <span className="max-w-[100px] truncate">
+                    {currentUser ? currentUser.username : "账号"}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform ${
+                      isDesktopUserMenuOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
 
-                  {isDesktopUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden z-20">
-                      <Link
-                        href="/user/profile"
-                        onClick={() => setIsDesktopUserMenuOpen(false)}
-                        className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
-                      >
-                        个人中心
-                      </Link>
-                      <button
-                        onClick={handleUserLogout}
-                        disabled={loggingOut}
-                        className="w-full px-3 py-2 text-left text-sm text-gray-200 hover:bg-zinc-800 disabled:opacity-60 transition-colors inline-flex items-center gap-2"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        {loggingOut ? "退出中..." : "退出登录"}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <>
-                  <Link
-                    href="/user/login"
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                  >
-                    登录
-                  </Link>
-                  <Link
-                    href="/user/register"
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-600 hover:bg-red-700 text-white transition-colors"
-                  >
-                    注册
-                  </Link>
-                </>
-              )}
+                {isDesktopUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden z-20">
+                    {currentUser ? (
+                      <>
+                        <Link
+                          href="/user/profile"
+                          onClick={() => setIsDesktopUserMenuOpen(false)}
+                          className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
+                        >
+                          个人中心
+                        </Link>
+                        <button
+                          onClick={handleUserLogout}
+                          disabled={loggingOut}
+                          className="w-full px-3 py-2 text-left text-sm text-gray-200 hover:bg-zinc-800 disabled:opacity-60 transition-colors inline-flex items-center gap-2"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          {loggingOut ? "退出中..." : "退出登录"}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          href="/user/login"
+                          onClick={() => setIsDesktopUserMenuOpen(false)}
+                          className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
+                        >
+                          登录
+                        </Link>
+                        <Link
+                          href="/user/register"
+                          onClick={() => setIsDesktopUserMenuOpen(false)}
+                          className="block px-3 py-2 text-sm text-white bg-red-600 hover:bg-red-700 transition-colors"
+                        >
+                          注册
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* 搜索按钮 */}
