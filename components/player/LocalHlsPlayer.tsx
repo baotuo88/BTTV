@@ -22,6 +22,7 @@ interface LocalHlsPlayerProps {
   title: string;
   settings: LocalPlayerSettings;
   externalDanmaku?: DanmakuItem[];
+  initialTime?: number;
   onDanmakuCountChange?: (count: number) => void;
   onProgress?: (time: number) => void;
   onEnded?: () => void;
@@ -38,6 +39,7 @@ export function LocalHlsPlayer({
   title,
   settings,
   externalDanmaku,
+  initialTime = 0,
   onDanmakuCountChange,
   onProgress,
   onEnded,
@@ -410,18 +412,28 @@ export function LocalHlsPlayer({
         });
 
         art.on("video:loadedmetadata", () => {
+          let resumeTime = 0;
+
           if (settingsRef.current.autoSaveProgress) {
             const saved = localStorage.getItem(`video_progress_${videoUrl}`);
             if (saved) {
               try {
                 const progress = JSON.parse(saved);
                 if (progress.time > 10 && progress.time < art.duration - 10) {
-                  art.currentTime = progress.time;
+                  resumeTime = progress.time;
                 }
               } catch {
                 // 忽略解析错误
               }
             }
+          }
+
+          if (initialTime > 10 && initialTime < art.duration - 10) {
+            resumeTime = Math.max(resumeTime, initialTime);
+          }
+
+          if (resumeTime > 10 && resumeTime < art.duration - 10) {
+            art.currentTime = resumeTime;
           }
         });
 
@@ -620,6 +632,17 @@ export function LocalHlsPlayer({
       handleDanmakuLoad(externalDanmaku);
     }
   }, [externalDanmaku, handleDanmakuLoad]);
+
+  // 初始云端进度晚到时，尝试补偿跳转
+  useEffect(() => {
+    if (!artRef.current || !initialTime || initialTime <= 10) return;
+    const art = artRef.current;
+    if (Number.isFinite(art.duration) && art.duration > 0) {
+      if (initialTime < art.duration - 10 && art.currentTime < 5) {
+        art.currentTime = initialTime;
+      }
+    }
+  }, [initialTime, videoUrl]);
 
   if (!isClient) {
     return (
