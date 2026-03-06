@@ -7,9 +7,13 @@ import {
   saveSelectedShortsSourceToDB,
 } from '@/lib/shorts-sources-db';
 import { ShortDramaSource } from '@/types/shorts-source';
+import { ensureAdminApiAuth, ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 // GET - 获取短剧视频源列表
 export async function GET(request: NextRequest) {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const { searchParams } = request.nextUrl;
     const includeDisabled = searchParams.get('all') === 'true';
@@ -49,6 +53,9 @@ export async function GET(request: NextRequest) {
 
 // POST - 保存短剧视频源列表
 export async function POST(request: NextRequest) {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const { sources, selected } = body;
@@ -98,6 +105,9 @@ export async function POST(request: NextRequest) {
 
 // PUT - 更新选中的短剧视频源
 export async function PUT(request: NextRequest) {
+  const authError = await ensureAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const { selected } = body;
