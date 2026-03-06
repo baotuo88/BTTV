@@ -87,6 +87,12 @@ function UserLoginContent() {
             >
               {loading ? "登录中..." : "登录"}
             </button>
+
+            <div className="text-right text-sm">
+              <Link href="/user/forgot-password" className="text-[#b3b3b3] hover:text-[#E50914]">
+                忘记密码？
+              </Link>
+            </div>
           </form>
 
           <div className="mt-6 text-center text-sm text-[#8c8c8c]">
