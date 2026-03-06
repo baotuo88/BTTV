@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, DramaDetail, Episode, VodSource } from '@/types/drama';
+import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 interface DetailItem {
   vod_id: number;
@@ -95,6 +96,9 @@ function errorResponse(msg: string, status: number = 500): NextResponse {
 }
 
 export async function POST(request: NextRequest) {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const source: VodSource = body.source;
@@ -199,4 +203,3 @@ export async function POST(request: NextRequest) {
     return errorResponse('获取影视详情失败');
   }
 }
-
