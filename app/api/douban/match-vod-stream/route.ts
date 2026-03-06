@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
+import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 interface VodItem {
   id: string | number;
@@ -40,13 +41,19 @@ function getMatchConfidence(vodName: string, title: string): 'high' | 'medium' |
 async function searchSingleSource(
   origin: string,
   source: VodSource,
-  title: string
+  title: string,
+  cookieHeader?: string
 ): Promise<MatchResult | null> {
   try {
+    const headers: HeadersInit = { 'Content-Type': 'application/json' };
+    if (cookieHeader) {
+      headers['Cookie'] = cookieHeader;
+    }
+
     // 使用 POST 请求，传递完整的 source 对象
     const response = await fetch(`${origin}/api/drama/list`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         source: source,
         page: 1,
@@ -103,6 +110,9 @@ async function searchSingleSource(
 }
 
 export async function GET(request: NextRequest) {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   const searchParams = request.nextUrl.searchParams;
   const title = searchParams.get('title');
   const doubanId = searchParams.get('douban_id');
@@ -119,6 +129,7 @@ export async function GET(request: NextRequest) {
   }
   
   const origin = request.nextUrl.origin;
+  const cookieHeader = request.headers.get('cookie') || '';
   
   // 创建 SSE 流
   const encoder = new TextEncoder();
@@ -141,7 +152,12 @@ export async function GET(request: NextRequest) {
       // 并行搜索所有源，但每个完成后立即发送结果
       const promises = allSources.map(async (source) => {
         try {
-          const result = await searchSingleSource(origin, source, title);
+          const result = await searchSingleSource(
+            origin,
+            source,
+            title,
+            cookieHeader
+          );
           completedCount++;
           
           if (result) {
