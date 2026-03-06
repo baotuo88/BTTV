@@ -2,8 +2,21 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { Menu, X, Home, Film, Tv, Clock, Video, Github, Calendar, History } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import {
+  Menu,
+  X,
+  Home,
+  Film,
+  Tv,
+  Clock,
+  Video,
+  Github,
+  Calendar,
+  History,
+  UserRound,
+  LogOut,
+} from "lucide-react";
 import { HistoryPopup } from "./HistoryPopup";
 import type { UserPublic } from "@/types/user";
 
@@ -15,13 +28,16 @@ interface NavbarProps {
 export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserPublic | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
+  const mobileUserMenuRef = useRef<HTMLDivElement | null>(null);
 
   // 防止移动端菜单打开时页面滚动
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
+      setIsMobileUserMenuOpen(false);
     } else {
       document.body.style.overflow = "unset";
     }
@@ -60,11 +76,30 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
     try {
       await fetch("/api/user/logout", { method: "POST" });
       setCurrentUser(null);
+      setIsMobileUserMenuOpen(false);
       router.refresh();
     } finally {
       setLoggingOut(false);
     }
   };
+
+  useEffect(() => {
+    if (!isMobileUserMenuOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (!mobileUserMenuRef.current) return;
+      if (!mobileUserMenuRef.current.contains(event.target as Node)) {
+        setIsMobileUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isMobileUserMenuOpen]);
 
   const navItems = [
     { href: "/", label: "首页", icon: Home },
@@ -105,7 +140,10 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
           <div className="flex items-center space-x-2 md:space-x-8">
             {/* 汉堡菜单按钮 - 仅移动端 */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => {
+                setIsMobileUserMenuOpen(false);
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
               className="md:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
               aria-label="菜单"
             >
@@ -195,6 +233,54 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
 
           {/* 右侧功能区 */}
           <div className="flex items-center space-x-1 md:space-x-2">
+            {/* 用户入口（移动端右上角） */}
+            <div ref={mobileUserMenuRef} className="md:hidden relative">
+              <button
+                onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                aria-label="用户菜单"
+              >
+                <UserRound className="w-5 h-5 text-white" />
+              </button>
+
+              {isMobileUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden">
+                  {currentUser ? (
+                    <>
+                      <div className="px-3 py-2 border-b border-zinc-800 text-sm text-gray-300 truncate">
+                        {currentUser.username}
+                      </div>
+                      <button
+                        onClick={handleUserLogout}
+                        disabled={loggingOut}
+                        className="w-full px-3 py-2 text-left text-sm text-gray-200 hover:bg-zinc-800 disabled:opacity-60 transition-colors inline-flex items-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        {loggingOut ? "退出中..." : "退出登录"}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/user/login"
+                        onClick={() => setIsMobileUserMenuOpen(false)}
+                        className="block px-3 py-2 text-sm text-gray-200 hover:bg-zinc-800 transition-colors"
+                      >
+                        登录
+                      </Link>
+                      <Link
+                        href="/user/register"
+                        onClick={() => setIsMobileUserMenuOpen(false)}
+                        className="block px-3 py-2 text-sm text-white bg-red-600 hover:bg-red-700 transition-colors"
+                      >
+                        注册
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* 用户入口（桌面） */}
             <div className="hidden md:flex items-center gap-2 mr-1">
               {currentUser ? (
@@ -287,41 +373,6 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
 
           {/* 导航菜单 */}
           <nav className="p-4 space-y-2">
-            {/* 用户入口（移动端） */}
-            <div className="px-4 py-3 border-b border-gray-800 mb-2">
-              {currentUser ? (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-300 truncate max-w-[160px]">
-                    {currentUser.username}
-                  </span>
-                  <button
-                    onClick={handleUserLogout}
-                    disabled={loggingOut}
-                    className="px-3 py-1 rounded text-xs text-white bg-red-600 hover:bg-red-700 disabled:opacity-60 transition-colors"
-                  >
-                    {loggingOut ? "退出中..." : "退出"}
-                  </button>
-                </div>
-              ) : (
-                <div className="flex gap-2">
-                  <Link
-                    href="/user/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex-1 text-center px-3 py-2 rounded text-sm text-gray-200 border border-gray-700 hover:bg-white/10 transition-colors"
-                  >
-                    登录
-                  </Link>
-                  <Link
-                    href="/user/register"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex-1 text-center px-3 py-2 rounded text-sm text-white bg-red-600 hover:bg-red-700 transition-colors"
-                  >
-                    注册
-                  </Link>
-                </div>
-              )}
-            </div>
-
             {navItems.map((item) => {
               const Icon = item.icon;
               if (item.children) {
