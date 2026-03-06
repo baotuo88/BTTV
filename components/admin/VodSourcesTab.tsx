@@ -592,7 +592,7 @@ export function VodSourcesTab({
             </label>
           </div>
         </div>
-        <div className="flex gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row gap-3 mt-6">
           <button
             onClick={handleSave}
             className="px-6 py-2 bg-[#E50914] hover:bg-[#B20710] text-white rounded-lg transition font-medium"
@@ -610,7 +610,7 @@ export function VodSourcesTab({
 
       {/* Sources List */}
       <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333]">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-bold text-white">已配置的视频源</h2>
             {sources.length > 0 && (
@@ -619,7 +619,7 @@ export function VodSourcesTab({
               </span>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setShowEncryptedImportModal(true)}
               className="px-4 py-2 bg-[#E50914] hover:bg-[#B20710] text-white rounded-lg transition font-medium text-sm flex items-center gap-2"
@@ -675,9 +675,9 @@ export function VodSourcesTab({
                   : "bg-[#141414] border-[#333] hover:border-[#555]"
               }`}
             >
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
                     <span className="text-xs px-2 py-1 bg-slate-600 text-slate-300 rounded font-mono">
                       #{source.priority ?? 0}
                     </span>
@@ -708,7 +708,7 @@ export function VodSourcesTab({
                     )}
                   </div>
                 </div>
-                <div className="flex gap-2 ml-4">
+                <div className="flex flex-wrap gap-2 sm:ml-4">
                   {selectedKey !== source.key && (
                     <button
                       onClick={() => handleSelectSource(source.key)}
