@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ensureUserOrAdminCookieAuth } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,6 +8,9 @@ export const dynamic = 'force-dynamic';
  * 支持 m3u8 播放列表重写
  */
 export async function GET(request: NextRequest) {
+  const authError = ensureUserOrAdminCookieAuth(request);
+  if (authError) return authError;
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const videoUrl = searchParams.get('url');
