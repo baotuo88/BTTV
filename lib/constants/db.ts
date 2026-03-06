@@ -23,6 +23,12 @@ export const COLLECTIONS = {
   USERS: 'users',
   /** 前台用户会话 */
   USER_SESSIONS: 'user_sessions',
+  /** 密码找回验证码 */
+  USER_PASSWORD_RESET_CODES: 'user_password_reset_codes',
+  /** 用户收藏/清单 */
+  USER_LIBRARY: 'user_library',
+  /** 用户云端播放进度 */
+  USER_PROGRESS: 'user_progress',
 } as const;
 
 /** 集合名称类型 */
