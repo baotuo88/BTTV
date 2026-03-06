@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
+import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 interface VodItem {
   id: string | number;
@@ -22,12 +23,18 @@ async function matchSingleSource(
   origin: string,
   source: VodSource,
   title: string,
-  year?: string | number
+  year?: string | number,
+  cookieHeader?: string
 ): Promise<VodItem | null> {
   try {
+    const headers: HeadersInit = { 'Content-Type': 'application/json' };
+    if (cookieHeader) {
+      headers['Cookie'] = cookieHeader;
+    }
+
     const searchResponse = await fetch(`${origin}/api/drama/list`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         source: source,  // 传递完整的 source 对象
         page: 1,
@@ -88,6 +95,9 @@ function getMatchConfidence(vodName: string, title: string): 'high' | 'medium' |
 
 // 根据豆瓣影片信息匹配所有VOD播放源
 export async function POST(request: NextRequest) {
+  const authError = await ensureUserOrAdminApiAuth();
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const { douban_id, title, year } = body;
@@ -112,11 +122,18 @@ export async function POST(request: NextRequest) {
     }
     
     const origin = request.nextUrl.origin;
+    const cookieHeader = request.headers.get('cookie') || '';
 
     // 并行搜索所有源
     const matchPromises = allSources.map(async (source) => {
       console.log(`  ⏳ 搜索源: ${source.name}...`);
-      const matchedVod = await matchSingleSource(origin, source, title, year);
+      const matchedVod = await matchSingleSource(
+        origin,
+        source,
+        title,
+        year,
+        cookieHeader
+      );
       
       if (matchedVod) {
         console.log(`  ✅ ${source.name} 找到: ${matchedVod.name}`);
