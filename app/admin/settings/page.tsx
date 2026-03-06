@@ -18,7 +18,15 @@ import type {
   UnifiedImportCallbacks,
 } from "@/components/admin/types";
 import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
-import { Tv, Film, Youtube, Settings, Database, Users } from "lucide-react";
+import {
+  Tv,
+  Film,
+  Youtube,
+  Settings,
+  Database,
+  Users,
+  ChevronDown,
+} from "lucide-react";
 
 type TabType = "sources" | "shorts" | "dailymotion" | "player" | "users" | "database";
 
@@ -59,6 +67,13 @@ function SettingsContent() {
     params.set("tab", tab);
     router.replace(`?${params.toString()}`, { scroll: false });
   };
+
+  useEffect(() => {
+    const urlTab = searchParams.get("tab");
+    if (urlTab && VALID_TABS.includes(urlTab as TabType) && urlTab !== activeTab) {
+      setActiveTab(urlTab as TabType);
+    }
+  }, [activeTab, searchParams]);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -135,36 +150,109 @@ function SettingsContent() {
   );
 
   const tabs = [
-    { id: "sources" as TabType, name: "视频源管理", icon: Tv },
-    { id: "shorts" as TabType, name: "短剧源管理", icon: Film },
-    { id: "dailymotion" as TabType, name: "Dailymotion", icon: Youtube },
-    { id: "player" as TabType, name: "播放器设置", icon: Settings },
-    { id: "users" as TabType, name: "用户管理", icon: Users },
-    { id: "database" as TabType, name: "数据库", icon: Database },
+    {
+      id: "sources" as TabType,
+      name: "视频源管理",
+      shortName: "视频源",
+      icon: Tv,
+    },
+    {
+      id: "shorts" as TabType,
+      name: "短剧源管理",
+      shortName: "短剧源",
+      icon: Film,
+    },
+    {
+      id: "dailymotion" as TabType,
+      name: "Dailymotion",
+      shortName: "DM",
+      icon: Youtube,
+    },
+    {
+      id: "player" as TabType,
+      name: "播放器设置",
+      shortName: "播放器",
+      icon: Settings,
+    },
+    {
+      id: "users" as TabType,
+      name: "用户管理",
+      shortName: "用户",
+      icon: Users,
+    },
+    {
+      id: "database" as TabType,
+      name: "数据库",
+      shortName: "数据库",
+      icon: Database,
+    },
   ];
+
+  const activeTabInfo =
+    tabs.find((tab) => tab.id === activeTab) || tabs[0];
+  const ActiveTabIcon = activeTabInfo.icon;
 
   return (
     <div className="min-h-screen bg-[#141414]">
       {/* Header - Netflix Style */}
       <div className="bg-[#141414] border-b border-[#333]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <h1 className="text-2xl font-bold text-[#E50914]">宝拓影视</h1>
-            <span className="text-white text-lg">系统设置</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#E50914]">
+                宝拓影视
+              </h1>
+              <span className="text-white text-base sm:text-lg">系统设置</span>
+            </div>
+            <div className="flex items-center justify-between sm:justify-end gap-3">
+              <span className="md:hidden inline-flex items-center gap-2 text-sm text-[#b3b3b3]">
+                <ActiveTabIcon size={16} />
+                {activeTabInfo.shortName}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-[#333] hover:bg-[#444] text-white rounded transition-colors text-sm sm:text-base"
+              >
+                退出登录
+              </button>
+            </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-[#333] hover:bg-[#444] text-white rounded transition-colors"
-          >
-            退出登录
-          </button>
         </div>
       </div>
 
       {/* Tabs Navigation - Netflix Style */}
       <div className="bg-[#181818] border-b border-[#333]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-1">
+          {/* Mobile Tab Switcher */}
+          <div className="md:hidden py-3">
+            <label
+              htmlFor="settings-tab-select"
+              className="block text-xs text-[#8f8f8f] mb-2"
+            >
+              切换设置模块
+            </label>
+            <div className="relative">
+              <select
+                id="settings-tab-select"
+                value={activeTab}
+                onChange={(event) => handleTabChange(event.target.value as TabType)}
+                className="w-full appearance-none bg-[#222] border border-[#3a3a3a] rounded-lg py-2.5 pl-3 pr-10 text-sm text-white focus:outline-none focus:border-[#E50914]"
+              >
+                {tabs.map((tab) => (
+                  <option key={tab.id} value={tab.id}>
+                    {tab.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={16}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none"
+              />
+            </div>
+          </div>
+
+          {/* Desktop Tab Navigation */}
+          <nav className="hidden md:flex space-x-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
@@ -192,7 +280,7 @@ function SettingsContent() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
         {activeTab === "sources" && (
           <VodSourcesTab
             sources={sources}
