@@ -27,6 +27,20 @@ body {
   overflow-x: hidden;
 }
 
+/* 防止移动端浏览器自动放大字体导致布局突变 */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (max-width: 768px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 /* 可点击元素默认指针样式 */
 button,
 [role="button"],
