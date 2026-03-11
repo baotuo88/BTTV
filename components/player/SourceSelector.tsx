@@ -116,7 +116,7 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
 
       {/* 下拉菜单 */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-[min(90vw,20rem)] md:w-80 pb-safe-area-inset-bottom bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
+        <div className="absolute right-0 mt-3 w-[min(82vw,17rem)] md:w-80 max-h-[calc(100dvh-96px)] md:max-h-none pb-safe-area-inset-bottom bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50 flex flex-col">
           {/* 头部 */}
           <div className="p-3 border-b border-gray-800 bg-gradient-to-r from-gray-800/50 to-transparent">
             <div className="flex items-center justify-between">
@@ -133,7 +133,7 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
           </div>
 
           {/* 源列表 */}
-          <div className="max-h-[calc(100dvh-140px)] md:max-h-[60vh] overflow-y-auto">
+          <div className="flex-1 min-h-0 md:max-h-[60vh] overflow-y-auto">
             {sortedSources.map((source, index) => {
               const isCurrent = source.source_key === currentSourceKey;
               return (
