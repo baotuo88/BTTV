@@ -3,10 +3,12 @@
 import { FormEvent, Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
 
 function UserLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const siteConfig = useSiteConfig();
   const redirect = searchParams.get("redirect") || "/";
 
   const [account, setAccount] = useState("");
@@ -47,7 +49,7 @@ function UserLoginContent() {
         <div className="bg-[#1a1a1a] rounded-lg shadow-2xl p-10 border border-[#333]">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-[#E50914] mb-2">用户登录</h1>
-            <p className="text-[#808080]">宝拓影视账号系统</p>
+            <p className="text-[#808080]">{siteConfig.siteName}账号系统</p>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-5">
