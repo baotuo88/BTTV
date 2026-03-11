@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
 import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
+import { recordSourceProbeResults, sortVodSourcesByHealth } from '@/lib/vod-source-health';
 
 interface VodItem {
   id: string | number;
@@ -18,7 +19,19 @@ interface MatchResult {
   vod_id: string | number;
   vod_name: string;
   match_confidence: 'high' | 'medium' | 'low';
-  priority: number;  // 视频源优先级
+  priority: number; // 实际选源优先级（越小越优先）
+  source_priority: number; // 配置优先级
+}
+
+interface SearchSingleSourceResult {
+  match: MatchResult | null;
+  probe: {
+    key: string;
+    ok: boolean;
+    latencyMs: number;
+    statusCode?: number;
+    error?: string;
+  };
 }
 
 // 计算匹配置信度
@@ -41,9 +54,11 @@ function getMatchConfidence(vodName: string, title: string): 'high' | 'medium' |
 async function searchSingleSource(
   origin: string,
   source: VodSource,
+  effectivePriority: number,
   title: string,
   cookieHeader?: string
-): Promise<MatchResult | null> {
+): Promise<SearchSingleSourceResult> {
+  const start = Date.now();
   try {
     const headers: HeadersInit = { 'Content-Type': 'application/json' };
     if (cookieHeader) {
@@ -64,7 +79,16 @@ async function searchSingleSource(
     });
     
     if (!response.ok) {
-      return null;
+      return {
+        match: null,
+        probe: {
+          key: source.key,
+          ok: false,
+          latencyMs: Date.now() - start,
+          statusCode: response.status,
+          error: `HTTP ${response.status}`,
+        },
+      };
     }
     
     const result = await response.json();
@@ -93,19 +117,44 @@ async function searchSingleSource(
       
       if (bestMatch) {
         return {
-          source_key: source.key,
-          source_name: source.name,
-          vod_id: bestMatch.id,
-          vod_name: bestMatch.name,
-          match_confidence: getMatchConfidence(bestMatch.name, title),
-          priority: source.priority ?? 999,  // 未设置优先级的排在最后
+          match: {
+            source_key: source.key,
+            source_name: source.name,
+            vod_id: bestMatch.id,
+            vod_name: bestMatch.name,
+            match_confidence: getMatchConfidence(bestMatch.name, title),
+            priority: effectivePriority,
+            source_priority: source.priority ?? 999,
+          },
+          probe: {
+            key: source.key,
+            ok: true,
+            latencyMs: Date.now() - start,
+            statusCode: response.status,
+          },
         };
       }
     }
     
-    return null;
-  } catch {
-    return null;
+    return {
+      match: null,
+      probe: {
+        key: source.key,
+        ok: true,
+        latencyMs: Date.now() - start,
+        statusCode: response.status,
+      },
+    };
+  } catch (error) {
+    return {
+      match: null,
+      probe: {
+        key: source.key,
+        ok: false,
+        latencyMs: Date.now() - start,
+        error: error instanceof Error ? error.message : '搜索失败',
+      },
+    };
   }
 }
 
@@ -123,8 +172,9 @@ export async function GET(request: NextRequest) {
   
   // 获取所有视频源
   const allSources = await getVodSourcesFromDB();
+  const orderedSources = await sortVodSourcesByHealth(allSources);
   
-  if (allSources.length === 0) {
+  if (orderedSources.length === 0) {
     return new Response('No video sources configured', { status: 404 });
   }
   
@@ -140,7 +190,7 @@ export async function GET(request: NextRequest) {
         type: 'init',
         doubanId,
         title,
-        totalSources: allSources.length,
+        totalSources: orderedSources.length,
       };
       controller.enqueue(encoder.encode(`data: ${JSON.stringify(initData)}\n\n`));
       
@@ -150,19 +200,22 @@ export async function GET(request: NextRequest) {
       let foundCount = 0;
       
       // 并行搜索所有源，但每个完成后立即发送结果
-      const promises = allSources.map(async (source) => {
+      const probeResults: SearchSingleSourceResult['probe'][] = [];
+      const promises = orderedSources.map(async (source, index) => {
         try {
-          const result = await searchSingleSource(
+          const searchResult = await searchSingleSource(
             origin,
             source,
+            index,
             title,
             cookieHeader
           );
+          probeResults.push(searchResult.probe);
           completedCount++;
           
-          if (result) {
+          if (searchResult.match) {
             foundCount++;
-            console.log(`  ✅ ${source.name} 找到: ${result.vod_name}`);
+            console.log(`  ✅ ${source.name} 找到: ${searchResult.match.vod_name}`);
           } else {
             console.log(`  ❌ ${source.name} 未找到`);
           }
@@ -172,14 +225,20 @@ export async function GET(request: NextRequest) {
             type: 'result',
             sourceKey: source.key,
             sourceName: source.name,
-            match: result,
+            match: searchResult.match,
             completed: completedCount,
-            total: allSources.length,
+            total: orderedSources.length,
           };
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(resultData)}\n\n`));
         } catch (error) {
           completedCount++;
           console.error(`  ❌ ${source.name} 搜索出错:`, error);
+          probeResults.push({
+            key: source.key,
+            ok: false,
+            latencyMs: 0,
+            error: error instanceof Error ? error.message : '搜索失败',
+          });
           
           // 发送错误结果
           const errorData = {
@@ -188,7 +247,7 @@ export async function GET(request: NextRequest) {
             sourceName: source.name,
             match: null,
             completed: completedCount,
-            total: allSources.length,
+            total: orderedSources.length,
           };
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(errorData)}\n\n`));
         }
@@ -196,13 +255,18 @@ export async function GET(request: NextRequest) {
       
       // 等待所有搜索完成
       await Promise.all(promises);
+      try {
+        await recordSourceProbeResults(probeResults);
+      } catch (error) {
+        console.warn("记录流式匹配健康状态失败:", error);
+      }
       
       console.log(`\n📊 搜索完成: 找到 ${foundCount} 个可用源\n`);
       
       // 发送完成信号
       const doneData = {
         type: 'done',
-        totalSources: allSources.length,
+        totalSources: orderedSources.length,
         foundCount,
       };
       controller.enqueue(encoder.encode(`data: ${JSON.stringify(doneData)}\n\n`));
