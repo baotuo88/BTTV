@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { HistoryPopup } from "./HistoryPopup";
 import type { UserPublic } from "@/types/user";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
 
 interface NavbarProps {
   scrolled: boolean;
@@ -28,6 +29,7 @@ interface NavbarProps {
 
 export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
   const router = useRouter();
+  const siteConfig = useSiteConfig();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
   const [isDesktopUserMenuOpen, setIsDesktopUserMenuOpen] = useState(false);
@@ -236,7 +238,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
                 alt="logo"
               />
               <span className="text-red-600 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-none whitespace-nowrap hover:text-red-500 transition-colors">
-                宝拓影视
+                {siteConfig.siteName}
               </span>
             </Link>
 
@@ -447,7 +449,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
             <div className="flex items-center gap-2">
               <img className="w-10 h-10" src="/logo.png" alt="logo" />
               <h2 className="text-red-600 text-2xl font-bold tracking-tight">
-                宝拓影视
+                {siteConfig.siteName}
               </h2>
             </div>
           </div>
@@ -498,7 +500,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
           {/* 侧边栏底部 */}
           <div className="px-6 py-4 border-t border-gray-800">
             <p className="text-xs text-gray-500 text-center">
-              © 2026 宝拓影视 · 海量影视随心看
+              © 2026 {siteConfig.siteName} · 海量影视随心看
             </p>
           </div>
         </div>
