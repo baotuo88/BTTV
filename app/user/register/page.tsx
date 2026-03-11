@@ -3,9 +3,11 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
 
 export default function UserRegisterPage() {
   const router = useRouter();
+  const siteConfig = useSiteConfig();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,7 +47,7 @@ export default function UserRegisterPage() {
         <div className="bg-[#1a1a1a] rounded-lg shadow-2xl p-10 border border-[#333]">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-[#E50914] mb-2">用户注册</h1>
-            <p className="text-[#808080]">创建你的宝拓影视账号</p>
+            <p className="text-[#808080]">创建你的{siteConfig.siteName}账号</p>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-5">
