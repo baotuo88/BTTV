@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { SWRProvider } from "@/components/providers/swr-provider";
+import { SiteMetadataSync } from "@/components/providers/site-metadata-sync";
+import { getEnvSiteConfig } from "@/lib/site-config";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,10 +16,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const envSiteConfig = getEnvSiteConfig();
+
 export const metadata: Metadata = {
-  title: "宝拓影视 - 免费影视在线观看",
-  description:
-    "宝拓影视 - 免费观看最新热门影视剧集，海量高清资源在线播放，支持多集连播",
+  title: envSiteConfig.siteTitle,
+  description: envSiteConfig.siteDescription,
 };
 
 export default function RootLayout({
@@ -62,7 +65,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <SWRProvider>{children}</SWRProvider>
+        <SWRProvider>
+          <SiteMetadataSync />
+          {children}
+        </SWRProvider>
       </body>
     </html>
   );
