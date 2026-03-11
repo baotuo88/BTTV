@@ -147,6 +147,10 @@ async function initializeDatabase(db: Db) {
     const dailymotionConfigCollection = db.collection(COLLECTIONS.DAILYMOTION_CONFIG);
     await dailymotionConfigCollection.createIndex({ id: 1 }, { unique: true });
 
+    // 创建 site_config 集合索引
+    const siteConfigCollection = db.collection(COLLECTIONS.SITE_CONFIG);
+    await siteConfigCollection.createIndex({ id: 1 }, { unique: true });
+
     // 创建 users 集合索引
     const usersCollection = db.collection(COLLECTIONS.USERS);
     await usersCollection.createIndex({ email_lower: 1 }, { unique: true });
