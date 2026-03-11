@@ -25,6 +25,12 @@ interface SourceHealthResult {
   error?: string;
 }
 
+interface RecommendedSourceOrder {
+  key: string;
+  name: string;
+  priority: number;
+}
+
 export function VodSourcesTab({
   sources,
   selectedKey,
@@ -61,6 +67,9 @@ export function VodSourcesTab({
   const [healthResults, setHealthResults] = useState<SourceHealthResult[] | null>(
     null
   );
+  const [recommendedOrder, setRecommendedOrder] = useState<
+    RecommendedSourceOrder[] | null
+  >(null);
   // 导入模式: "replace" = 替换全部, "merge" = 保留并合并
   const [importMode, setImportMode] = useState<"replace" | "merge">("merge");
 
@@ -516,6 +525,11 @@ export function VodSourcesTab({
         ? (result.data.results as SourceHealthResult[])
         : [];
       setHealthResults(results);
+      setRecommendedOrder(
+        Array.isArray(result?.data?.recommendedOrder)
+          ? (result.data.recommendedOrder as RecommendedSourceOrder[])
+          : null
+      );
 
       const unhealthy = results.filter((item) => !item.ok).length;
       onShowToast({
@@ -729,6 +743,14 @@ export function VodSourcesTab({
             <div className="px-3 py-2 border-b border-[#333] text-sm text-slate-300 font-medium">
               视频源健康报告
             </div>
+            {recommendedOrder && recommendedOrder.length > 0 && (
+              <div className="px-3 py-2 border-b border-[#2a2a2a] text-xs text-slate-400">
+                推荐搜索顺序：
+                <span className="text-slate-300 ml-1">
+                  {recommendedOrder.map((item) => item.name).join(" -> ")}
+                </span>
+              </div>
+            )}
             <div className="max-h-64 overflow-auto">
               {healthResults.map((item) => (
                 <div
