@@ -71,7 +71,7 @@ export function DanmakuSelector({
 
   // 点击外部关闭下拉菜单
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -82,10 +82,22 @@ export function DanmakuSelector({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // 移动端打开弹幕面板时，锁定背景避免误触滚动
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
 
@@ -179,7 +191,7 @@ export function DanmakuSelector({
       {/* 触发按钮 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full transition-all hover:scale-105 text-white text-xs md:text-sm font-medium shadow-lg backdrop-blur-sm"
+        className="group touch-manipulation flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full transition-all md:hover:scale-105 active:scale-95 text-white text-xs md:text-sm font-medium shadow-lg backdrop-blur-sm"
         aria-label="弹幕设置"
         aria-expanded={isOpen}
       >
@@ -192,7 +204,7 @@ export function DanmakuSelector({
 
       {/* 下拉菜单 */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 md:w-96 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
+        <div className="fixed inset-x-3 top-[56px] bottom-3 pb-safe-area-inset-bottom md:absolute md:inset-auto md:right-0 md:mt-3 md:w-96 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
           {/* 头部 */}
           <div className="p-3 border-b border-gray-800 bg-gradient-to-r from-gray-800/50 to-transparent">
             <div className="flex items-center justify-between">
@@ -218,7 +230,7 @@ export function DanmakuSelector({
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="输入动漫名称搜索"
-                  className="w-full px-3 py-2 pr-10 bg-white/10 border border-white/20 rounded-lg text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-red-500/50"
+                  className="w-full px-3 py-2 pr-10 bg-white/10 border border-white/20 rounded-lg text-white text-base md:text-sm placeholder:text-white/40 focus:outline-none focus:border-red-500/50"
                 />
                 {isSearching && (
                   <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 animate-spin" />
@@ -235,7 +247,7 @@ export function DanmakuSelector({
           </div>
 
           {/* 内容区域 */}
-          <div className="max-h-[50vh] overflow-y-auto p-3 space-y-3">
+          <div className="h-full max-h-[calc(100dvh-150px)] md:max-h-[50vh] overflow-y-auto p-3 space-y-3">
             {/* 错误提示 */}
             {error && (
               <div className="flex items-center gap-2 p-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-xs">
