@@ -21,6 +21,10 @@ export const COLLECTIONS = {
   SITE_CONFIG: 'site_config',
   /** 播放器配置 */
   PLAYER_CONFIG: 'player_config',
+  /** 视频源健康统计 */
+  VOD_SOURCE_HEALTH: 'vod_source_health',
+  /** 运营配置中心 */
+  OPERATIONS_CONFIG: 'operations_config',
   /** 前台用户 */
   USERS: 'users',
   /** 前台用户会话 */
