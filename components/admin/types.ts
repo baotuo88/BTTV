@@ -2,6 +2,7 @@ import { VodSource } from "@/types/drama";
 import { ShortDramaSource } from "@/types/shorts-source";
 import type { PlayerConfig } from "@/app/api/player-config/route";
 import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
+import type { SiteConfigData } from "@/types/site-config";
 
 export interface ToastState {
   message: string;
@@ -70,4 +71,10 @@ export interface DailymotionChannelsTabProps {
 export interface UserManagementTabProps {
   onShowToast: (toast: ToastState) => void;
   onShowConfirm: (confirm: ConfirmState) => void;
+}
+
+export interface SiteSettingsTabProps {
+  siteConfig: SiteConfigData;
+  onConfigChange: (config: SiteConfigData) => void;
+  onShowToast: (toast: ToastState) => void;
 }
