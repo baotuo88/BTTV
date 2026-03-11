@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureAdminApiAuth } from "@/lib/api-auth";
 import type { VodSource } from "@/types/drama";
+import {
+  recordSourceProbeResults,
+  sortVodSourcesByHealth,
+} from "@/lib/vod-source-health";
 
 interface SourceHealthResult {
   key: string;
@@ -86,6 +90,16 @@ export async function POST(request: NextRequest) {
 
     const results = await Promise.all(sources.map((source) => checkOneSource(source)));
     const healthyCount = results.filter((item) => item.ok).length;
+    await recordSourceProbeResults(
+      results.map((item) => ({
+        key: item.key,
+        ok: item.ok,
+        latencyMs: item.latencyMs,
+        statusCode: item.statusCode,
+        error: item.error,
+      }))
+    );
+    const sortedSources = await sortVodSourcesByHealth(sources);
 
     return NextResponse.json({
       code: 200,
@@ -95,6 +109,11 @@ export async function POST(request: NextRequest) {
         total: results.length,
         healthy: healthyCount,
         unhealthy: results.length - healthyCount,
+        recommendedOrder: sortedSources.map((source) => ({
+          key: source.key,
+          name: source.name,
+          priority: source.priority ?? 999,
+        })),
       },
     });
   } catch (error) {
