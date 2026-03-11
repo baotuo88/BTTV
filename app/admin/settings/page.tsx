@@ -13,6 +13,7 @@ import { ShortsSourcesTab } from "@/components/admin/ShortsSourcesTab";
 import { DatabaseSettingsTab } from "@/components/admin/DatabaseSettingsTab";
 import { UserManagementTab } from "@/components/admin/UserManagementTab";
 import { SiteSettingsTab } from "@/components/admin/SiteSettingsTab";
+import { OperationsSettingsTab } from "@/components/admin/OperationsSettingsTab";
 import type {
   ToastState,
   ConfirmState,
@@ -20,6 +21,7 @@ import type {
 } from "@/components/admin/types";
 import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
 import type { SiteConfigData } from "@/types/site-config";
+import type { OperationsConfigData } from "@/types/operations-config";
 import {
   Tv,
   Film,
@@ -28,6 +30,7 @@ import {
   Database,
   Users,
   Globe,
+  Megaphone,
   ChevronDown,
 } from "lucide-react";
 
@@ -38,7 +41,8 @@ type TabType =
   | "player"
   | "users"
   | "database"
-  | "site";
+  | "site"
+  | "operations";
 
 const VALID_TABS: TabType[] = [
   "sources",
@@ -48,6 +52,7 @@ const VALID_TABS: TabType[] = [
   "users",
   "database",
   "site",
+  "operations",
 ];
 
 function SettingsContent() {
@@ -72,6 +77,8 @@ function SettingsContent() {
     DailymotionChannelConfig[]
   >([]);
   const [siteConfig, setSiteConfig] = useState<SiteConfigData | null>(null);
+  const [operationsConfig, setOperationsConfig] =
+    useState<OperationsConfigData | null>(null);
   const [defaultChannelId, setDefaultChannelId] = useState<
     string | undefined
   >();
@@ -94,6 +101,13 @@ function SettingsContent() {
         const siteResult = await siteResponse.json();
         if (siteResult.code === 200 && siteResult.data) {
           setSiteConfig(siteResult.data);
+        }
+        const operationsResponse = await fetch("/api/operations-config", {
+          cache: "no-store",
+        });
+        const operationsResult = await operationsResponse.json();
+        if (operationsResult.code === 200 && operationsResult.data) {
+          setOperationsConfig(operationsResult.data);
         }
 
         const vodResponse = await fetch("/api/vod-sources");
@@ -209,6 +223,12 @@ function SettingsContent() {
       name: "站点设置",
       shortName: "站点",
       icon: Globe,
+    },
+    {
+      id: "operations" as TabType,
+      name: "运营配置",
+      shortName: "运营",
+      icon: Megaphone,
     },
   ];
 
@@ -375,6 +395,19 @@ function SettingsContent() {
           ) : (
             <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333] text-[#9b9b9b]">
               正在加载站点设置...
+            </div>
+          ))}
+
+        {activeTab === "operations" &&
+          (operationsConfig ? (
+            <OperationsSettingsTab
+              operationsConfig={operationsConfig}
+              onConfigChange={setOperationsConfig}
+              onShowToast={setToast}
+            />
+          ) : (
+            <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333] text-[#9b9b9b]">
+              正在加载运营配置...
             </div>
           ))}
       </div>
