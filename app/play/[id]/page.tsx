@@ -435,7 +435,7 @@ export default function PlayPage() {
   );
 
   useEffect(() => {
-    if (!dramaDetail) return;
+    if (!dramaDetail?.id) return;
     syncCloudProgress(0);
   }, [dramaDetail?.id, currentEpisode, currentVodSource?.key, syncCloudProgress]);
 
@@ -589,9 +589,8 @@ export default function PlayPage() {
 
   return (
     <div
-      className="w-full h-screen"
+      className="w-full min-h-[100dvh]"
       style={{
-        backgroundAttachment: "fixed",
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundImage: "url(/movie-default-bg.jpg)",
@@ -759,7 +758,7 @@ export default function PlayPage() {
             {/* 关闭按钮 */}
             <button
               onClick={() => setIsRightPanelOpen(false)}
-              className="hidden sm:block absolute top-4 right-4 z-20 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 group"
+              className="absolute top-3 right-3 lg:top-4 lg:right-4 z-20 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 group"
               title="关闭侧边栏"
             >
               <X className="w-5 h-5 text-gray-300 group-hover:text-white" />
