@@ -3,6 +3,7 @@ import { ShortDramaSource } from "@/types/shorts-source";
 import type { PlayerConfig } from "@/app/api/player-config/route";
 import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
 import type { SiteConfigData } from "@/types/site-config";
+import type { OperationsConfigData } from "@/types/operations-config";
 
 export interface ToastState {
   message: string;
@@ -76,5 +77,11 @@ export interface UserManagementTabProps {
 export interface SiteSettingsTabProps {
   siteConfig: SiteConfigData;
   onConfigChange: (config: SiteConfigData) => void;
+  onShowToast: (toast: ToastState) => void;
+}
+
+export interface OperationsSettingsTabProps {
+  operationsConfig: OperationsConfigData;
+  onConfigChange: (config: OperationsConfigData) => void;
   onShowToast: (toast: ToastState) => void;
 }
