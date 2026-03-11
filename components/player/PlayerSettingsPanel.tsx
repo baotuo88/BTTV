@@ -38,7 +38,7 @@ export function PlayerSettingsPanel({
 
   // 点击外部关闭面板
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
         panelRef.current &&
         !panelRef.current.contains(event.target as Node)
@@ -49,10 +49,12 @@ export function PlayerSettingsPanel({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isOpen]);
 
@@ -70,6 +72,16 @@ export function PlayerSettingsPanel({
 
     return () => {
       document.removeEventListener("keydown", handleEsc);
+    };
+  }, [isOpen]);
+
+  // 移动端打开设置时，锁定背景滚动，避免误触和页面位移
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
 
@@ -111,7 +123,7 @@ export function PlayerSettingsPanel({
       {/* 触发按钮 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full transition-all hover:scale-105 text-white text-xs md:text-sm font-medium shadow-lg backdrop-blur-sm"
+        className="group touch-manipulation flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full transition-all md:hover:scale-105 active:scale-95 text-white text-xs md:text-sm font-medium shadow-lg backdrop-blur-sm"
         aria-label="播放器设置"
         aria-expanded={isOpen}
       >
@@ -140,7 +152,7 @@ export function PlayerSettingsPanel({
 
       {/* 设置面板 */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 md:w-96 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50 animate-fade-in">
+        <div className="fixed inset-x-3 top-[56px] bottom-3 pb-safe-area-inset-bottom md:absolute md:inset-auto md:right-0 md:mt-3 md:w-96 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50 animate-fade-in">
           {/* 标题栏 */}
           <div className="p-3 border-b border-gray-800 bg-gradient-to-r from-gray-800/50 to-transparent">
             <div className="flex items-center justify-between">
@@ -164,7 +176,7 @@ export function PlayerSettingsPanel({
             </div>
           </div>
 
-          <div className="max-h-[70vh] overflow-y-auto">
+          <div className="h-full max-h-[calc(100dvh-80px)] md:max-h-[70vh] overflow-y-auto">
             {/* 播放器模式选择 */}
             <div className="p-4 border-b border-gray-800">
               <div className="flex items-center justify-between mb-3">
