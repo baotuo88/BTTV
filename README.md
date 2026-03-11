@@ -175,6 +175,12 @@ cd ~/kerkerker
 | ----------------------------- | -------------- | ------------------------------------ |
 | `ADMIN_PASSWORD`              | 后台管理密码   | `admin123`                           |
 | `MONGODB_DB_NAME`             | 数据库名称     | `kerkerker`                          |
+| `SITE_NAME`                   | 站点名称（用于导航品牌） | `宝拓影视`                   |
+| `SITE_TITLE`                  | 浏览器标题（SEO title） | `宝拓影视 - 免费影视在线观看` |
+| `SITE_DESCRIPTION`            | 站点描述（SEO description） | -                           |
+| `NEXT_PUBLIC_SITE_NAME`       | 前端回退站点名称（可选） | -                              |
+| `NEXT_PUBLIC_SITE_TITLE`      | 前端回退标题（可选）   | -                                |
+| `NEXT_PUBLIC_SITE_DESCRIPTION`| 前端回退描述（可选）   | -                                |
 | `NEXT_PUBLIC_DANMU_API_URL`   | 弹幕 API 地址  | `https://danmuapi1-eight.vercel.app` |
 | `NEXT_PUBLIC_DANMU_API_TOKEN` | 弹幕 API Token | -                                    |
 | `RESEND_API_KEY`              | Resend 邮件 Key（找回密码） | -                     |
