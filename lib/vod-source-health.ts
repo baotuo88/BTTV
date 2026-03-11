@@ -100,18 +100,6 @@ export async function recordSourceProbeResults(
             last_checked_at: now,
             updated_at: now,
           },
-          $setOnInsert: {
-            success_count: 0,
-            failure_count: 0,
-            consecutive_failures: 0,
-            sample_count: 0,
-            total_latency_ms: 0,
-            average_latency_ms: 0,
-            last_latency_ms: 0,
-            last_status: "healthy",
-            last_checked_at: now,
-            updated_at: now,
-          },
         },
         { upsert: true }
       );
