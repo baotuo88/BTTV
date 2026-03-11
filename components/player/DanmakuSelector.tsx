@@ -204,7 +204,7 @@ export function DanmakuSelector({
 
       {/* 下拉菜单 */}
       {isOpen && (
-        <div className="fixed inset-x-3 top-[56px] bottom-3 pb-safe-area-inset-bottom md:absolute md:inset-auto md:right-0 md:mt-3 md:w-96 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
+        <div className="absolute right-0 mt-3 w-[min(92vw,24rem)] md:w-96 pb-safe-area-inset-bottom bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
           {/* 头部 */}
           <div className="p-3 border-b border-gray-800 bg-gradient-to-r from-gray-800/50 to-transparent">
             <div className="flex items-center justify-between">
@@ -247,7 +247,7 @@ export function DanmakuSelector({
           </div>
 
           {/* 内容区域 */}
-          <div className="h-full max-h-[calc(100dvh-150px)] md:max-h-[50vh] overflow-y-auto p-3 space-y-3">
+          <div className="max-h-[calc(100dvh-180px)] md:max-h-[50vh] overflow-y-auto p-3 space-y-3">
             {/* 错误提示 */}
             {error && (
               <div className="flex items-center gap-2 p-2 bg-red-500/20 border border-red-500/30 rounded-lg text-red-300 text-xs">
