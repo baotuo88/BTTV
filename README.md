@@ -71,7 +71,7 @@
 1. 点击上方按钮，Fork 项目到 Vercel
 2. 在 Vercel 控制台设置环境变量：
    ```
-   MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/kerkerker
+   MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/BTTV
    ADMIN_PASSWORD=your_password
    ```
 3. 部署完成！
@@ -112,7 +112,7 @@ services:
       - "3000:3000" # 修改左侧端口号自定义访问端口
     environment:
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - MONGODB_URI=mongodb://mongodb:27017/kerkerker
+      - MONGODB_URI=mongodb://mongodb:27017/BTTV
     depends_on:
       mongodb:
         condition: service_healthy
@@ -135,31 +135,6 @@ docker-compose pull        # 更新镜像
 
 ---
 
-### 方式三：VPS 一键部署
-
-在任何装有 Docker 的服务器上执行：
-
-```bash
-# 使用 curl
-curl -fsSL https://raw.githubusercontent.com/baotuo88/BTTV/master/scripts/install.sh | bash
-
-# 使用 wget
-wget -qO- https://raw.githubusercontent.com/baotuo88/BTTV/master/scripts/install.sh | bash
-```
-
-**部署后管理：**
-
-```bash
-cd ~/kerkerker
-./kerkerker.sh start     # 启动
-./kerkerker.sh stop      # 停止
-./kerkerker.sh restart   # 重启
-./kerkerker.sh logs      # 日志
-./kerkerker.sh update    # 更新
-./kerkerker.sh backup    # 备份
-```
-
----
 
 ## ⚙️ 环境变量
 
@@ -174,7 +149,7 @@ cd ~/kerkerker
 | 变量名                        | 说明           | 默认值                               |
 | ----------------------------- | -------------- | ------------------------------------ |
 | `ADMIN_PASSWORD`              | 后台管理密码   | `admin123`                           |
-| `MONGODB_DB_NAME`             | 数据库名称     | `kerkerker`                          |
+| `MONGODB_DB_NAME`             | 数据库名称     | `BTTV`                          |
 | `SITE_NAME`                   | 站点名称（用于导航品牌） | `宝拓影视`                   |
 | `SITE_TITLE`                  | 浏览器标题（SEO title） | `宝拓影视 - 免费影视在线观看` |
 | `SITE_DESCRIPTION`            | 站点描述（SEO description） | -                           |
@@ -190,13 +165,13 @@ cd ~/kerkerker
 
 ```bash
 # Docker 内部（docker-compose 自动配置）
-MONGODB_URI=mongodb://mongodb:27017/kerkerker
+MONGODB_URI=mongodb://mongodb:27017/BTTV
 
 # 本地 MongoDB
-MONGODB_URI=mongodb://localhost:27017/kerkerker
+MONGODB_URI=mongodb://localhost:27017/BTTV
 
 # MongoDB Atlas（云端）
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/kerkerker
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/BTTV
 ```
 
 ---
