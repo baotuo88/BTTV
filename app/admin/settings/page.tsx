@@ -12,12 +12,14 @@ import { DailymotionChannelsTab } from "@/components/admin/DailymotionChannelsTa
 import { ShortsSourcesTab } from "@/components/admin/ShortsSourcesTab";
 import { DatabaseSettingsTab } from "@/components/admin/DatabaseSettingsTab";
 import { UserManagementTab } from "@/components/admin/UserManagementTab";
+import { SiteSettingsTab } from "@/components/admin/SiteSettingsTab";
 import type {
   ToastState,
   ConfirmState,
   UnifiedImportCallbacks,
 } from "@/components/admin/types";
 import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
+import type { SiteConfigData } from "@/types/site-config";
 import {
   Tv,
   Film,
@@ -25,27 +27,42 @@ import {
   Settings,
   Database,
   Users,
+  Globe,
   ChevronDown,
 } from "lucide-react";
 
-type TabType = "sources" | "shorts" | "dailymotion" | "player" | "users" | "database";
+type TabType =
+  | "sources"
+  | "shorts"
+  | "dailymotion"
+  | "player"
+  | "users"
+  | "database"
+  | "site";
 
-const VALID_TABS: TabType[] = ["sources", "shorts", "dailymotion", "player", "users", "database"];
+const VALID_TABS: TabType[] = [
+  "sources",
+  "shorts",
+  "dailymotion",
+  "player",
+  "users",
+  "database",
+  "site",
+];
 
 function SettingsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // 从 URL 读取初始 tab
-  const getInitialTab = (): TabType => {
+  // 从 URL 读取当前 tab
+  const activeTab = useMemo<TabType>(() => {
     const urlTab = searchParams.get("tab");
     if (urlTab && VALID_TABS.includes(urlTab as TabType)) {
       return urlTab as TabType;
     }
     return "sources";
-  };
+  }, [searchParams]);
 
-  const [activeTab, setActiveTab] = useState<TabType>(getInitialTab);
   const [sources, setSources] = useState<VodSource[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>("");
   const [shortsSources, setShortsSources] = useState<ShortDramaSource[]>([]);
@@ -54,6 +71,7 @@ function SettingsContent() {
   const [dailymotionChannels, setDailymotionChannels] = useState<
     DailymotionChannelConfig[]
   >([]);
+  const [siteConfig, setSiteConfig] = useState<SiteConfigData | null>(null);
   const [defaultChannelId, setDefaultChannelId] = useState<
     string | undefined
   >();
@@ -62,22 +80,22 @@ function SettingsContent() {
 
   // 切换 tab 时更新 URL
   const handleTabChange = (tab: TabType) => {
-    setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
-    const urlTab = searchParams.get("tab");
-    if (urlTab && VALID_TABS.includes(urlTab as TabType) && urlTab !== activeTab) {
-      setActiveTab(urlTab as TabType);
-    }
-  }, [activeTab, searchParams]);
-
-  useEffect(() => {
     const loadSettings = async () => {
       try {
+        const siteResponse = await fetch("/api/site-config", {
+          cache: "no-store",
+        });
+        const siteResult = await siteResponse.json();
+        if (siteResult.code === 200 && siteResult.data) {
+          setSiteConfig(siteResult.data);
+        }
+
         const vodResponse = await fetch("/api/vod-sources");
         const vodResult = await vodResponse.json();
 
@@ -186,6 +204,12 @@ function SettingsContent() {
       shortName: "数据库",
       icon: Database,
     },
+    {
+      id: "site" as TabType,
+      name: "站点设置",
+      shortName: "站点",
+      icon: Globe,
+    },
   ];
 
   const activeTabInfo =
@@ -200,7 +224,7 @@ function SettingsContent() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4 sm:gap-6">
               <h1 className="text-xl sm:text-2xl font-bold text-[#E50914]">
-                宝拓影视
+                {siteConfig?.siteName || "宝拓影视"}
               </h1>
               <span className="text-white text-base sm:text-lg">系统设置</span>
             </div>
@@ -340,6 +364,19 @@ function SettingsContent() {
             onShowConfirm={setConfirm}
           />
         )}
+
+        {activeTab === "site" &&
+          (siteConfig ? (
+            <SiteSettingsTab
+              siteConfig={siteConfig}
+              onConfigChange={setSiteConfig}
+              onShowToast={setToast}
+            />
+          ) : (
+            <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333] text-[#9b9b9b]">
+              正在加载站点设置...
+            </div>
+          ))}
       </div>
 
       {/* Toast 通知 */}
