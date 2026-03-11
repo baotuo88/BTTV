@@ -23,7 +23,7 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
 
   // 点击外部关闭下拉菜单
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
@@ -31,10 +31,22 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // 移动端打开时锁定背景，避免误触拖动页面
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
 
@@ -76,7 +88,7 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
       {/* 触发按钮 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full transition-all hover:scale-105 text-white text-xs md:text-sm font-medium shadow-lg backdrop-blur-sm"
+        className="group touch-manipulation flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full transition-all md:hover:scale-105 active:scale-95 text-white text-xs md:text-sm font-medium shadow-lg backdrop-blur-sm"
         aria-label="切换视频源"
         aria-expanded={isOpen}
       >
@@ -104,7 +116,7 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
 
       {/* 下拉菜单 */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-72 md:w-80 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
+        <div className="fixed inset-x-3 top-[56px] bottom-3 pb-safe-area-inset-bottom md:absolute md:inset-auto md:right-0 md:mt-3 md:w-80 bg-gray-900/98 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700 overflow-hidden animate-fade-in z-50">
           {/* 头部 */}
           <div className="p-3 border-b border-gray-800 bg-gradient-to-r from-gray-800/50 to-transparent">
             <div className="flex items-center justify-between">
@@ -121,7 +133,7 @@ export function SourceSelector({ sources, currentSourceKey, onSourceChange }: So
           </div>
 
           {/* 源列表 */}
-          <div className="max-h-[60vh] overflow-y-auto">
+          <div className="h-full max-h-[calc(100dvh-80px)] md:max-h-[60vh] overflow-y-auto">
             {sortedSources.map((source, index) => {
               const isCurrent = source.source_key === currentSourceKey;
               return (
