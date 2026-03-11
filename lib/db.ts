@@ -151,6 +151,15 @@ async function initializeDatabase(db: Db) {
     const siteConfigCollection = db.collection(COLLECTIONS.SITE_CONFIG);
     await siteConfigCollection.createIndex({ id: 1 }, { unique: true });
 
+    // 创建 vod_source_health 集合索引
+    const vodSourceHealthCollection = db.collection(COLLECTIONS.VOD_SOURCE_HEALTH);
+    await vodSourceHealthCollection.createIndex({ key: 1 }, { unique: true });
+    await vodSourceHealthCollection.createIndex({ updated_at: -1 });
+
+    // 创建 operations_config 集合索引
+    const operationsConfigCollection = db.collection(COLLECTIONS.OPERATIONS_CONFIG);
+    await operationsConfigCollection.createIndex({ id: 1 }, { unique: true });
+
     // 创建 users 集合索引
     const usersCollection = db.collection(COLLECTIONS.USERS);
     await usersCollection.createIndex({ email_lower: 1 }, { unique: true });
