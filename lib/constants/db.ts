@@ -17,6 +17,8 @@ export const COLLECTIONS = {
   DAILYMOTION_CHANNELS: 'dailymotion_channels',
   /** Dailymotion 全局配置 */
   DAILYMOTION_CONFIG: 'dailymotion_config',
+  /** 站点全局配置 */
+  SITE_CONFIG: 'site_config',
   /** 播放器配置 */
   PLAYER_CONFIG: 'player_config',
   /** 前台用户 */
