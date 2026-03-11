@@ -1,4 +1,10 @@
+"use client";
+
+import { useSiteConfig } from "@/hooks/useSiteConfig";
+
 export function Footer() {
+  const siteConfig = useSiteConfig();
+
   return (
     <footer className="mt-20 border-t border-gray-800 bg-gradient-to-b from-black to-gray-950">
       <div className="mx-auto px-4 md:px-12 py-12">
@@ -46,7 +52,7 @@ export function Footer() {
         {/* 底部信息 */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <span>© 2026 宝拓影视</span>
+            <span>© 2026 {siteConfig.siteName}</span>
             <span className="text-gray-700">|</span>
             <span>仅供学习交流使用</span>
           </div>
