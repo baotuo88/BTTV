@@ -2,6 +2,10 @@ import { NextRequest } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
 import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
+import {
+  recordSourceProbeResults,
+  sortVodSourcesByHealth,
+} from '@/lib/vod-source-health';
 
 interface DramaListItem {
   vod_id: number;
@@ -67,6 +71,7 @@ function formatDramaList(list: DramaListItem[], source: VodSource) {
 
 // 搜索单个源
 async function searchSingleSource(source: VodSource, keyword: string) {
+  const start = Date.now();
   try {
     let response: Response;
 
@@ -103,7 +108,13 @@ async function searchSingleSource(source: VodSource, keyword: string) {
     }
 
     if (!response.ok) {
-      return { source, results: [], error: 'API请求失败' };
+      return {
+        source,
+        results: [],
+        error: 'API请求失败',
+        latencyMs: Date.now() - start,
+        statusCode: response.status,
+      };
     }
 
     const data: unknown = await response.json();
@@ -111,27 +122,58 @@ async function searchSingleSource(source: VodSource, keyword: string) {
     // 处理代理 API 响应格式
     if (source.searchProxy && isProxyResponse(data)) {
       if (!data.success) {
-        return { source, results: [], error: data.message || '搜索失败' };
+        return {
+          source,
+          results: [],
+          error: data.message || '搜索失败',
+          latencyMs: Date.now() - start,
+          statusCode: response.status,
+        };
       }
       const formattedList = formatDramaList(data.data || [], source);
-      return { source, results: formattedList, error: null };
+      return {
+        source,
+        results: formattedList,
+        error: null,
+        latencyMs: Date.now() - start,
+        statusCode: response.status,
+      };
     }
 
     // 处理标准 API 响应格式
     if (isStandardResponse(data)) {
       if (data.code !== 1) {
-        return { source, results: [], error: data.msg || '未知错误' };
+        return {
+          source,
+          results: [],
+          error: data.msg || '未知错误',
+          latencyMs: Date.now() - start,
+          statusCode: response.status,
+        };
       }
       const formattedList = formatDramaList(data.list || [], source);
-      return { source, results: formattedList, error: null };
+      return {
+        source,
+        results: formattedList,
+        error: null,
+        latencyMs: Date.now() - start,
+        statusCode: response.status,
+      };
     }
 
-    return { source, results: [], error: '无法解析响应格式' };
+    return {
+      source,
+      results: [],
+      error: '无法解析响应格式',
+      latencyMs: Date.now() - start,
+      statusCode: response.status,
+    };
   } catch (error) {
     return { 
       source, 
       results: [], 
-      error: error instanceof Error ? error.message : '搜索失败' 
+      error: error instanceof Error ? error.message : '搜索失败',
+      latencyMs: Date.now() - start,
     };
   }
 }
@@ -153,8 +195,9 @@ export async function GET(request: NextRequest) {
 
   // 获取所有视频源
   const allSources = await getVodSourcesFromDB();
+  const orderedSources = await sortVodSourcesByHealth(allSources);
   
-  if (allSources.length === 0) {
+  if (orderedSources.length === 0) {
     return new Response(JSON.stringify({ error: '未配置视频源' }), {
       status: 404,
       headers: { 'Content-Type': 'application/json' },
@@ -170,13 +213,17 @@ export async function GET(request: NextRequest) {
       controller.enqueue(encoder.encode(
         `data: ${JSON.stringify({ 
           type: 'init', 
-          totalSources: allSources.length,
-          sources: allSources.map(s => ({ key: s.key, name: s.name }))
+          totalSources: orderedSources.length,
+          sources: orderedSources.map((s, index) => ({
+            key: s.key,
+            name: s.name,
+            rank: index + 1,
+          })),
         })}\n\n`
       ));
 
       // 并行搜索所有源，但每个完成就立即推送
-      const searchPromises = allSources.map(async (source) => {
+      const searchPromises = orderedSources.map(async (source) => {
         const result = await searchSingleSource(source, keyword);
         
         // 每个源完成后立即推送结果
@@ -195,7 +242,20 @@ export async function GET(request: NextRequest) {
       });
 
       // 等待所有搜索完成
-      await Promise.all(searchPromises);
+      const settled = await Promise.all(searchPromises);
+      try {
+        await recordSourceProbeResults(
+          settled.map((item) => ({
+            key: item.source.key,
+            ok: !item.error,
+            latencyMs: item.latencyMs || 0,
+            statusCode: item.statusCode,
+            error: item.error || undefined,
+          }))
+        );
+      } catch (error) {
+        console.warn("记录视频源健康状态失败:", error);
+      }
 
       // 发送完成信号
       controller.enqueue(encoder.encode(
