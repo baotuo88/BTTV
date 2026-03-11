@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, type ComponentType } from "react";
 import {
   Menu,
   X,
@@ -21,6 +21,21 @@ import {
 import { HistoryPopup } from "./HistoryPopup";
 import type { UserPublic } from "@/types/user";
 import { useSiteConfig } from "@/hooks/useSiteConfig";
+import { useOperationsConfig } from "@/hooks/useOperationsConfig";
+
+interface NavChildItem {
+  href: string;
+  label: string;
+}
+
+interface NavItem {
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  href?: string;
+  external?: boolean;
+  mobileOnly?: boolean;
+  children?: NavChildItem[];
+}
 
 interface NavbarProps {
   scrolled: boolean;
@@ -30,6 +45,7 @@ interface NavbarProps {
 export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
   const router = useRouter();
   const siteConfig = useSiteConfig();
+  const operationsConfig = useOperationsConfig();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileUserMenuOpen, setIsMobileUserMenuOpen] = useState(false);
   const [isDesktopUserMenuOpen, setIsDesktopUserMenuOpen] = useState(false);
@@ -120,28 +136,47 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
     };
   }, [isMobileUserMenuOpen, isDesktopUserMenuOpen]);
 
-  const navItems = [
-    { href: "/", label: "首页", icon: Home },
-    { href: "/browse/movies", label: "电影", icon: Film },
-    { href: "/browse/tv", label: "电视剧", icon: Tv },
-    { href: "/calendar", label: "追剧日历", icon: Calendar },
-    { href: "/browse/latest", label: "最新", icon: Clock },
-    { href: "/history", label: "历史记录", icon: History, mobileOnly: true },
-    {
-      label: "短剧",
-      icon: Video,
-      children: [
-        { href: "/shorts", label: "短剧" },
-        { href: "/dailymotion", label: "短剧Motion" },
-      ],
-    },
-    {
-      href: "https://github.com/baotuo88/BTTV",
-      label: "Github",
-      icon: Github,
-      external: true,
-    },
-  ];
+  const navItems = useMemo<NavItem[]>(() => {
+    const baseItems: NavItem[] = [
+      { href: "/", label: "首页", icon: Home },
+      { href: "/browse/movies", label: "电影", icon: Film },
+      { href: "/browse/tv", label: "电视剧", icon: Tv },
+      { href: "/calendar", label: "追剧日历", icon: Calendar },
+      { href: "/browse/latest", label: "最新", icon: Clock },
+      { href: "/history", label: "历史记录", icon: History, mobileOnly: true },
+      {
+        label: "短剧",
+        icon: Video,
+        children: [
+          { href: "/shorts", label: "短剧" },
+          { href: "/dailymotion", label: "短剧Motion" },
+        ],
+      },
+    ];
+
+    if (operationsConfig.showGithubLink) {
+      baseItems.push({
+        href: "https://github.com/baotuo88/BTTV",
+        label: "Github",
+        icon: Github,
+        external: true,
+      });
+    }
+
+    const customLinks: NavItem[] = operationsConfig.navLinks
+      .filter((link) => link.enabled && link.label.trim() && link.href.trim())
+      .map((link) => ({
+        href: link.href.trim(),
+        label: link.label.trim(),
+        icon: Film,
+        external:
+          link.newTab ||
+          link.href.startsWith("http://") ||
+          link.href.startsWith("https://"),
+      }));
+
+    return [...baseItems, ...customLinks];
+  }, [operationsConfig]);
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
