@@ -394,10 +394,10 @@ export default function MovieDetailPage() {
 
       {/* 加载中骨架屏 */}
       {isLoadingDetail && (
-        <main className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
+        <main className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
             {/* 海报骨架 */}
-            <div className="w-full max-w-[300px] mx-auto lg:w-[360px] shrink-0">
+            <div className="w-full max-w-[min(78vw,18rem)] sm:max-w-[300px] mx-auto lg:w-[360px] shrink-0">
               <div className="aspect-2/3 rounded-2xl bg-white/10 animate-pulse shadow-2xl shadow-black/50" />
             </div>
 
@@ -466,10 +466,10 @@ export default function MovieDetailPage() {
 
       {/* 主内容 */}
       {!isLoadingDetail && (
-        <main className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
+        <main className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
             {/* 左侧海报 */}
-            <div className="w-full max-w-[300px] mx-auto lg:w-[360px] shrink-0 animate-fade-in">
+            <div className="w-full max-w-[min(78vw,18rem)] sm:max-w-[300px] mx-auto lg:w-[360px] shrink-0 animate-fade-in">
               <div className="aspect-2/3 rounded-2xl overflow-hidden shadow-2xl shadow-black/80 border border-white/10 relative group">
                 <img
                   src={getImageUrl(cover)}
@@ -483,8 +483,8 @@ export default function MovieDetailPage() {
             {/* 右侧信息 & 播放源 */}
             <div className="flex-1 w-full animate-fade-in delay-100">
               {/* 标题和元数据 */}
-              <div className="mb-10">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-xl">
+              <div className="mb-8 md:mb-10">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-xl">
                   {title}
                 </h1>
 
@@ -583,7 +583,7 @@ export default function MovieDetailPage() {
                       <ImageIcon className="w-5 h-5 text-blue-400" />
                       剧照
                     </h3>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {movieDetail.photos.slice(0, 6).map((photo) => (
                         <a
                           key={photo.id}
@@ -630,13 +630,13 @@ export default function MovieDetailPage() {
               </div>
 
               {/* 播放源区域 */}
-              <div className="bg-[#121212]/40 backdrop-blur-2xl rounded-3xl border border-white/5 p-6 md:p-8 shadow-2xl shadow-black/20">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-white flex items-center gap-3">
+              <div className="bg-[#121212]/40 backdrop-blur-2xl rounded-3xl border border-white/5 p-4 sm:p-6 md:p-8 shadow-2xl shadow-black/20">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+                  <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-3">
                     <span className="w-1 h-6 bg-red-600 rounded-full" />
                     播放源
                     {searchStatus === "searching" && totalSourceCount > 0 && (
-                      <span className="text-sm font-normal text-gray-400 ml-2 flex items-center gap-2">
+                      <span className="text-xs sm:text-sm font-normal text-gray-400 ml-2 flex items-center gap-2">
                         <Loader2 className="w-3 h-3 animate-spin" />
                         正在搜索... {searchedSourceCount}/{totalSourceCount}
                       </span>
@@ -645,7 +645,7 @@ export default function MovieDetailPage() {
 
                   {/* 统计信息 */}
                   {availableSources.length > 0 && (
-                    <div className="text-sm text-gray-400 bg-black/20 px-3 py-1 rounded-full border border-white/5">
+                    <div className="text-xs sm:text-sm text-gray-400 bg-black/20 px-3 py-1 rounded-full border border-white/5">
                       已找到{" "}
                       <span className="text-white font-bold">
                         {availableSources.length}
@@ -672,7 +672,7 @@ export default function MovieDetailPage() {
                     {/* 快速播放 */}
                     <button
                       onClick={handleQuickPlay}
-                      className="w-full md:w-auto flex items-center justify-center gap-3 bg-red-600 hover:bg-red-500 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-red-900/20 group"
+                      className="w-full md:w-auto flex items-center justify-center gap-3 bg-red-600 hover:bg-red-500 text-white px-6 sm:px-8 md:px-10 py-3.5 md:py-4 rounded-2xl font-bold text-base md:text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-red-900/20 group"
                     >
                       <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Play className="w-4 h-4 fill-red-600 text-red-600 ml-0.5" />
@@ -794,7 +794,7 @@ export default function MovieDetailPage() {
                   <Film className="w-6 h-6 text-red-500" />
                   相关推荐
                 </h2>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
                   {movieDetail.recommendations.map((rec) => (
                     <Link
                       key={rec.id}

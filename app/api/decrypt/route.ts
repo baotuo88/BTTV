@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { ensureAdminApiAuth } from '@/lib/api-auth';
+import { assertSafeRemoteUrl } from '@/lib/server/safe-remote-url';
 
 const PBKDF2_ITERATIONS = 100000;
 
@@ -124,7 +125,8 @@ export async function POST(request: NextRequest) {
 
     if (subscriptionUrl) {
       // 从 URL 获取加密配置
-      const response = await fetch(subscriptionUrl);
+      const safeSubscriptionUrl = await assertSafeRemoteUrl(subscriptionUrl);
+      const response = await fetch(safeSubscriptionUrl.toString());
       if (!response.ok) {
         throw new Error(`获取配置失败: ${response.status}`);
       }

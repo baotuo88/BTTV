@@ -12,6 +12,22 @@ export interface ShortDrama {
   type_name: string;
 }
 
+interface ShortDramaApiItem {
+  vod_id: number;
+  vod_name: string;
+  vod_pic?: string;
+  vod_remarks?: string;
+  vod_time?: string;
+  type_name?: string;
+}
+
+interface ShortDramaApiResponse {
+  page: number;
+  pagecount: number;
+  total: number;
+  list: ShortDramaApiItem[];
+}
+
 export interface ShortsListResponse {
   code: number;
   msg: string;
@@ -81,7 +97,7 @@ export async function GET(request: NextRequest) {
       throw new Error(`API request failed: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as ShortDramaApiResponse;
 
     return NextResponse.json({
       code: 200,
@@ -90,13 +106,13 @@ export async function GET(request: NextRequest) {
         page: data.page,
         pagecount: data.pagecount,
         total: data.total,
-        list: data.list.map((item: any) => ({
+        list: data.list.map((item) => ({
           vod_id: item.vod_id,
           vod_name: item.vod_name,
           vod_pic: item.vod_pic || "",
-          vod_remarks: item.vod_remarks,
-          vod_time: item.vod_time,
-          type_name: item.type_name,
+          vod_remarks: item.vod_remarks || "",
+          vod_time: item.vod_time || "",
+          type_name: item.type_name || "",
         })),
         source: source.key,
         sources: sources.map(s => ({ key: s.key, name: s.name })),

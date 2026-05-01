@@ -35,16 +35,16 @@ export function WatchHistory() {
   };
 
   return (
-    <div className="px-4 md:px-12">
+    <div className="px-4 sm:px-5 md:px-12">
       {/* 标题和查看全部 */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
+        <h2 className="min-w-0 text-lg sm:text-xl md:text-2xl font-bold text-white flex items-center gap-2 sm:gap-3">
           <History className="w-6 h-6 text-red-500" />
-          <span>继续观看</span>
+          <span className="truncate">继续观看</span>
         </h2>
         <Link
           href="/history"
-          className="text-sm text-gray-400 hover:text-white transition-colors flex items-center space-x-1 group"
+          className="shrink-0 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors flex items-center space-x-1 group"
         >
           <span>{hasMore ? `查看全部 (${history.length})` : "管理历史"}</span>
           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -53,12 +53,12 @@ export function WatchHistory() {
 
       {/* 横向滚动列表 */}
       <div className="relative group">
-        <div className="flex overflow-x-auto space-x-3 md:space-x-4 pb-4 scrollbar-hide scroll-smooth">
+        <div className="flex overflow-x-auto gap-2.5 sm:gap-3 md:gap-4 pb-4 scrollbar-hide scroll-smooth">
           {displayHistory.map((item) => (
             <div
               key={item.id}
               onClick={() => handleClick(item)}
-              className="shrink-0 w-40 sm:w-48 md:w-56 cursor-pointer group/card"
+              className="shrink-0 w-[42vw] min-w-[8rem] max-w-[10rem] sm:w-44 md:w-56 cursor-pointer group/card"
             >
               <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-gray-800 shadow-lg transition-all duration-300 group-hover/card:shadow-xl group-hover/card:shadow-red-500/20 group-hover/card:scale-105">
                 {/* 封面图 */}

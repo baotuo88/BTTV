@@ -12,8 +12,6 @@ import {
   Search,
   ArrowLeft,
   Check,
-  Film,
-  Tv,
 } from "lucide-react";
 
 export default function HistoryPage() {
@@ -223,7 +221,7 @@ export default function HistoryPage() {
               未找到相关记录
             </h2>
             <p className="text-gray-400">
-              没有找到包含 "{searchKeyword}" 的历史记录
+              没有找到包含 &quot;{searchKeyword}&quot; 的历史记录
             </p>
           </div>
         ) : (

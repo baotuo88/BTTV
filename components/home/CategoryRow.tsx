@@ -22,17 +22,17 @@ export function CategoryRow({
   const hasMore = movies.length > INITIAL_DISPLAY_COUNT;
 
   return (
-    <div className="px-4 md:px-12">
+    <div className="px-4 sm:px-5 md:px-12">
       {/* 标题和查看更多 */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
+        <h2 className="min-w-0 text-lg sm:text-xl md:text-2xl font-bold text-white flex items-center gap-2 sm:gap-3">
           {icon}
-          <span>{title}</span>
+          <span className="truncate">{title}</span>
         </h2>
         {hasMore && (
           <button
             onClick={onViewMore}
-            className="text-sm text-gray-400 hover:text-white transition-colors flex items-center space-x-1 group"
+            className="shrink-0 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors flex items-center space-x-1 group"
           >
             <span>查看全部</span>
             <svg
@@ -54,9 +54,12 @@ export function CategoryRow({
 
       {/* 横向滚动列表 */}
       <div className="relative group">
-        <div className="flex overflow-x-auto space-x-3 md:space-x-4 pb-4 scrollbar-hide scroll-smooth">
+        <div className="flex overflow-x-auto gap-2.5 sm:gap-3 md:gap-4 pb-4 scrollbar-hide scroll-smooth">
           {displayMovies.map((movie) => (
-            <div key={movie.id} className="shrink-0 w-40 sm:w-48 md:w-56">
+            <div
+              key={movie.id}
+              className="shrink-0 w-[42vw] min-w-[8rem] max-w-[10rem] sm:w-44 md:w-56"
+            >
               <DoubanCard movie={movie} onSelect={onMovieClick} />
             </div>
           ))}

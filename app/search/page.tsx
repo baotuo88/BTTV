@@ -179,7 +179,7 @@ function SearchContent() {
         setLoading(false);
       }
     },
-    [startTransition]
+    [allSources.length, startTransition]
   );
 
   // 当搜索关键词变化时执行搜索
@@ -217,8 +217,8 @@ function SearchContent() {
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-red-500/30">
       {/* 顶部导航栏 */}
       <div className="sticky top-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/50">
-        <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
+        <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             {/* 返回按钮和Logo */}
             <div className="flex items-center gap-4 shrink-0">
               <button
@@ -248,7 +248,7 @@ function SearchContent() {
               </h1>
             </div>
             {/* 搜索框 */}
-            <div className="flex-1 max-w-2xl mx-auto">
+            <div className="order-3 sm:order-none basis-full sm:basis-auto flex-1 min-w-0 max-w-2xl mx-auto">
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <svg
@@ -277,7 +277,7 @@ function SearchContent() {
                 {searchKeyword && (
                   <button
                     onClick={() => setSearchKeyword("")}
-                    className="absolute inset-y-0 right-14 pr-2 flex items-center"
+                    className="absolute inset-y-0 right-12 sm:right-14 pr-2 flex items-center"
                   >
                     <svg
                       className="w-4 h-4 text-gray-500 hover:text-white transition-colors"
@@ -296,13 +296,13 @@ function SearchContent() {
                 )}
                 <button
                   onClick={handleSearch}
-                  className="absolute inset-y-0 right-1.5 my-1.5 px-4 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-full transition-colors shadow-lg shadow-red-900/20"
+                  className="absolute inset-y-0 right-1.5 my-1.5 px-3 sm:px-4 bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-medium rounded-full transition-colors shadow-lg shadow-red-900/20"
                 >
                   搜索
                 </button>
               </div>
             </div>
-            <div className="w-10 sm:w-[88px] shrink-0" />{" "}
+            <div className="hidden sm:block w-[88px] shrink-0" />
             {/* Spacer for alignment */}
           </div>
 
@@ -359,10 +359,10 @@ function SearchContent() {
       </div>
 
       {/* 内容区域 */}
-      <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[60vh]">
+      <div className="max-w-[2000px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 min-h-[60vh]">
         {/* 状态反馈条 */}
         {(loading || searched) && (
-          <div className="mb-8 flex items-center justify-between text-sm">
+          <div className="mb-6 sm:mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm">
             <div className="flex items-center gap-2 text-gray-400">
               {loading ? (
                 <>
@@ -395,7 +395,7 @@ function SearchContent() {
         {/* 结果展示 */}
         {allSources.length === 0 ? (
           // 无视频源配置
-          <div className="flex flex-col items-center justify-center py-32 animate-fade-in">
+          <div className="flex flex-col items-center justify-center py-24 sm:py-32 animate-fade-in text-center px-4">
             <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6 border border-red-500/20">
               <svg
                 className="w-10 h-10 text-red-500"
@@ -428,7 +428,7 @@ function SearchContent() {
         ) : searched || searchResults.length > 0 ? (
           searchResults.length > 0 ? (
             <div className="animate-fade-in">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-y-8 gap-x-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-y-6 sm:gap-y-8 gap-x-3 sm:gap-x-4">
                 {searchResults
                   .filter(
                     (drama) =>
@@ -469,7 +469,7 @@ function SearchContent() {
             </div>
           ) : (
             /* 无结果 */
-            <div className="flex flex-col items-center justify-center py-32">
+            <div className="flex flex-col items-center justify-center py-24 sm:py-32 text-center px-4">
               <div className="w-24 h-24 bg-gray-900 rounded-full flex items-center justify-center mb-6">
                 <svg
                   className="w-12 h-12 text-gray-600"
@@ -495,7 +495,7 @@ function SearchContent() {
               <p className="text-gray-500 text-sm mb-6">
                 已搜索: {allSources.map((s) => s.name).join("、")}
               </p>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
                 <button
                   onClick={goBack}
                   className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
@@ -513,7 +513,7 @@ function SearchContent() {
           )
         ) : (
           /* 初始状态 */
-          <div className="flex flex-col items-center justify-center py-32">
+          <div className="flex flex-col items-center justify-center py-24 sm:py-32 text-center px-4">
             <div className="w-24 h-24 bg-gray-900 rounded-full flex items-center justify-center mb-6">
               <svg
                 className="w-12 h-12 text-gray-600"

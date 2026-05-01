@@ -12,6 +12,19 @@ interface Source {
   name: string;
 }
 
+interface ShortsListItem {
+  vod_id: number;
+  vod_name: string;
+  vod_pic: string;
+  vod_remarks: string;
+}
+
+interface ShortsListResponseData {
+  pagecount: number;
+  list: ShortsListItem[];
+  sources?: Source[];
+}
+
 export default function ShortsPage() {
   const [dramas, setDramas] = useState<ShortDrama[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,16 +77,17 @@ export default function ShortsPage() {
           throw new Error(result.msg || "获取短剧列表失败");
         }
 
-        const dramaList = result.data.list;
+        const responseData = result.data as ShortsListResponseData;
+        const dramaList = responseData.list;
 
         // 保存可用源列表
-        if (result.data.sources) {
-          setSources(result.data.sources);
+        if (responseData.sources) {
+          setSources(responseData.sources);
         }
 
         // 并行获取每个短剧的详情
         const dramasWithEpisodes = await Promise.all(
-          dramaList.map(async (drama: any) => {
+          dramaList.map(async (drama) => {
             const episodes = await fetchDramaDetail(drama.vod_id, source);
             return {
               vod_id: drama.vod_id,
@@ -99,7 +113,7 @@ export default function ShortsPage() {
           setDramas(validDramas);
         }
 
-        setHasMore(pageNum < result.data.pagecount);
+        setHasMore(pageNum < responseData.pagecount);
         setError(null);
       } catch (err) {
         console.error("[Shorts Fetch Error]", err);

@@ -236,22 +236,22 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 pt-safe-area-inset-top transition-all duration-300 ${
           scrolled
             ? "bg-black"
             : "bg-gradient-to-b from-black/80 to-transparent"
         }`}
       >
-        <div className="px-3 sm:px-4 md:px-12 py-3 md:py-4 flex items-center justify-between">
+        <div className="px-3 sm:px-4 md:px-12 py-3 md:py-4 flex items-center justify-between gap-2 md:gap-4">
           {/* 左侧：汉堡菜单（移动端）+ Logo */}
-          <div className="flex items-center space-x-2 md:space-x-8">
+          <div className="flex min-w-0 flex-1 items-center gap-2 md:gap-8">
             {/* 汉堡菜单按钮 - 仅移动端 */}
             <button
               onClick={() => {
                 setIsMobileUserMenuOpen(false);
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
-              className="md:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="md:hidden p-1.5 sm:p-2 hover:bg-white/10 rounded-lg transition-colors shrink-0"
               aria-label="菜单"
             >
               {isMobileMenuOpen ? (
@@ -272,7 +272,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
                 src="/logo.png"
                 alt="logo"
               />
-              <span className="text-red-600 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-none whitespace-nowrap hover:text-red-500 transition-colors">
+              <span className="max-w-[calc(100vw-12rem)] sm:max-w-[calc(100vw-18rem)] md:max-w-none truncate text-red-600 text-[clamp(1rem,4.8vw,1.35rem)] md:text-2xl lg:text-3xl font-bold tracking-tight leading-none hover:text-red-500 transition-colors">
                 {siteConfig.siteName}
               </span>
             </Link>
@@ -339,12 +339,12 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
           </div>
 
           {/* 右侧功能区 */}
-          <div className="flex items-center space-x-1 md:space-x-2">
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1 md:gap-2">
             {/* 用户入口（移动端右上角） */}
             <div ref={mobileUserMenuRef} className="md:hidden relative">
               <button
                 onClick={() => setIsMobileUserMenuOpen((prev) => !prev)}
-                className="px-2 py-1.5 rounded-lg text-[11px] font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1"
+                className="max-w-[88px] px-2 py-1.5 rounded-lg text-[11px] font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors inline-flex items-center gap-1"
                 aria-label="移动端用户菜单"
               >
                 <UserRound className="w-3.5 h-3.5" />
@@ -359,7 +359,7 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
               </button>
 
               {isMobileUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden">
+                <div className="absolute right-0 mt-2 w-[min(72vw,14rem)] bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl overflow-hidden">
                   {currentUser ? (
                     renderLoggedInMenu(() => setIsMobileUserMenuOpen(false))
                   ) : (
@@ -475,22 +475,22 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
 
         {/* 侧边栏内容 */}
         <div
-          className={`absolute top-0 left-0 h-full w-[280px] bg-gradient-to-b from-gray-900 to-black shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${
+          className={`absolute top-0 left-0 h-full w-[min(82vw,20rem)] pt-safe-area-inset-top pb-safe-area-inset-bottom bg-gradient-to-b from-gray-900 to-black shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           {/* 侧边栏头部 */}
-          <div className="p-6 border-b border-gray-800">
+          <div className="p-5 border-b border-gray-800">
             <div className="flex items-center gap-2">
               <img className="w-10 h-10" src="/logo.png" alt="logo" />
-              <h2 className="text-red-600 text-2xl font-bold tracking-tight">
+              <h2 className="min-w-0 truncate text-red-600 text-xl sm:text-2xl font-bold tracking-tight">
                 {siteConfig.siteName}
               </h2>
             </div>
           </div>
 
           {/* 导航菜单 */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-2 pb-6">
+          <nav className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2 pb-6">
             {navItems.map((item) => {
               const Icon = item.icon;
               if (item.children) {
@@ -533,8 +533,8 @@ export function Navbar({ scrolled, onSearchOpen }: NavbarProps) {
           </nav>
 
           {/* 侧边栏底部 */}
-          <div className="px-6 py-4 border-t border-gray-800">
-            <p className="text-xs text-gray-500 text-center">
+          <div className="px-5 py-4 border-t border-gray-800">
+            <p className="text-[11px] text-gray-500 text-center">
               © 2026 {siteConfig.siteName} · 海量影视随心看
             </p>
           </div>

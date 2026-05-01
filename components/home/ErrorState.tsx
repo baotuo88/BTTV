@@ -5,7 +5,7 @@ interface ErrorStateProps {
 
 export function ErrorState({ error, onRetry }: ErrorStateProps) {
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className="min-h-[100dvh] flex items-center justify-center">
       <div className="text-center px-4 max-w-md">
         <div className="w-24 h-24 mx-auto mb-6 bg-red-900/20 rounded-full flex items-center justify-center">
           <svg

@@ -405,7 +405,7 @@ export default function BrowsePage() {
         setLoadingMore(false);
       }
     },
-    [config.api, config.hasCategories, config.hasFilters, filters]
+    [config.api, config.hasCategories, filters]
   );
 
   // 筛选条件变化时重置并重新加载

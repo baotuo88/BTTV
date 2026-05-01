@@ -116,21 +116,21 @@ export function HeroBanner({
 
               {/* 内容区域 */}
               <div className="absolute inset-0 flex items-end">
-                <div className="w-full px-4 md:px-12 lg:px-16 pb-20 md:pb-24">
+                <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 pb-10 sm:pb-14 md:pb-24">
                   <div
-                    className={`max-w-3xl transform transition-all duration-700 delay-100 ${
+                    className={`max-w-[min(100%,24rem)] md:max-w-3xl transform transition-all duration-700 delay-100 ${
                       isActive
                         ? "translate-y-0 opacity-100"
                         : "translate-y-8 opacity-0"
                     }`}
                   >
                     {/* 标题 */}
-                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 leading-tight drop-shadow-xl">
+                    <h1 className="text-[clamp(1.9rem,8.5vw,3rem)] md:text-5xl lg:text-7xl font-bold text-white mb-3 md:mb-4 leading-[1.05] drop-shadow-xl">
                       {movie.title}
                     </h1>
 
                     {/* 元信息栏 */}
-                    <div className="flex flex-wrap items-center gap-3 mb-6 text-sm md:text-base">
+                    <div className="flex flex-wrap items-center gap-2.5 md:gap-3 mb-5 md:mb-6 text-xs sm:text-sm md:text-base">
                       {movie.rate && (
                         <div className="flex items-center text-yellow-400 font-bold bg-black/30 px-2 py-1 rounded backdrop-blur-md">
                           <span className="text-lg">{movie.rate}</span>
@@ -184,13 +184,13 @@ export function HeroBanner({
                     )}
 
                     {/* 操作按钮 */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-3">
                       <button
                         onClick={() => onMovieClick(movie)}
-                        className="group flex items-center gap-3 bg-white text-black px-8 py-3.5 rounded-xl font-bold hover:bg-primary hover:scale-105 transition-all duration-300 shadow-lg shadow-white/5"
+                        className="group flex items-center gap-2.5 bg-white text-black px-5 sm:px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-bold text-sm sm:text-base md:text-lg hover:bg-primary hover:scale-105 transition-all duration-300 shadow-lg shadow-white/5"
                       >
-                        <Play className="w-6 h-6 fill-black group-hover:fill-black transition-colors" />
-                        <span className="text-lg">立即播放</span>
+                        <Play className="w-5 h-5 md:w-6 md:h-6 fill-black group-hover:fill-black transition-colors" />
+                        <span>立即播放</span>
                       </button>
                     </div>
                   </div>
@@ -255,7 +255,7 @@ function HeroBannerSkeleton() {
 
       {/* 内容骨架 */}
       <div className="absolute inset-0 flex items-end">
-        <div className="w-full px-4 md:px-12 lg:px-16 pb-20 md:pb-24">
+        <div className="w-full px-4 sm:px-6 md:px-12 lg:px-16 pb-10 sm:pb-14 md:pb-24">
           <div className="max-w-3xl space-y-4">
             {/* 标题骨架 */}
             <div className="h-10 md:h-14 lg:h-16 bg-white/10 rounded-lg w-2/3 animate-pulse" />
@@ -275,7 +275,7 @@ function HeroBannerSkeleton() {
 
             {/* 按钮骨架 */}
             <div className="flex gap-3 mt-6">
-              <div className="h-12 w-32 bg-white/20 rounded-lg animate-pulse" />
+              <div className="h-12 w-28 sm:w-32 md:w-36 bg-white/20 rounded-lg animate-pulse" />
               <div className="h-12 w-12 bg-white/10 rounded-lg animate-pulse hidden md:block" />
             </div>
           </div>

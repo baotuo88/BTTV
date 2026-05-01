@@ -589,7 +589,7 @@ export default function PlayPage() {
 
   return (
     <div
-      className="w-full min-h-[100dvh]"
+      className="w-full min-h-[100dvh] overflow-x-clip"
       style={{
         backgroundPosition: "center",
         backgroundSize: "cover",
@@ -598,17 +598,17 @@ export default function PlayPage() {
     >
       {/* 顶部导航栏 - Netflix风格 */}
       <nav className="sticky top-0 z-450 bg-zinc-900/95 backdrop-blur-md border-b border-white/5">
-        <div className="w-full mx-auto px-4 md:px-6 h-[48px] md:h-[64px] flex items-center justify-between">
+        <div className="w-full mx-auto px-3 sm:px-4 md:px-6 min-h-[48px] md:h-[64px] py-2 md:py-0 flex items-center justify-between gap-2">
           <button
             onClick={() => router.back()}
-            className="text-white text-lg font-bold flex items-center gap-2 hover:text-red-500 transition-all duration-300 group"
+            className="text-white text-sm sm:text-lg font-bold flex items-center gap-1.5 sm:gap-2 hover:text-red-500 transition-all duration-300 group shrink-0"
           >
             <div className="p-2 rounded-lg bg-white/5 group-hover:bg-red-500/10 transition-all duration-300">
               <ArrowLeft className="w-5 h-5" />
             </div>
             <span className="hidden sm:inline">返回</span>
           </button>
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex max-w-[65%] md:max-w-none flex-wrap items-center justify-end gap-2 md:gap-4">
             {/* 多源选择器 */}
             <SourceSelector
               sources={availableSources}
@@ -641,7 +641,7 @@ export default function PlayPage() {
             {!isRightPanelOpen && (
               <button
                 onClick={() => setIsRightPanelOpen(true)}
-                className="p-2 rounded-lg bg-white/5 hover:bg-red-500/10 transition-all duration-300 group"
+                className="p-1.5 sm:p-2 rounded-lg bg-white/5 hover:bg-red-500/10 transition-all duration-300 group"
                 title="打开侧边栏"
               >
                 <ChevronLeft className="w-5 h-5 text-white group-hover:text-red-500 transform rotate-180" />
@@ -690,7 +690,7 @@ export default function PlayPage() {
           </div>
 
           {/* 视频下方信息 - 仅在移动端显示 */}
-          <div className="lg:hidden p-4 bg-linear-to-b from-gray-900/90 to-gray-950/90 backdrop-blur-sm">
+          <div className="lg:hidden p-3 sm:p-4 bg-linear-to-b from-gray-900/90 to-gray-950/90 backdrop-blur-sm">
             <h1 className="text-sm font-bold text-white mb-2 tracking-tight">
               {dramaDetail.name}
             </h1>
@@ -754,7 +754,7 @@ export default function PlayPage() {
 
         {/* 右侧：剧集信息和选择器 - Netflix风格 */}
         {isRightPanelOpen ? (
-          <div className="w-full lg:w-[380px] xl:w-[420px] bg-zinc-900 overflow-y-auto lg:max-h-[calc(100vh-65px)] relative">
+          <div className="w-full max-w-full lg:w-[380px] xl:w-[420px] bg-zinc-900 overflow-y-auto lg:max-h-[calc(100vh-65px)] relative">
             {/* 关闭按钮 */}
             <button
               onClick={() => setIsRightPanelOpen(false)}
@@ -763,7 +763,7 @@ export default function PlayPage() {
             >
               <X className="w-5 h-5 text-gray-300 group-hover:text-white" />
             </button>
-            <div className="p-4 lg:p-6 space-y-4 lg:space-y-6">
+            <div className="p-4 sm:p-5 lg:p-6 space-y-4 lg:space-y-6">
               {/* 查看全部集数模式 */}
               {showAllEpisodes ? (
                 <div className="space-y-4 lg:space-y-6">
@@ -801,7 +801,7 @@ export default function PlayPage() {
                   </div>
 
                   {/* 所有集数网格 */}
-                  <div className="grid grid-cols-4 gap-2.5 pb-6">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 pb-6">
                     {dramaDetail.episodes.map((episode, index) => (
                       <button
                         key={index}
@@ -1014,7 +1014,7 @@ export default function PlayPage() {
                     </div>
 
                     {/* 集数预览（显示前12集） */}
-                    <div className="grid grid-cols-4 gap-2.5 mb-4">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 mb-4">
                       {dramaDetail.episodes
                         .slice(0, 12)
                         .map((episode, index) => (

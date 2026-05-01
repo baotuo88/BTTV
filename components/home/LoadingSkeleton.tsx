@@ -14,7 +14,7 @@ export function LoadingSkeleton() {
         
         {/* 内容骨架 */}
         <div className="absolute inset-0 flex items-end">
-          <div className="w-full px-4 md:px-12 pb-8 md:pb-12 lg:pb-16">
+          <div className="w-full px-4 sm:px-6 md:px-12 pb-8 md:pb-12 lg:pb-16">
             <div className="max-w-3xl space-y-3 md:space-y-4">
               {/* 标题骨架 */}
               <div className="h-12 md:h-16 bg-zinc-900/50 rounded-lg w-3/4 animate-pulse" />
@@ -55,7 +55,7 @@ export function LoadingSkeleton() {
       {/* 分类骨架屏 - 10个分类，每个15个卡片 */}
       <div className="relative z-20 mt-6 sm:-mt-4 md:-mt-4 lg:-mt-4 space-y-10 md:space-y-12 lg:space-y-16 pb-16">
         {[...Array(10)].map((_, i) => (
-          <div key={i} className="px-4 md:px-12">
+          <div key={i} className="px-4 sm:px-5 md:px-12">
             {/* 分类标题骨架 */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -67,9 +67,12 @@ export function LoadingSkeleton() {
             </div>
             
             {/* 影片卡片骨架 - 15个卡片 */}
-            <div className="flex overflow-x-auto space-x-3 md:space-x-4 pb-4 scrollbar-hide">
+            <div className="flex overflow-x-auto gap-2.5 sm:gap-3 md:gap-4 pb-4 scrollbar-hide">
               {[...Array(15)].map((_, j) => (
-                <div key={j} className="flex-shrink-0 w-40 sm:w-48 md:w-56">
+                <div
+                  key={j}
+                  className="flex-shrink-0 w-[42vw] min-w-[8rem] max-w-[10rem] sm:w-44 md:w-56"
+                >
                   {/* 海报骨架 */}
                   <div className="relative aspect-[2/3] bg-gradient-to-br from-zinc-950 via-black to-zinc-950 rounded-lg overflow-hidden">
                     <div className="absolute inset-0 animate-pulse bg-gradient-to-tr from-transparent via-white/10 to-transparent" />

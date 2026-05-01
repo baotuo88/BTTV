@@ -125,7 +125,6 @@ export function UserProfileContent({ mode = "all" }: UserProfileContentProps) {
   // 初始加载
   useEffect(() => {
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const saveProfile = async (e: FormEvent) => {

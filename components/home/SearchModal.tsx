@@ -38,15 +38,15 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm transition-opacity duration-200">
-      <div className="flex items-start justify-center pt-32 px-4">
+    <div className="fixed inset-0 z-[60] overflow-y-auto bg-black/80 backdrop-blur-sm transition-opacity duration-200">
+      <div className="flex min-h-full items-start justify-center px-4 pt-20 sm:pt-24 md:pt-32 pb-8">
         <div className="w-full max-w-3xl">
           {/* 搜索框 */}
           <div className="relative">
-            <div className="flex items-center bg-white rounded-lg shadow-2xl overflow-hidden">
-              <div className="pl-6 pr-4 text-gray-400">
+            <div className="flex items-center bg-white rounded-2xl shadow-2xl overflow-hidden">
+              <div className="pl-4 sm:pl-6 pr-3 sm:pr-4 text-gray-400">
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -68,15 +68,15 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   if (e.key === "Escape") onClose();
                 }}
                 placeholder="搜索你想看的内容…"
-                className="flex-1 px-2 py-5 text-lg text-black outline-none placeholder:text-gray-400"
+                className="flex-1 px-1 py-4 sm:py-5 text-base sm:text-lg text-black outline-none placeholder:text-gray-400"
                 autoFocus
               />
               <button
                 onClick={onClose}
-                className="px-6 py-5 text-gray-400 hover:text-gray-600 transition-colors"
+                className="px-4 sm:px-6 py-4 sm:py-5 text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -92,7 +92,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </div>
 
             {/* 提示文字 */}
-            <div className="mt-4 text-center">
+            <div className="hidden sm:block mt-4 text-center">
               <p className="text-sm text-gray-400">
                 <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">
                   Enter
@@ -105,7 +105,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
             {/* 搜索历史 */}
             {history.length > 0 && (
-              <div className="mt-6 bg-gray-900/90 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+              <div className="mt-4 sm:mt-6 bg-gray-900/90 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/10">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2 text-gray-300">
                     <Clock className="w-4 h-4" />
@@ -113,7 +113,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   </div>
                   <button
                     onClick={clearHistory}
-                    className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-400 transition-colors"
+                    className="flex items-center gap-1 text-[11px] sm:text-xs text-gray-500 hover:text-red-400 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span>清除全部</span>
@@ -124,9 +124,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     <div
                       key={index}
                       onClick={() => handleHistoryClick(keyword)}
-                      className="group flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer transition-all duration-200"
+                      className="group max-w-full flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer transition-all duration-200"
                     >
-                      <span className="text-sm text-gray-200 group-hover:text-white">
+                      <span className="max-w-[10rem] sm:max-w-none truncate text-sm text-gray-200 group-hover:text-white">
                         {keyword}
                       </span>
                       <button

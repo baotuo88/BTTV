@@ -131,18 +131,6 @@ export function ShortsSourcesTab({
     }
   };
 
-  const handleAdd = () => {
-    setFormData({
-      key: "",
-      name: "",
-      api: "",
-      typeId: undefined,
-      priority: sources.length,
-    });
-    setIsAddMode(true);
-    setEditingSource(null);
-  };
-
   const handleEdit = (source: ShortDramaSource) => {
     setFormData({ ...source });
     setEditingSource(source);

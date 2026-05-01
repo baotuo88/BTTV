@@ -87,13 +87,28 @@ export async function saveShortsSourcesToDB(sources: ShortDramaSource[]) {
     updated_at: now,
   }));
 
-  const operations: AnyBulkWriteOperation<ShortDramaSourceDoc>[] = [
-    { deleteMany: { filter: {} } },
-    ...docs.map((doc) => ({ insertOne: { document: doc } })),
-  ];
+  const operations: AnyBulkWriteOperation<ShortDramaSourceDoc>[] = docs.map(
+    (doc) => {
+      const { created_at, ...fieldsToUpdate } = doc;
 
-  if (operations.length >= 1) {
+      return {
+        updateOne: {
+          filter: { key: doc.key },
+          update: {
+            $set: fieldsToUpdate,
+            $setOnInsert: { created_at },
+          },
+          upsert: true,
+        },
+      };
+    }
+  );
+
+  if (operations.length > 0) {
     await collection.bulkWrite(operations, { ordered: true });
+    await collection.deleteMany({ key: { $nin: docs.map((doc) => doc.key) } });
+  } else {
+    await collection.deleteMany({});
   }
 }
 

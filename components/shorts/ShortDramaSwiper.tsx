@@ -51,10 +51,6 @@ export function ShortDramaSwiper({
   const [currentDramaIndex, setCurrentDramaIndex] = useState(0);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
 
-  // 进度状态
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-
   // 获取当前显示的项目列表
   const getDisplayItems = useCallback(() => {
     if (mode === "explore") {
@@ -172,13 +168,7 @@ export function ShortDramaSwiper({
   }, [mode, activeIndex, dramas, currentDramaIndex]);
 
   // 处理进度更新
-  const handleProgress = useCallback(
-    (currentTime: number, totalDuration: number) => {
-      setProgress(totalDuration > 0 ? currentTime / totalDuration : 0);
-      setDuration(totalDuration);
-    },
-    []
-  );
+  const handleProgress = useCallback(() => {}, []);
 
   // 监听滚动
   useEffect(() => {
@@ -191,12 +181,16 @@ export function ShortDramaSwiper({
 
   // 模式切换时重置滚动位置
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({ top: 0, behavior: "instant" });
-      setActiveIndex(
-        mode === "watch" ? currentEpisodeIndex : currentDramaIndex
-      );
-    }
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.scrollTo({ top: 0, behavior: "instant" });
+    const targetIndex = mode === "watch" ? currentEpisodeIndex : currentDramaIndex;
+    const frame = requestAnimationFrame(() => {
+      setActiveIndex(targetIndex);
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, [mode, currentDramaIndex, currentEpisodeIndex]);
 
   return (

@@ -1,14 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ensureUserOrAdminCookieAuth } from '@/lib/api-auth';
+import { NextRequest, NextResponse } from "next/server";
+import { ensureUserOrAdminApiAuth } from "@/lib/api-auth";
+import { assertSafeRemoteUrl } from "@/lib/server/safe-remote-url";
 
 export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
 
 /**
  * 智能视频代理 v2
  * 支持 m3u8 播放列表重写
  */
 export async function GET(request: NextRequest) {
-  const authError = ensureUserOrAdminCookieAuth(request);
+  const authError = await ensureUserOrAdminApiAuth();
   if (authError) return authError;
 
   try {
@@ -22,7 +24,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log(`🎬 代理视频请求: ${videoUrl}`);
+    const safeVideoUrl = await assertSafeRemoteUrl(videoUrl);
+    const safeVideoUrlString = safeVideoUrl.toString();
+
+    console.log(`🎬 代理视频请求: ${safeVideoUrlString}`);
 
     // 准备请求头 - 模拟真实浏览器
     const fetchHeaders: HeadersInit = {
@@ -38,9 +43,8 @@ export async function GET(request: NextRequest) {
     
     // 添加 Referer - 使用同域名的根路径
     try {
-      const urlObj = new URL(videoUrl);
-      fetchHeaders['Referer'] = `${urlObj.protocol}//${urlObj.host}/`;
-      fetchHeaders['Origin'] = `${urlObj.protocol}//${urlObj.host}`;
+      fetchHeaders["Referer"] = `${safeVideoUrl.protocol}//${safeVideoUrl.host}/`;
+      fetchHeaders["Origin"] = `${safeVideoUrl.protocol}//${safeVideoUrl.host}`;
     } catch (e) {
       console.warn('设置Referer失败:', e);
     }
@@ -53,14 +57,14 @@ export async function GET(request: NextRequest) {
     
     console.log('🔧 请求headers:', JSON.stringify(fetchHeaders, null, 2));
     
-    const videoResponse = await fetch(videoUrl, {
+    const videoResponse = await fetch(safeVideoUrlString, {
       headers: fetchHeaders,
       signal: AbortSignal.timeout(30000)
     });
 
     if (!videoResponse.ok && videoResponse.status !== 206) {
       console.error(`❌ 视频请求失败: ${videoResponse.status} ${videoResponse.statusText}`);
-      console.error('❌ 目标URL:', videoUrl);
+      console.error('❌ 目标URL:', safeVideoUrlString);
       console.error('❌ 响应headers:', JSON.stringify(Object.fromEntries(videoResponse.headers.entries()), null, 2));
       
       // 尝试读取错误响应体
@@ -86,7 +90,7 @@ export async function GET(request: NextRequest) {
     // 检查是否是 m3u8 播放列表
     if (contentType.includes('application/vnd.apple.mpegurl') || 
         contentType.includes('application/x-mpegURL') ||
-        videoUrl.endsWith('.m3u8')) {
+        safeVideoUrlString.endsWith('.m3u8')) {
       
       console.log('📝 检测到 m3u8 文件，重写内部 URL...');
       
@@ -94,7 +98,11 @@ export async function GET(request: NextRequest) {
       const m3u8Content = await videoResponse.text();
       
       // 重写 m3u8 内容
-      const rewrittenContent = rewriteM3U8(m3u8Content, videoUrl, request.nextUrl.origin);
+      const rewrittenContent = rewriteM3U8(
+        m3u8Content,
+        safeVideoUrlString,
+        request.nextUrl.origin
+      );
       
       // 返回重写后的 m3u8
       return new NextResponse(rewrittenContent, {

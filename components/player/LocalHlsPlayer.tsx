@@ -34,6 +34,19 @@ const MAX_NETWORK_RETRY = 3;
 const MAX_MEDIA_RETRY = 2;
 const MAX_KEY_ERROR = 5;
 
+interface DanmakuPluginController {
+  config(options: { danmuku: DanmakuItem[] }): void;
+  load(): void;
+}
+
+type ArtplayerWithDanmaku = Artplayer & {
+  plugins: {
+    artplayerPluginDanmuku?: DanmakuPluginController;
+  };
+};
+
+type HlsConstructor = typeof import("hls.js").default;
+
 export function LocalHlsPlayer({
   videoUrl,
   title,
@@ -56,7 +69,6 @@ export function LocalHlsPlayer({
   );
 
   // 弹幕状态
-  const [danmakuList, setDanmakuList] = useState<DanmakuItem[]>([]);
   const [autoLoadStatus, setAutoLoadStatus] = useState<{
     loading: boolean;
     message: string;
@@ -82,6 +94,8 @@ export function LocalHlsPlayer({
   const onEndedRef = useRef(onEnded);
   const onErrorRef = useRef(onError);
   const settingsRef = useRef(settings);
+  const titleRef = useRef(title);
+  const initialTimeRef = useRef(initialTime);
 
   // 更新回调 ref
   useEffect(() => {
@@ -89,6 +103,8 @@ export function LocalHlsPlayer({
     onEndedRef.current = onEnded;
     onErrorRef.current = onError;
     settingsRef.current = settings;
+    titleRef.current = title;
+    initialTimeRef.current = initialTime;
   });
 
   // 确保在客户端执行
@@ -368,16 +384,15 @@ export function LocalHlsPlayer({
           setIsLoading(false);
 
           // 自动加载弹幕
-          if (!autoLoadAttemptedRef.current && title) {
+          if (!autoLoadAttemptedRef.current && titleRef.current) {
             autoLoadAttemptedRef.current = true;
             setAutoLoadStatus({
               loading: true,
               message: "正在自动匹配弹幕...",
             });
 
-            autoLoadDanmaku(title).then((result) => {
+            autoLoadDanmaku(titleRef.current).then((result) => {
               if (result.success && result.danmaku.length > 0) {
-                setDanmakuList(result.danmaku);
                 setAutoLoadStatus({
                   loading: false,
                   message: result.message,
@@ -386,7 +401,8 @@ export function LocalHlsPlayer({
 
                 // 加载弹幕到播放器
 
-                const plugin = art.plugins.artplayerPluginDanmuku as any;
+                const plugin = (art as ArtplayerWithDanmaku).plugins
+                  .artplayerPluginDanmuku;
                 if (plugin) {
                   plugin.config({ danmuku: result.danmaku });
                   plugin.load();
@@ -428,8 +444,12 @@ export function LocalHlsPlayer({
             }
           }
 
-          if (initialTime > 10 && initialTime < art.duration - 10) {
-            resumeTime = Math.max(resumeTime, initialTime);
+          const pendingInitialTime = initialTimeRef.current;
+          if (
+            pendingInitialTime > 10 &&
+            pendingInitialTime < art.duration - 10
+          ) {
+            resumeTime = Math.max(resumeTime, pendingInitialTime);
           }
 
           if (resumeTime > 10 && resumeTime < art.duration - 10) {
@@ -490,7 +510,7 @@ export function LocalHlsPlayer({
   function handleHlsError(
     data: HlsErrorData,
     hls: HlsType,
-    Hls: any,
+    Hls: HlsConstructor,
     useDirectPlay: boolean,
     setUseDirectPlay: (v: boolean) => void,
     setPlayMode: (v: "direct" | "proxy" | "detecting") => void,
@@ -611,11 +631,11 @@ export function LocalHlsPlayer({
   // 处理弹幕加载 - 必须在早期返回之前定义以遵守Hooks规则
   const handleDanmakuLoad = useCallback(
     (danmaku: DanmakuItem[]) => {
-      setDanmakuList(danmaku);
       onDanmakuCountChange?.(danmaku.length);
       if (artRef.current && danmakuPluginRef.current) {
         // 清空现有弹幕并加载新弹幕
-        const plugin = artRef.current.plugins.artplayerPluginDanmuku as any;
+        const plugin = (artRef.current as ArtplayerWithDanmaku).plugins
+          .artplayerPluginDanmuku;
         if (plugin) {
           plugin.config({ danmuku: danmaku });
           plugin.load();

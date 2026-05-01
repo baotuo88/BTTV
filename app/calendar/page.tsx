@@ -231,7 +231,7 @@ export default function CalendarPage() {
   const router = useRouter();
   const [showSearch, setShowSearch] = useState(false);
   const scrolled = useScrollState(50);
-  const { matchingMovie, handleMovieClick, toast, setToast } = useMovieMatch();
+  const { matchingMovie, toast, setToast } = useMovieMatch();
 
   const [calendarData, setCalendarData] = useState<CalendarResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -291,8 +291,6 @@ export default function CalendarPage() {
       router.push(`/search?q=${encodeURIComponent(entry.show_name_cn || entry.show_name)}`);
     }
   };
-
-  const currentRegion = REGIONS.find(r => r.code === region);
 
   return (
     <div className="min-h-screen bg-black">

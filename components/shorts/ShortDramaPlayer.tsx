@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import type Artplayer from "artplayer";
+import type HlsType from "hls.js";
+import type { HlsErrorData } from "@/lib/player/types";
 
 interface ShortDramaPlayerProps {
   videoUrl: string;
@@ -18,11 +20,18 @@ export function ShortDramaPlayer({
 }: ShortDramaPlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const artRef = useRef<Artplayer | null>(null);
-  const hlsRef = useRef<any>(null);
+  const hlsRef = useRef<HlsType | null>(null);
   const isMountedRef = useRef(true);
+  const onEndedRef = useRef(onEnded);
+  const onProgressRef = useRef(onProgress);
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    onEndedRef.current = onEnded;
+    onProgressRef.current = onProgress;
+  }, [onEnded, onProgress]);
 
   // 初始化播放器
   useEffect(() => {
@@ -122,7 +131,7 @@ export function ShortDramaPlayer({
                   setIsLoading(false);
                 });
 
-                hls.on(Hls.Events.ERROR, (_: string, data: any) => {
+                hls.on(Hls.Events.ERROR, (_: string, data: HlsErrorData) => {
                   if (data.fatal) {
                     setError("视频加载失败");
                     setIsLoading(false);
@@ -147,13 +156,13 @@ export function ShortDramaPlayer({
         });
 
         art.on("video:timeupdate", () => {
-          if (onProgress && art.duration > 0) {
-            onProgress(art.currentTime, art.duration);
+          if (onProgressRef.current && art.duration > 0) {
+            onProgressRef.current(art.currentTime, art.duration);
           }
         });
 
         art.on("video:ended", () => {
-          onEnded();
+          onEndedRef.current();
         });
 
         art.on("video:error", () => {

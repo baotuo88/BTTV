@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ToastProps {
   message: string;
@@ -10,17 +10,13 @@ interface ToastProps {
 }
 
 export function Toast({ message, type = 'info', onClose, duration = 3000 }: ToastProps) {
-  // Use ref to avoid dependency issues with onClose callback
-  const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      onCloseRef.current();
+      onClose();
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration]);
+  }, [duration, onClose]);
 
   const bgColor = {
     success: 'bg-green-500',
@@ -37,8 +33,8 @@ export function Toast({ message, type = 'info', onClose, duration = 3000 }: Toas
   }[type];
 
   return (
-    <div className="fixed top-4 right-4 z-50 animate-slide-in">
-      <div className={`${bgColor} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]`}>
+    <div className="fixed top-4 inset-x-3 sm:inset-x-auto sm:right-4 z-50 animate-slide-in sm:max-w-sm">
+      <div className={`${bgColor} w-full sm:w-auto text-white px-4 sm:px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 sm:min-w-[300px]`}>
         <span className="text-xl">{icon}</span>
         <span className="flex-1">{message}</span>
         <button

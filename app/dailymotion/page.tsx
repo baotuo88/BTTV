@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense, useCallback } from "react";
+import { useState, Suspense, useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AlertCircle, Home } from "lucide-react";
 import Link from "next/link";
@@ -24,12 +24,27 @@ function DailymotionContent() {
     loading: configLoading,
   } = useDailymotionConfig();
 
-  const [activeChannelId, setActiveChannelId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedVideo, setSelectedVideo] = useState<DailymotionVideo | null>(
     null
   );
   const [videoError, setVideoError] = useState(false);
+
+  const currentPage = useMemo(() => {
+    const value = Number.parseInt(searchParams.get("page") || "1", 10);
+    return Number.isNaN(value) || value < 1 ? 1 : value;
+  }, [searchParams]);
+
+  const activeChannelId = useMemo(() => {
+    const channelFromUrl = searchParams.get("channel");
+    if (channelFromUrl) {
+      const matchedChannel = channels.find((channel) => channel.username === channelFromUrl);
+      if (matchedChannel) {
+        return matchedChannel.id;
+      }
+    }
+
+    return defaultChannelId || channels[0]?.id || null;
+  }, [channels, defaultChannelId, searchParams]);
 
   // 获取当前频道的 username
   const activeChannel = channels.find((c) => c.id === activeChannelId);
@@ -43,36 +58,10 @@ function DailymotionContent() {
     error,
   } = useDailymotionVideos(activeUsername, currentPage);
 
-  // 初始化活跃频道
-  useEffect(() => {
-    if (!activeChannelId && channels.length > 0) {
-      const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
-      const channelFromUrl = searchParams.get("channel");
-
-      setCurrentPage(pageFromUrl);
-
-      if (channelFromUrl) {
-        const channelExists = channels.find(
-          (c) => c.username === channelFromUrl
-        );
-        if (channelExists) {
-          setActiveChannelId(channelExists.id);
-          return;
-        }
-      }
-
-      // 使用默认频道
-      setActiveChannelId(defaultChannelId || channels[0]?.id);
-    }
-  }, [channels, defaultChannelId, activeChannelId, searchParams]);
-
   const handleChannelSwitch = useCallback(
     (channelId: string) => {
       const channel = channels.find((c) => c.id === channelId);
       if (!channel) return;
-
-      setActiveChannelId(channelId);
-      setCurrentPage(1);
 
       const url = new URL(window.location.href);
       url.searchParams.set("channel", channel.username);
@@ -94,8 +83,6 @@ function DailymotionContent() {
     (page: number) => {
       const channel = channels.find((c) => c.id === activeChannelId);
       if (!channel) return;
-
-      setCurrentPage(page);
 
       const url = new URL(window.location.href);
       url.searchParams.set("channel", channel.username);

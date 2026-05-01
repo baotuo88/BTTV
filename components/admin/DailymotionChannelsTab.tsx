@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, Trash2, Star, Download, X, Lock } from "lucide-react";
+import { Trash2, Download, X } from "lucide-react";
 import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
 import type { DailymotionChannelsTabProps } from "./types";
 import { isSubscriptionUrl } from "@/lib/utils";
@@ -12,17 +12,14 @@ export function DailymotionChannelsTab({
   onChannelsChange,
   onShowToast,
   onShowConfirm,
-  unifiedImport,
 }: DailymotionChannelsTabProps) {
   const [showModal, setShowModal] = useState(false);
-  const [showImportModal, setShowImportModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     username: "",
     displayName: "",
     avatarUrl: "",
   });
-  const [importing, setImporting] = useState(false);
 
   // 加密导入相关状态
   const [showEncryptedImportModal, setShowEncryptedImportModal] =
@@ -183,7 +180,7 @@ export function DailymotionChannelsTab({
           }
           onChannelsChange([], undefined);
           onShowToast({ message: "已清空全部频道", type: "success" });
-        } catch (error) {
+        } catch {
           onShowToast({ message: "清空失败", type: "error" });
         }
       },

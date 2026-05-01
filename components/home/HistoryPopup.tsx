@@ -82,7 +82,7 @@ export function HistoryPopup() {
       {/* Popup 弹出层 */}
       {isOpen && (
         <div className="absolute right-0 top-full pt-2 z-50">
-          <div className="w-80 bg-zinc-900 rounded-xl shadow-2xl border border-zinc-800 overflow-hidden">
+          <div className="w-[min(85vw,20rem)] bg-zinc-900 rounded-xl shadow-2xl border border-zinc-800 overflow-hidden">
             {/* 顶部红色装饰线 */}
             <div className="h-0.5 bg-red-600" />
 

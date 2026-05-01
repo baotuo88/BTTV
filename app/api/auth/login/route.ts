@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createSession, validatePassword } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { createSession, validatePassword } from "@/lib/auth";
+import { isAdminPasswordConfigured } from "@/lib/admin-session";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +10,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: '请输入密码' },
         { status: 400 }
+      );
+    }
+
+    if (!isAdminPasswordConfigured()) {
+      return NextResponse.json(
+        { error: "管理员密码未配置，请先设置 ADMIN_PASSWORD" },
+        { status: 503 }
       );
     }
 

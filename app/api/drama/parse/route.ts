@@ -48,8 +48,7 @@ export async function POST(request: NextRequest) {
       parseParams.set('id', source.parseId);
     }
     parseParams.set('url', url);
-    // 使用随机 token（每次请求生成新的）
-    parseParams.set('token', generateRandomToken());
+    parseParams.set('token', source.parseToken?.trim() || generateRandomToken());
 
     const parseUrl = `${source.parseProxy}?${parseParams.toString()}`;
 

@@ -34,7 +34,6 @@ export function useHomeData(): UseHomeDataReturn {
   const {
     data: categoryData,
     error: categoryError,
-    isLoading: categoryLoading,
     mutate: mutateCategories,
   } = useSWR(SWR_KEY_CATEGORIES, getNewContent);
 

@@ -1,5 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ensureUserOrAdminCookieAuth } from '@/lib/api-auth';
+import { NextRequest, NextResponse } from "next/server";
+import { ensureUserOrAdminApiAuth } from "@/lib/api-auth";
+import { assertSafeRemoteUrl } from "@/lib/server/safe-remote-url";
+
+export const runtime = "nodejs";
 
 // 代理池配置
 const PROXY_POOL = [
@@ -95,7 +98,7 @@ async function fetchImageWithProxy(url: string): Promise<Response> {
 }
 
 export async function GET(request: NextRequest) {
-  const authError = ensureUserOrAdminCookieAuth(request);
+  const authError = await ensureUserOrAdminApiAuth();
   if (authError) return authError;
 
   try {
@@ -105,8 +108,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 });
     }
 
+    const safeUrl = await assertSafeRemoteUrl(url);
+
     // 使用代理池获取图片
-    const response = await fetchImageWithProxy(url);
+    const response = await fetchImageWithProxy(safeUrl.toString());
     
     const imageBuffer = await response.arrayBuffer();
     const contentType = response.headers.get('content-type') || 'image/jpeg';

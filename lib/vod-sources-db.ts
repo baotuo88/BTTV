@@ -135,15 +135,26 @@ export async function saveVodSourcesToDB(sources: VodSource[]) {
     updated_at: now,
   }));
 
-  // 使用 bulkWrite 顺序执行（ordered: true）
-  // 注意：失败时停止后续操作，但已执行操作不会回滚
-  const operations: AnyBulkWriteOperation<VodSourceDoc>[] = [
-    { deleteMany: { filter: {} } },
-    ...docs.map((doc) => ({ insertOne: { document: doc } })),
-  ];
+  const operations: AnyBulkWriteOperation<VodSourceDoc>[] = docs.map((doc) => {
+    const { created_at, ...fieldsToUpdate } = doc;
 
-  if (operations.length >= 1) {
+    return {
+      updateOne: {
+        filter: { key: doc.key },
+        update: {
+          $set: fieldsToUpdate,
+          $setOnInsert: { created_at },
+        },
+        upsert: true,
+      },
+    };
+  });
+
+  if (operations.length > 0) {
     await collection.bulkWrite(operations, { ordered: true });
+    await collection.deleteMany({ key: { $nin: docs.map((doc) => doc.key) } });
+  } else {
+    await collection.deleteMany({});
   }
 }
 

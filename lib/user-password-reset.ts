@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import { getDatabase } from "@/lib/db";
 import { COLLECTIONS } from "@/lib/constants/db";
 import { hashPassword } from "@/lib/user-auth";
-import { sendMail } from "@/lib/mailer";
+import { assertMailConfigured, sendMail } from "@/lib/mailer";
 
 const RESET_CODE_TTL_MINUTES = 10;
 const SEND_INTERVAL_SECONDS = 60;
@@ -51,6 +51,8 @@ function formatMaskEmail(email: string): string {
 export async function requestPasswordReset(email: string): Promise<void> {
   const normalizedEmail = email.trim().toLowerCase();
   if (!normalizedEmail) return;
+
+  assertMailConfigured();
 
   const db = await getDatabase();
   const users = db.collection<UserDoc>(COLLECTIONS.USERS);

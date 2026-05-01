@@ -12,17 +12,20 @@ function getResendConfig() {
   };
 }
 
-export async function sendMail(params: SendMailParams): Promise<void> {
+export function isMailConfigured(): boolean {
   const { apiKey, from } = getResendConfig();
+  return !!apiKey && !!from;
+}
 
-  // 开发或未配置邮件服务时，退化为日志输出，避免阻塞功能
-  if (!apiKey || !from) {
-    console.log("📧 [MAIL_FALLBACK]");
-    console.log(`To: ${params.to}`);
-    console.log(`Subject: ${params.subject}`);
-    console.log(params.text);
-    return;
+export function assertMailConfigured(): void {
+  if (!isMailConfigured()) {
+    throw new Error("邮件服务未配置，暂时无法发送验证码");
   }
+}
+
+export async function sendMail(params: SendMailParams): Promise<void> {
+  assertMailConfigured();
+  const { apiKey, from } = getResendConfig();
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
