@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import type Artplayer from "artplayer";
+import type { Setting } from "artplayer/types/setting";
 import type HlsType from "hls.js";
 import { LocalPlayerSettings } from "@/app/api/player-config/route";
 
@@ -60,6 +61,11 @@ export function LocalHlsPlayer({
   onStall,
   onError,
 }: LocalHlsPlayerProps) {
+  type QualityOption = {
+    value: number;
+    label: string;
+  };
+
   // 状态
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<PlayerError | null>(null);
@@ -69,6 +75,9 @@ export function LocalHlsPlayer({
   const [, setPlayMode] = useState<"direct" | "proxy" | "detecting">(
     "detecting"
   );
+  const [qualityOptions, setQualityOptions] = useState<QualityOption[]>([]);
+  const [selectedQuality, setSelectedQuality] = useState<number>(-1);
+  const [activeQualityLabel, setActiveQualityLabel] = useState<string>("自动");
 
   // 弹幕状态
   const [autoLoadStatus, setAutoLoadStatus] = useState<{
@@ -103,6 +112,9 @@ export function LocalHlsPlayer({
   const settingsRef = useRef(settings);
   const titleRef = useRef(title);
   const initialTimeRef = useRef(initialTime);
+  const qualityOptionsRef = useRef<QualityOption[]>([]);
+  const selectedQualityRef = useRef<number>(-1);
+  const activeQualityLabelRef = useRef<string>("自动");
 
   // 更新回调 ref
   useEffect(() => {
@@ -113,6 +125,9 @@ export function LocalHlsPlayer({
     settingsRef.current = settings;
     titleRef.current = title;
     initialTimeRef.current = initialTime;
+    qualityOptionsRef.current = qualityOptions;
+    selectedQualityRef.current = selectedQuality;
+    activeQualityLabelRef.current = activeQualityLabel;
   });
 
   // 确保在客户端执行
@@ -152,7 +167,69 @@ export function LocalHlsPlayer({
     networkRetryCount.current = 0;
     mediaRetryCount.current = 0;
     keyErrorCount.current = 0;
+    setQualityOptions([]);
+    setSelectedQuality(-1);
+    setActiveQualityLabel("自动");
   }, []);
+
+  const buildQualityLabel = useCallback((level: { height?: number; bitrate?: number }) => {
+    const height = level.height;
+    const bitrate = level.bitrate;
+
+    if (height && bitrate) {
+      return `${height}p (${(bitrate / 1000000).toFixed(1)} Mbps)`;
+    }
+    if (height) {
+      return `${height}p`;
+    }
+    if (bitrate) {
+      return `${(bitrate / 1000000).toFixed(1)} Mbps`;
+    }
+    return "未知清晰度";
+  }, []);
+
+  const buildQualitySetting = useCallback(
+    (hls: HlsType): Setting | null => {
+      const options = qualityOptionsRef.current;
+      if (options.length <= 1) return null;
+
+      return {
+        name: "quality",
+        html: "清晰度",
+        tooltip: activeQualityLabelRef.current,
+        selector: options.map((option) => ({
+          html: option.label,
+          value: option.value,
+          default: option.value === selectedQualityRef.current,
+        })),
+        onSelect: function (item) {
+          if (!("value" in item) || typeof item.value !== "number") return;
+
+          const next = item.value;
+          setSelectedQuality(next);
+          if (next === -1) {
+            hls.currentLevel = -1;
+            const autoLevel = hls.nextAutoLevel;
+            if (autoLevel >= 0 && hls.levels[autoLevel]) {
+              setActiveQualityLabel(
+                `自动 (${buildQualityLabel(hls.levels[autoLevel])})`
+              );
+            } else {
+              setActiveQualityLabel("自动");
+            }
+            return item;
+          }
+
+          hls.currentLevel = next;
+          if (hls.levels[next]) {
+            setActiveQualityLabel(buildQualityLabel(hls.levels[next]));
+          }
+          return item;
+        },
+      };
+    },
+    [buildQualityLabel]
+  );
 
   // 清理播放器实例
   const cleanupPlayer = useCallback(() => {
@@ -335,6 +412,37 @@ export function LocalHlsPlayer({
 
               // Manifest 加载完成
               hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                const manualOptions = hls.levels
+                  .map((level, index) => ({
+                    value: index,
+                    label: buildQualityLabel(level),
+                    height: level.height || 0,
+                  }))
+                  .sort((a, b) => b.height - a.height)
+                  .map(({ value, label }) => ({ value, label }));
+
+                if (manualOptions.length > 1) {
+                  setQualityOptions([{ value: -1, label: "自动" }, ...manualOptions]);
+                  setSelectedQuality(-1);
+                  const currentLevel = hls.currentLevel >= 0 ? hls.currentLevel : hls.nextAutoLevel;
+                  if (currentLevel >= 0 && hls.levels[currentLevel]) {
+                    setActiveQualityLabel(`自动 (${buildQualityLabel(hls.levels[currentLevel])})`);
+                  } else {
+                    setActiveQualityLabel("自动");
+                  }
+                } else {
+                  setQualityOptions([]);
+                  setSelectedQuality(-1);
+                  setActiveQualityLabel("自动");
+                }
+
+                const qualitySetting = buildQualitySetting(hls);
+                if (qualitySetting) {
+                  art.setting.update(qualitySetting);
+                } else {
+                  art.setting.remove("quality");
+                }
+
                 if (isMountedRef.current && video && document.contains(video)) {
                   video.play().catch((e) => {
                     if (e.name === "NotAllowedError") {
@@ -346,6 +454,24 @@ export function LocalHlsPlayer({
                       console.log("[Autoplay Failed]", e);
                     }
                   });
+                }
+              });
+
+              hls.on(Hls.Events.LEVEL_SWITCHED, (_event: string, data: { level: number }) => {
+                const nextLevel = data.level;
+                const nextMeta = hls.levels[nextLevel];
+                if (!nextMeta) return;
+
+                const label = buildQualityLabel(nextMeta);
+                if (hls.currentLevel === -1) {
+                  setActiveQualityLabel(`自动 (${label})`);
+                } else {
+                  setActiveQualityLabel(label);
+                }
+
+                const qualitySetting = buildQualitySetting(hls);
+                if (qualitySetting) {
+                  art.setting.update(qualitySetting);
                 }
               });
 
@@ -368,6 +494,12 @@ export function LocalHlsPlayer({
             },
           },
           settings: [
+            {
+              name: "quality",
+              html: "清晰度",
+              tooltip: "自动",
+              selector: [{ html: "自动", value: -1, default: true }],
+            },
             {
               name: "playbackRate",
               html: "播放速度",
@@ -538,6 +670,8 @@ export function LocalHlsPlayer({
     videoUrl,
     retryCount,
     useDirectPlay,
+    buildQualityLabel,
+    buildQualitySetting,
     getProxiedUrl,
     setPlayerError,
     cleanupPlayer,
