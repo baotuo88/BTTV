@@ -83,7 +83,9 @@ export function UnifiedPlayer({
   const previousModeRef = useRef<"iframe" | "local" | undefined>(undefined);
   const switchTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef<boolean>(true);
-  const lastParsedUrlRef = useRef<string>("");
+  const lastParseCacheKeyRef = useRef<string>("");
+  const parsedVideoUrlRef = useRef<string | null>(null);
+  const parsingCacheKeyRef = useRef<string | null>(null);
 
   // 使用 ref 保存回调，避免频繁重建
   const onIframePlayerSwitchRef = useRef(onIframePlayerSwitch);
@@ -92,6 +94,10 @@ export function UnifiedPlayer({
   useEffect(() => {
     onIframePlayerSwitchRef.current = onIframePlayerSwitch;
   });
+
+  useEffect(() => {
+    parsedVideoUrlRef.current = parsedVideoUrl;
+  }, [parsedVideoUrl]);
 
   // 设置 mounted 状态
   useEffect(() => {
@@ -106,20 +112,30 @@ export function UnifiedPlayer({
     const parseVideoUrl = async () => {
       // 重置错误状态
       setParseError(null);
+      const parseProxyKey = vodSource?.parseProxy || "no-proxy";
+      const parseCacheKey = `${videoUrl}::${parseProxyKey}`;
 
-      // 如果URL没变，不需要重新解析
-      if (lastParsedUrlRef.current === videoUrl) {
+      // 仅当缓存命中且已存在可用解析结果时才跳过
+      if (
+        lastParseCacheKeyRef.current === parseCacheKey &&
+        parsedVideoUrlRef.current
+      ) {
+        return;
+      }
+      if (parsingCacheKeyRef.current === parseCacheKey) {
         return;
       }
 
       // 如果没有parseProxy，直接使用原始URL
       if (!vodSource?.parseProxy) {
         setParsedVideoUrl(videoUrl);
-        lastParsedUrlRef.current = videoUrl;
+        lastParseCacheKeyRef.current = parseCacheKey;
+        parsingCacheKeyRef.current = null;
         return;
       }
 
       setIsParsing(true);
+      parsingCacheKeyRef.current = parseCacheKey;
       try {
         const response = await fetch("/api/drama/parse", {
           method: "POST",
@@ -135,7 +151,7 @@ export function UnifiedPlayer({
         const result = await response.json();
         if (result.code === 200 && result.data?.url) {
           setParsedVideoUrl(result.data.url);
-          lastParsedUrlRef.current = videoUrl;
+          lastParseCacheKeyRef.current = parseCacheKey;
         } else {
           // 解析失败，显示错误
           const errorMsg = result.msg || result.data?.error || "视频解析失败";
@@ -148,6 +164,7 @@ export function UnifiedPlayer({
         console.warn("[Video Parse] 请求失败:", error);
         setParseError("视频解析请求失败，请检查网络连接");
       } finally {
+        parsingCacheKeyRef.current = null;
         if (isMountedRef.current) {
           setIsParsing(false);
         }
@@ -327,7 +344,7 @@ export function UnifiedPlayer({
             onClick={() => {
               setParseError(null);
               setParsedVideoUrl(null);
-              lastParsedUrlRef.current = "";
+              lastParseCacheKeyRef.current = "";
             }}
             className="px-6 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg transition-colors font-medium"
           >
