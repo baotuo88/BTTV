@@ -1,0 +1,457 @@
+"use client";
+
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { VodSource } from "@/types/drama";
+import { ShortDramaSource } from "@/types/shorts-source";
+import { Toast, ConfirmDialog } from "@/components/Toast";
+import type { PlayerConfig } from "@/app/api/player-config/route";
+import { VodSourcesTab } from "@/components/admin/VodSourcesTab";
+import { PlayerConfigTab } from "@/components/admin/PlayerConfigTab";
+import { DailymotionChannelsTab } from "@/components/admin/DailymotionChannelsTab";
+import { ShortsSourcesTab } from "@/components/admin/ShortsSourcesTab";
+import { DatabaseSettingsTab } from "@/components/admin/DatabaseSettingsTab";
+import { UserManagementTab } from "@/components/admin/UserManagementTab";
+import { SiteSettingsTab } from "@/components/admin/SiteSettingsTab";
+import { OperationsSettingsTab } from "@/components/admin/OperationsSettingsTab";
+import type {
+  ToastState,
+  ConfirmState,
+  UnifiedImportCallbacks,
+} from "@/components/admin/types";
+import type { DailymotionChannelConfig } from "@/types/dailymotion-config";
+import type { SiteConfigData } from "@/types/site-config";
+import type { OperationsConfigData } from "@/types/operations-config";
+import {
+  Tv,
+  Film,
+  Youtube,
+  Settings,
+  Database,
+  Users,
+  Globe,
+  Megaphone,
+  ChevronDown,
+} from "lucide-react";
+
+type TabType =
+  | "sources"
+  | "shorts"
+  | "dailymotion"
+  | "player"
+  | "users"
+  | "database"
+  | "site"
+  | "operations";
+
+const VALID_TABS: TabType[] = [
+  "sources",
+  "shorts",
+  "dailymotion",
+  "player",
+  "users",
+  "database",
+  "site",
+  "operations",
+];
+
+function SettingsContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 从 URL 读取当前 tab
+  const activeTab = useMemo<TabType>(() => {
+    const urlTab = searchParams.get("tab");
+    if (urlTab && VALID_TABS.includes(urlTab as TabType)) {
+      return urlTab as TabType;
+    }
+    return "sources";
+  }, [searchParams]);
+
+  const [sources, setSources] = useState<VodSource[]>([]);
+  const [selectedKey, setSelectedKey] = useState<string>("");
+  const [shortsSources, setShortsSources] = useState<ShortDramaSource[]>([]);
+  const [selectedShortsKey, setSelectedShortsKey] = useState<string>("");
+  const [playerConfig, setPlayerConfig] = useState<PlayerConfig | null>(null);
+  const [dailymotionChannels, setDailymotionChannels] = useState<
+    DailymotionChannelConfig[]
+  >([]);
+  const [siteConfig, setSiteConfig] = useState<SiteConfigData | null>(null);
+  const [operationsConfig, setOperationsConfig] =
+    useState<OperationsConfigData | null>(null);
+  const [defaultChannelId, setDefaultChannelId] = useState<
+    string | undefined
+  >();
+  const [toast, setToast] = useState<ToastState | null>(null);
+  const [confirm, setConfirm] = useState<ConfirmState | null>(null);
+
+  // 切换 tab 时更新 URL
+  const handleTabChange = (tab: TabType) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", tab);
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const siteResponse = await fetch("/api/site-config", {
+          cache: "no-store",
+        });
+        const siteResult = await siteResponse.json();
+        if (siteResult.code === 200 && siteResult.data) {
+          setSiteConfig(siteResult.data);
+        }
+        const operationsResponse = await fetch("/api/operations-config", {
+          cache: "no-store",
+        });
+        const operationsResult = await operationsResponse.json();
+        if (operationsResult.code === 200 && operationsResult.data) {
+          setOperationsConfig(operationsResult.data);
+        }
+
+        const vodResponse = await fetch("/api/vod-sources");
+        const vodResult = await vodResponse.json();
+
+        if (vodResult.code === 200 && vodResult.data) {
+          setSources(vodResult.data.sources || []);
+          setSelectedKey(vodResult.data.selected?.key || "");
+        }
+
+        // 加载短剧源配置
+        const shortsResponse = await fetch("/api/shorts-sources");
+        const shortsResult = await shortsResponse.json();
+
+        if (shortsResult.code === 200 && shortsResult.data) {
+          setShortsSources(shortsResult.data.sources || []);
+          setSelectedShortsKey(shortsResult.data.selected?.key || "");
+        }
+
+        const playerResponse = await fetch("/api/player-config");
+        const playerResult = await playerResponse.json();
+
+        if (playerResult.code === 200 && playerResult.data) {
+          setPlayerConfig(playerResult.data);
+        }
+
+        const dailymotionResponse = await fetch("/api/dailymotion-config");
+        const dailymotionResult = await dailymotionResponse.json();
+
+        if (dailymotionResult.code === 200 && dailymotionResult.data) {
+          setDailymotionChannels(dailymotionResult.data.channels || []);
+          setDefaultChannelId(dailymotionResult.data.defaultChannelId);
+        }
+      } catch (error) {
+        setToast({
+          message: error instanceof Error ? error.message : "加载配置失败",
+          type: "error",
+        });
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  // 统一导入回调 - 允许任意 Tab 更新所有类型的源
+  const unifiedImportCallbacks: UnifiedImportCallbacks = useMemo(
+    () => ({
+      onVodSourcesImport: (newSources, selected) => {
+        setSources(newSources);
+        if (selected) setSelectedKey(selected);
+      },
+      onShortsSourcesImport: (newSources, selected) => {
+        setShortsSources(newSources);
+        if (selected) setSelectedShortsKey(selected);
+      },
+      onDailymotionImport: (channels, defaultId) => {
+        setDailymotionChannels(channels);
+        if (defaultId) setDefaultChannelId(defaultId);
+      },
+    }),
+    []
+  );
+
+  const tabs = [
+    {
+      id: "sources" as TabType,
+      name: "视频源管理",
+      shortName: "视频源",
+      icon: Tv,
+    },
+    {
+      id: "shorts" as TabType,
+      name: "短剧源管理",
+      shortName: "短剧源",
+      icon: Film,
+    },
+    {
+      id: "dailymotion" as TabType,
+      name: "Dailymotion",
+      shortName: "DM",
+      icon: Youtube,
+    },
+    {
+      id: "player" as TabType,
+      name: "播放器设置",
+      shortName: "播放器",
+      icon: Settings,
+    },
+    {
+      id: "users" as TabType,
+      name: "用户管理",
+      shortName: "用户",
+      icon: Users,
+    },
+    {
+      id: "database" as TabType,
+      name: "数据库",
+      shortName: "数据库",
+      icon: Database,
+    },
+    {
+      id: "site" as TabType,
+      name: "站点设置",
+      shortName: "站点",
+      icon: Globe,
+    },
+    {
+      id: "operations" as TabType,
+      name: "运营配置",
+      shortName: "运营",
+      icon: Megaphone,
+    },
+  ];
+
+  const activeTabInfo =
+    tabs.find((tab) => tab.id === activeTab) || tabs[0];
+  const ActiveTabIcon = activeTabInfo.icon;
+
+  return (
+    <div className="min-h-screen bg-[#141414]">
+      {/* Header - Netflix Style */}
+      <div className="bg-[#141414] border-b border-[#333]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4 sm:gap-6">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#E50914]">
+                {siteConfig?.siteName || "宝拓影视"}
+              </h1>
+              <span className="text-white text-base sm:text-lg">系统设置</span>
+            </div>
+            <div className="flex items-center justify-between sm:justify-end gap-3">
+              <span className="md:hidden inline-flex items-center gap-2 text-sm text-[#b3b3b3]">
+                <ActiveTabIcon size={16} />
+                {activeTabInfo.shortName}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-[#333] hover:bg-[#444] text-white rounded transition-colors text-sm sm:text-base"
+              >
+                退出登录
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs Navigation - Netflix Style */}
+      <div className="bg-[#181818] border-b border-[#333]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Mobile Tab Switcher */}
+          <div className="md:hidden py-3">
+            <label
+              htmlFor="settings-tab-select"
+              className="block text-xs text-[#8f8f8f] mb-2"
+            >
+              切换设置模块
+            </label>
+            <div className="relative">
+              <select
+                id="settings-tab-select"
+                value={activeTab}
+                onChange={(event) => handleTabChange(event.target.value as TabType)}
+                className="w-full appearance-none bg-[#222] border border-[#3a3a3a] rounded-lg py-2.5 pl-3 pr-10 text-sm text-white focus:outline-none focus:border-[#E50914]"
+              >
+                {tabs.map((tab) => (
+                  <option key={tab.id} value={tab.id}>
+                    {tab.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={16}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none"
+              />
+            </div>
+          </div>
+
+          {/* Desktop Tab Navigation */}
+          <nav className="hidden md:flex space-x-1">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`px-6 py-4 text-sm font-medium transition-all relative ${
+                    activeTab === tab.id
+                      ? "text-white"
+                      : "text-[#808080] hover:text-white"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Icon size={18} strokeWidth={1.5} />
+                    <span>{tab.name}</span>
+                  </span>
+                  {activeTab === tab.id && (
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#E50914]" />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
+        {activeTab === "sources" && (
+          <VodSourcesTab
+            sources={sources}
+            selectedKey={selectedKey}
+            onSourcesChange={setSources}
+            onSelectedKeyChange={setSelectedKey}
+            onShowToast={setToast}
+            onShowConfirm={setConfirm}
+            unifiedImport={unifiedImportCallbacks}
+          />
+        )}
+
+        {activeTab === "shorts" && (
+          <ShortsSourcesTab
+            sources={shortsSources}
+            selectedKey={selectedShortsKey}
+            onSourcesChange={setShortsSources}
+            onSelectedKeyChange={setSelectedShortsKey}
+            onShowToast={setToast}
+            onShowConfirm={setConfirm}
+            unifiedImport={unifiedImportCallbacks}
+          />
+        )}
+
+        {activeTab === "player" && playerConfig && (
+          <PlayerConfigTab
+            playerConfig={playerConfig}
+            onConfigChange={setPlayerConfig}
+            onShowToast={setToast}
+            onShowConfirm={setConfirm}
+          />
+        )}
+
+        {activeTab === "dailymotion" && (
+          <DailymotionChannelsTab
+            channels={dailymotionChannels}
+            defaultChannelId={defaultChannelId}
+            onChannelsChange={(channels, defaultId) => {
+              setDailymotionChannels(channels);
+              setDefaultChannelId(defaultId);
+            }}
+            onShowToast={setToast}
+            onShowConfirm={setConfirm}
+            unifiedImport={unifiedImportCallbacks}
+          />
+        )}
+
+        {activeTab === "database" && (
+          <DatabaseSettingsTab
+            onShowToast={setToast}
+          />
+        )}
+
+        {activeTab === "users" && (
+          <UserManagementTab
+            onShowToast={setToast}
+            onShowConfirm={setConfirm}
+          />
+        )}
+
+        {activeTab === "site" &&
+          (siteConfig ? (
+            <SiteSettingsTab
+              siteConfig={siteConfig}
+              onConfigChange={setSiteConfig}
+              onShowToast={setToast}
+            />
+          ) : (
+            <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333] text-[#9b9b9b]">
+              正在加载站点设置...
+            </div>
+          ))}
+
+        {activeTab === "operations" &&
+          (operationsConfig ? (
+            <OperationsSettingsTab
+              operationsConfig={operationsConfig}
+              onConfigChange={setOperationsConfig}
+              onShowToast={setToast}
+            />
+          ) : (
+            <div className="bg-[#1a1a1a] rounded-xl p-6 border border-[#333] text-[#9b9b9b]">
+              正在加载运营配置...
+            </div>
+          ))}
+      </div>
+
+      {/* Toast 通知 */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
+      {/* 确认对话框 */}
+      {confirm && (
+        <ConfirmDialog
+          title={confirm.title}
+          message={confirm.message}
+          onConfirm={confirm.onConfirm}
+          onCancel={() => setConfirm(null)}
+          danger={confirm.danger}
+        />
+      )}
+    </div>
+  );
+}
+
+// 加载占位符
+function SettingsLoading() {
+  return (
+    <div className="min-h-screen bg-[#141414] flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-600 border-t-red-600 mx-auto mb-4" />
+        <p className="text-gray-400">加载中...</p>
+      </div>
+    </div>
+  );
+}
+
+// 主页面组件 - 用 Suspense 包装
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={<SettingsLoading />}>
+      <SettingsContent />
+    </Suspense>
+  );
+}

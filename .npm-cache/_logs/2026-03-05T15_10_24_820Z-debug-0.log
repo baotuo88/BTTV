@@ -1,0 +1,1649 @@
+0 verbose cli /usr/local/bin/node /usr/local/bin/npm
+1 info using npm@10.9.2
+2 info using node@v22.16.0
+3 silly config load:file:/usr/local/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/yewuchen/Desktop/宝拓影视/.npmrc
+5 silly config load:file:/Users/yewuchen/.npmrc
+6 silly config load:file:/usr/local/etc/npmrc
+7 verbose title npm install
+8 verbose argv "install"
+9 verbose logfile logs-max:10 dir:/Users/yewuchen/Desktop/宝拓影视/.npm-cache/_logs/2026-03-05T15_10_24_820Z-
+10 verbose logfile /Users/yewuchen/Desktop/宝拓影视/.npm-cache/_logs/2026-03-05T15_10_24_820Z-debug-0.log
+11 silly logfile done cleaning log files
+12 http fetch GET https://registry.npmjs.org/npm attempt 1 failed with ENOTFOUND
+13 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+14 silly idealTree buildDeps
+15 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/artplayer' ]
+16 silly reify mark retired [
+16 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/artplayer-plugin-danmuku'
+16 silly reify ]
+17 silly reify mark retired [
+17 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/baseline-browser-mapping'
+17 silly reify ]
+18 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/before-after-hook' ]
+19 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/browserslist' ]
+20 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/bson' ]
+21 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/caniuse-lite' ]
+22 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/electron-to-chromium' ]
+23 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/enhanced-resolve' ]
+24 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/es-abstract' ]
+25 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/es-iterator-helpers' ]
+26 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint' ]
+27 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-config-next' ]
+28 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/fast-content-type-parse' ]
+29 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/fastq' ]
+30 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/form-data' ]
+31 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/hls.js' ]
+32 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/kind-of' ]
+33 silly reify mark retired [
+33 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-android-arm64'
+33 silly reify ]
+34 silly reify mark retired [
+34 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-darwin-arm64'
+34 silly reify ]
+35 silly reify mark retired [
+35 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-freebsd-x64'
+35 silly reify ]
+36 silly reify mark retired [
+36 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm-gnueabihf'
+36 silly reify ]
+37 silly reify mark retired [
+37 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-gnu'
+37 silly reify ]
+38 silly reify mark retired [
+38 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-musl'
+38 silly reify ]
+39 silly reify mark retired [
+39 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-gnu'
+39 silly reify ]
+40 silly reify mark retired [
+40 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-musl'
+40 silly reify ]
+41 silly reify mark retired [
+41 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-arm64-msvc'
+41 silly reify ]
+42 silly reify mark retired [
+42 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-x64-msvc'
+42 silly reify ]
+43 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/lucide-react' ]
+44 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/memory-pager' ]
+45 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/mongodb' ]
+46 silly reify mark retired [
+46 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/mongodb-connection-string-url'
+46 silly reify ]
+47 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/option-validator' ]
+48 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/react' ]
+49 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/react-dom' ]
+50 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/sharp' ]
+51 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/sparse-bitfield' ]
+52 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/tailwindcss' ]
+53 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/tr46' ]
+54 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsx' ]
+55 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/typescript-eslint' ]
+56 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/universal-user-agent' ]
+57 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/update-browserslist-db' ]
+58 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/webidl-conversions' ]
+59 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/whatwg-url' ]
+60 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/zod' ]
+61 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@emnapi/core' ]
+62 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@emnapi/runtime' ]
+63 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/aix-ppc64' ]
+64 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm' ]
+65 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm64' ]
+66 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-x64' ]
+67 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/darwin-arm64' ]
+68 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-arm64' ]
+69 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-x64' ]
+70 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm' ]
+71 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm64' ]
+72 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-mips64el' ]
+73 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ia32' ]
+74 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-loong64' ]
+75 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ppc64' ]
+76 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-riscv64' ]
+77 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-s390x' ]
+78 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-x64' ]
+79 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-arm64' ]
+80 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-x64' ]
+81 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-arm64' ]
+82 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-x64' ]
+83 silly reify mark retired [
+83 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openharmony-arm64'
+83 silly reify ]
+84 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/sunos-x64' ]
+85 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-arm64' ]
+86 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-ia32' ]
+87 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-x64' ]
+88 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@eslint/eslintrc' ]
+89 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@eslint/js' ]
+90 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-darwin-arm64' ]
+91 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-darwin-x64' ]
+92 silly reify mark retired [
+92 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-darwin-arm64'
+92 silly reify ]
+93 silly reify mark retired [
+93 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-darwin-x64'
+93 silly reify ]
+94 silly reify mark retired [
+94 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm'
+94 silly reify ]
+95 silly reify mark retired [
+95 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm64'
+95 silly reify ]
+96 silly reify mark retired [
+96 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-ppc64'
+96 silly reify ]
+97 silly reify mark retired [
+97 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-s390x'
+97 silly reify ]
+98 silly reify mark retired [
+98 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-x64'
+98 silly reify ]
+99 silly reify mark retired [
+99 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-arm64'
+99 silly reify ]
+100 silly reify mark retired [
+100 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-x64'
+100 silly reify ]
+101 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm' ]
+102 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm64' ]
+103 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-ppc64' ]
+104 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-s390x' ]
+105 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-x64' ]
+106 silly reify mark retired [
+106 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-arm64'
+106 silly reify ]
+107 silly reify mark retired [
+107 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-x64'
+107 silly reify ]
+108 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-wasm32' ]
+109 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-arm64' ]
+110 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-ia32' ]
+111 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-x64' ]
+112 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@mongodb-js/saslprep' ]
+113 silly reify mark retired [
+113 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/eslint-plugin-next'
+113 silly reify ]
+114 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-darwin-arm64' ]
+115 silly reify mark retired [
+115 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-gnu'
+115 silly reify ]
+116 silly reify mark retired [
+116 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-musl'
+116 silly reify ]
+117 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-gnu' ]
+118 silly reify mark retired [
+118 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-musl'
+118 silly reify ]
+119 silly reify mark retired [
+119 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-arm64-msvc'
+119 silly reify ]
+120 silly reify mark retired [
+120 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-x64-msvc'
+120 silly reify ]
+121 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/auth-token' ]
+122 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/core' ]
+123 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/endpoint' ]
+124 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/graphql' ]
+125 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/openapi-types' ]
+126 silly reify mark retired [
+126 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/plugin-paginate-rest'
+126 silly reify ]
+127 silly reify mark retired [
+127 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/plugin-request-log'
+127 silly reify ]
+128 silly reify mark retired [
+128 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/plugin-rest-endpoint-methods'
+128 silly reify ]
+129 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/request' ]
+130 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/request-error' ]
+131 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/rest' ]
+132 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/types' ]
+133 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/node' ]
+134 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide' ]
+135 silly reify mark retired [
+135 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-android-arm64'
+135 silly reify ]
+136 silly reify mark retired [
+136 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-darwin-arm64'
+136 silly reify ]
+137 silly reify mark retired [
+137 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-darwin-x64'
+137 silly reify ]
+138 silly reify mark retired [
+138 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-freebsd-x64'
+138 silly reify ]
+139 silly reify mark retired [
+139 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm-gnueabihf'
+139 silly reify ]
+140 silly reify mark retired [
+140 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-gnu'
+140 silly reify ]
+141 silly reify mark retired [
+141 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-musl'
+141 silly reify ]
+142 silly reify mark retired [
+142 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-gnu'
+142 silly reify ]
+143 silly reify mark retired [
+143 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-musl'
+143 silly reify ]
+144 silly reify mark retired [
+144 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-wasm32-wasi'
+144 silly reify ]
+145 silly reify mark retired [
+145 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-arm64-msvc'
+145 silly reify ]
+146 silly reify mark retired [
+146 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-x64-msvc'
+146 silly reify ]
+147 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/postcss' ]
+148 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/node' ]
+149 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/react' ]
+150 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/react-dom' ]
+151 silly reify mark retired [
+151 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/webidl-conversions'
+151 silly reify ]
+152 silly reify mark retired [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/whatwg-url' ]
+153 silly reify mark retired [
+153 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/eslint-plugin'
+153 silly reify ]
+154 silly reify mark retired [
+154 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/parser'
+154 silly reify ]
+155 silly reify mark retired [
+155 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/project-service'
+155 silly reify ]
+156 silly reify mark retired [
+156 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/scope-manager'
+156 silly reify ]
+157 silly reify mark retired [
+157 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/tsconfig-utils'
+157 silly reify ]
+158 silly reify mark retired [
+158 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/type-utils'
+158 silly reify ]
+159 silly reify mark retired [
+159 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/types'
+159 silly reify ]
+160 silly reify mark retired [
+160 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/typescript-estree'
+160 silly reify ]
+161 silly reify mark retired [
+161 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/utils'
+161 silly reify ]
+162 silly reify mark retired [
+162 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/visitor-keys'
+162 silly reify ]
+163 silly reify mark retired [
+163 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm-eabi'
+163 silly reify ]
+164 silly reify mark retired [
+164 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm64'
+164 silly reify ]
+165 silly reify mark retired [
+165 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-darwin-arm64'
+165 silly reify ]
+166 silly reify mark retired [
+166 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-freebsd-x64'
+166 silly reify ]
+167 silly reify mark retired [
+167 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-gnueabihf'
+167 silly reify ]
+168 silly reify mark retired [
+168 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-musleabihf'
+168 silly reify ]
+169 silly reify mark retired [
+169 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-gnu'
+169 silly reify ]
+170 silly reify mark retired [
+170 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-musl'
+170 silly reify ]
+171 silly reify mark retired [
+171 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-ppc64-gnu'
+171 silly reify ]
+172 silly reify mark retired [
+172 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-gnu'
+172 silly reify ]
+173 silly reify mark retired [
+173 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-musl'
+173 silly reify ]
+174 silly reify mark retired [
+174 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-s390x-gnu'
+174 silly reify ]
+175 silly reify mark retired [
+175 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-gnu'
+175 silly reify ]
+176 silly reify mark retired [
+176 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-musl'
+176 silly reify ]
+177 silly reify mark retired [
+177 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-wasm32-wasi'
+177 silly reify ]
+178 silly reify mark retired [
+178 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-arm64-msvc'
+178 silly reify ]
+179 silly reify mark retired [
+179 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-ia32-msvc'
+179 silly reify ]
+180 silly reify mark retired [
+180 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-x64-msvc'
+180 silly reify ]
+181 silly reify mark retired [
+181 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/acorn',
+181 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/acorn'
+181 silly reify ]
+182 silly reify mark retired [
+182 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/esbuild',
+182 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/esbuild'
+182 silly reify ]
+183 silly reify mark retired [
+183 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-plugin-react/node_modules/resolve',
+183 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-plugin-react/node_modules/.bin/resolve'
+183 silly reify ]
+184 silly reify mark retired [
+184 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/is-bun-module/node_modules/semver',
+184 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/is-bun-module/node_modules/.bin/semver'
+184 silly reify ]
+185 silly reify mark retired [
+185 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/jiti',
+185 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/jiti'
+185 silly reify ]
+186 silly reify mark retired [
+186 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/jsesc',
+186 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/jsesc'
+186 silly reify ]
+187 silly reify mark retired [
+187 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/json5',
+187 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/json5'
+187 silly reify ]
+188 silly reify mark retired [
+188 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/js-yaml',
+188 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/js-yaml'
+188 silly reify ]
+189 silly reify mark retired [
+189 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/loose-envify',
+189 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/loose-envify'
+189 silly reify ]
+190 silly reify mark retired [
+190 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/napi-postinstall',
+190 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/napi-postinstall'
+190 silly reify ]
+191 silly reify mark retired [
+191 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/nanoid',
+191 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/nanoid'
+191 silly reify ]
+192 silly reify mark retired [
+192 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/next',
+192 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/next'
+192 silly reify ]
+193 silly reify mark retired [
+193 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/resolve',
+193 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/resolve'
+193 silly reify ]
+194 silly reify mark retired [
+194 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/semver',
+194 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/semver'
+194 silly reify ]
+195 silly reify mark retired [
+195 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsconfig-paths/node_modules/json5',
+195 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsconfig-paths/node_modules/.bin/json5'
+195 silly reify ]
+196 silly reify mark retired [
+196 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/typescript',
+196 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/tsc',
+196 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/tsserver'
+196 silly reify ]
+197 silly reify mark retired [
+197 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/which',
+197 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/node-which'
+197 silly reify ]
+198 silly reify mark retired [
+198 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@babel/parser',
+198 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/parser'
+198 silly reify ]
+199 silly reify moves {
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/artplayer': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.artplayer-LcA8f0iP',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/artplayer-plugin-danmuku': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.artplayer-plugin-danmuku-jHIGS8e5',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/baseline-browser-mapping': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.baseline-browser-mapping-5JpyGv8g',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/before-after-hook': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.before-after-hook-SnA0Gh4K',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/browserslist': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.browserslist-NfXLzaAx',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/bson': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bson-wMNXFZRg',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/caniuse-lite': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.caniuse-lite-JYlzowdq',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/electron-to-chromium': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.electron-to-chromium-QDMJf7av',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/enhanced-resolve': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.enhanced-resolve-etp7IPGO',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/es-abstract': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.es-abstract-hLRfSyTl',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/es-iterator-helpers': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.es-iterator-helpers-2ksxHDb2',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.eslint-qRS5q1l4',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-config-next': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.eslint-config-next-lVM9V2Yx',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/fast-content-type-parse': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.fast-content-type-parse-E8baydvD',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/fastq': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.fastq-N5yBxiqY',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/form-data': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.form-data-nUB3doYI',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/hls.js': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.hls.js-a9JBBdyW',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/kind-of': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.kind-of-MU1DCUt2',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-android-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-android-arm64-TKmyJWHf',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-darwin-arm64-WI5TJcSg',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-freebsd-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-freebsd-x64-zI2DWhWh',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm-gnueabihf': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-linux-arm-gnueabihf-8fTqRXN6',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-linux-arm64-gnu-M6oa9KTw',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-linux-arm64-musl-fE8mqLdw',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-linux-x64-gnu-ZRiDaQMY',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-linux-x64-musl-nI4NhB7q',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-arm64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-win32-arm64-msvc-50r8SUvj',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-x64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lightningcss-win32-x64-msvc-AlmF2YNn',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lucide-react': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.lucide-react-JGpw6LDU',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/memory-pager': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.memory-pager-FuyuZi5P',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/mongodb': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.mongodb-0CuIi7FH',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/mongodb-connection-string-url': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.mongodb-connection-string-url-u0dUVkwS',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/option-validator': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.option-validator-zlFhDWIR',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/react': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.react-C27S9UsK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/react-dom': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.react-dom-bk9vTDmK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/sharp': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.sharp-SSnzf2dM',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/sparse-bitfield': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.sparse-bitfield-mEQq5e9m',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tailwindcss': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.tailwindcss-kuApFmap',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tr46': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.tr46-WtKoEI6I',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsx': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.tsx-XxT42ZBS',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/typescript-eslint': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.typescript-eslint-NTeplvN8',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/universal-user-agent': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.universal-user-agent-ZOGcMg32',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/update-browserslist-db': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.update-browserslist-db-BiJEa8xq',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/webidl-conversions': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.webidl-conversions-3cZbBTSD',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/whatwg-url': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.whatwg-url-myVvWr3w',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/zod': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.zod-T53sn1VR',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@emnapi/core': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@emnapi/.core-bhN51WLx',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@emnapi/runtime': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@emnapi/.runtime-9SSFJiqx',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/aix-ppc64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.aix-ppc64-1GBfvXcD',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.android-arm-PxDcSMC5',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.android-arm64-fOJVIzCv',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.android-x64-abliTJRO',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.darwin-arm64-zZseQHGn',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.freebsd-arm64-LewZG56J',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.freebsd-x64-OEJILc5T',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-arm-fBxSz4Gb',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-arm64-ByrzHBXI',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-mips64el': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-mips64el-BWItVgVT',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ia32': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-ia32-lojfK1L7',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-loong64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-loong64-gdDKodSF',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ppc64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-ppc64-uUysNBCb',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-riscv64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-riscv64-kbQBttgk',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-s390x': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-s390x-dCMwYoPT',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.linux-x64-K8jHPdfi',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.netbsd-arm64-YI32IwfF',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.netbsd-x64-idjkpE3V',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.openbsd-arm64-HlNUMqm9',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.openbsd-x64-IQl5a2M4',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openharmony-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.openharmony-arm64-E3ImHT0F',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/sunos-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.sunos-x64-2l2yPi6g',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.win32-arm64-byS5vGeH',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-ia32': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.win32-ia32-k6OqJrRi',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/.win32-x64-uKkbSFo1',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@eslint/eslintrc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@eslint/.eslintrc-HP7JiPS1',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@eslint/js': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@eslint/.js-l8SjuAM8',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-darwin-arm64-a8q9CAma',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-darwin-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-darwin-x64-iTywRC9m',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-darwin-arm64-TssecfjL',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-darwin-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-darwin-x64-0wCO3urI',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linux-arm-oGXy71OQ',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linux-arm64-8V20CRmO',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-ppc64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linux-ppc64-x9SdI0G6',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-s390x': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linux-s390x-I5LepLC4',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linux-x64-8yC4QdWG',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linuxmusl-arm64-dlb5WSsr',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-libvips-linuxmusl-x64-sE05rPVB',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linux-arm-wLXjOQZ2',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linux-arm64-BsZ1sJbq',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-ppc64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linux-ppc64-DI9Lcn09',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-s390x': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linux-s390x-nKgSRJep',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linux-x64-DC3Jj1dr',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linuxmusl-arm64-L6AmhLcA',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-linuxmusl-x64-HHzpHCK0',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-wasm32': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-wasm32-QH1Zq7Hl',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-win32-arm64-Lk3JSMzY',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-ia32': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-win32-ia32-7nfjSSto',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/.sharp-win32-x64-QsTcEiuy',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@mongodb-js/saslprep': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@mongodb-js/.saslprep-81x2EHa6',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/eslint-plugin-next': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.eslint-plugin-next-rrdKotLg',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-darwin-arm64-Ox2vvbbB',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-linux-arm64-gnu-UoyWBlak',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-linux-arm64-musl-Hx6J8UB4',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-linux-x64-gnu-RgAQRV3I',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-linux-x64-musl-L1EOLIqT',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-arm64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-win32-arm64-msvc-ebb9IcDt',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-x64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/.swc-win32-x64-msvc-XoV8gW2W',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/auth-token': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.auth-token-zTIbV8pW',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/core': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.core-z6ayb14p',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/endpoint': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.endpoint-xjAmMLn0',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/graphql': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.graphql-dV4tJfjc',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/openapi-types': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.openapi-types-sVFc5FAB',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/plugin-paginate-rest': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.plugin-paginate-rest-MUoXMC9v',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/plugin-request-log': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.plugin-request-log-OG9RLUYF',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/plugin-rest-endpoint-methods': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.plugin-rest-endpoint-methods-ZpJZ6cIs',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/request': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.request-eIStpUFn',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/request-error': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.request-error-dokezOAX',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/rest': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.rest-n2PmxMJK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/types': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@octokit/.types-VBuYjFR4',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/node': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.node-0OfidpOj',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-wziiCOKL',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-android-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-android-arm64-j0mqt8qo',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-darwin-arm64-gksdR6Sa',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-darwin-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-darwin-x64-8QAkJXqK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-freebsd-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-freebsd-x64-7zmiWfSa',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm-gnueabihf': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-linux-arm-gnueabihf-WKlwl4X2',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-linux-arm64-gnu-KupZvdnW',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-linux-arm64-musl-ebBjmkhd',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-linux-x64-gnu-l91H5zyd',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-linux-x64-musl-Dogen2OT',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-wasm32-wasi': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-wasm32-wasi-tDMrvcTM',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-arm64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-win32-arm64-msvc-AexgTBzV',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-x64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.oxide-win32-x64-msvc-TLqDCuP9',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/postcss': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/.postcss-rMuS8TXA',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/node': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/.node-J7ouFy9z',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/react': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/.react-DSSoDvCG',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/react-dom': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/.react-dom-FDnVYsXf',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/webidl-conversions': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/.webidl-conversions-YxppvPWE',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/whatwg-url': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@types/.whatwg-url-A6LS22lo',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/eslint-plugin': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.eslint-plugin-RCRu0DnB',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/parser': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.parser-0UWahvhW',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/project-service': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.project-service-tPGU5JW9',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/scope-manager': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.scope-manager-OehkYvcM',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/tsconfig-utils': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.tsconfig-utils-siaXvJNN',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/type-utils': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.type-utils-cf9LwjrP',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/types': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.types-KCaMPxiN',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/typescript-estree': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.typescript-estree-7eQ0MLOT',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/utils': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.utils-MrtmtQIW',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/visitor-keys': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@typescript-eslint/.visitor-keys-gRWuOgKA',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm-eabi': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-android-arm-eabi-LHOgywqq',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-android-arm64-4CBNzyOo',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-darwin-arm64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-darwin-arm64-hh1wgweq',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-freebsd-x64': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-freebsd-x64-rBehFDKN',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-gnueabihf': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-arm-gnueabihf-NH800z9P',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-musleabihf': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-arm-musleabihf-Ob2d2aP7',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-arm64-gnu-aZIyG8ri',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-arm64-musl-3ATOiSpK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-ppc64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-ppc64-gnu-p2bcP1NK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-riscv64-gnu-YbSu4LAK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-riscv64-musl-CaWLUKJO',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-s390x-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-s390x-gnu-3gsBrxwd',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-gnu': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-x64-gnu-YLY0f1dH',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-musl': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-linux-x64-musl-1DW4QSaK',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-wasm32-wasi': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-wasm32-wasi-xONpQkFr',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-arm64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-win32-arm64-msvc-OHkn8fH4',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-ia32-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-win32-ia32-msvc-0Of9Ks0r',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-x64-msvc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/.resolver-binding-win32-x64-msvc-2J2zht2x',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/acorn': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.acorn-0TPh5Nd2',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/acorn': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.acorn-X13J94jr',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/esbuild': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.esbuild-mmaXyS76',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/esbuild': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.esbuild-pAj7gwbY',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-plugin-react/node_modules/resolve': '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-plugin-react/node_modules/.resolve-14gG9YYy',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-plugin-react/node_modules/.bin/resolve': '/Users/yewuchen/Desktop/宝拓影视/node_modules/eslint-plugin-react/node_modules/.bin/.resolve-n1UFq1Qz',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/is-bun-module/node_modules/semver': '/Users/yewuchen/Desktop/宝拓影视/node_modules/is-bun-module/node_modules/.semver-QtxKV2Km',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/is-bun-module/node_modules/.bin/semver': '/Users/yewuchen/Desktop/宝拓影视/node_modules/is-bun-module/node_modules/.bin/.semver-ehceD2ym',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/jiti': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.jiti-cwmyJecC',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/jiti': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.jiti-22FQ80K5',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/jsesc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.jsesc-b3GdQn7u',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/jsesc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.jsesc-5kGOnuUw',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/json5': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.json5-e1o9XLuw',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/json5': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.json5-7Dmy04UO',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/js-yaml': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.js-yaml-yWUcSL8N',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/js-yaml': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.js-yaml-XseuTAwR',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/loose-envify': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.loose-envify-buqaSqET',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/loose-envify': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.loose-envify-uTgxh5UA',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/napi-postinstall': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.napi-postinstall-kfoUVBtD',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/napi-postinstall': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.napi-postinstall-W4pgwjYw',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/nanoid': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.nanoid-fMyhY44Y',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/nanoid': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.nanoid-B9PJwMlm',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/next': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.next-yNuJQPb8',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/next': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.next-xgYcnysA',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/resolve': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.resolve-HRKSsvOF',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/resolve': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.resolve-t9tp40lI',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/semver': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.semver-1hmHtIpa',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/semver': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.semver-D2Qszq2i',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsconfig-paths/node_modules/json5': '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsconfig-paths/node_modules/.json5-sVmS5LIz',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsconfig-paths/node_modules/.bin/json5': '/Users/yewuchen/Desktop/宝拓影视/node_modules/tsconfig-paths/node_modules/.bin/.json5-H64iQxYc',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/typescript': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.typescript-vDVJBlqj',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/tsc': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.tsc-BTdIhlCN',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/tsserver': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.tsserver-kGogT2H7',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/which': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.which-3CJ8fD5A',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/node-which': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.node-which-7SZashsY',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@babel/parser': '/Users/yewuchen/Desktop/宝拓影视/node_modules/@babel/.parser-4RF9Td9y',
+199 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/parser': '/Users/yewuchen/Desktop/宝拓影视/node_modules/.bin/.parser-MiY6pszo'
+199 silly reify }
+200 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-wasm32-wasi
+201 silly reify mark deleted [
+201 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-wasm32-wasi'
+201 silly reify ]
+202 silly audit bulk request {
+202 silly audit   '@alloc/quick-lru': [ '5.2.0' ],
+202 silly audit   '@babel/code-frame': [ '7.27.1' ],
+202 silly audit   '@babel/compat-data': [ '7.28.5' ],
+202 silly audit   '@babel/core': [ '7.28.5' ],
+202 silly audit   '@babel/generator': [ '7.28.5' ],
+202 silly audit   '@babel/helper-compilation-targets': [ '7.27.2' ],
+202 silly audit   '@babel/helper-globals': [ '7.28.0' ],
+202 silly audit   '@babel/helper-module-imports': [ '7.27.1' ],
+202 silly audit   '@babel/helper-module-transforms': [ '7.28.3' ],
+202 silly audit   '@babel/helper-string-parser': [ '7.27.1' ],
+202 silly audit   '@babel/helper-validator-identifier': [ '7.28.5' ],
+202 silly audit   '@babel/helper-validator-option': [ '7.27.1' ],
+202 silly audit   '@babel/helpers': [ '7.28.4' ],
+202 silly audit   '@babel/parser': [ '7.28.5' ],
+202 silly audit   '@babel/template': [ '7.27.2' ],
+202 silly audit   '@babel/traverse': [ '7.28.5' ],
+202 silly audit   '@babel/types': [ '7.28.5' ],
+202 silly audit   '@emnapi/core': [ '1.7.0' ],
+202 silly audit   '@emnapi/runtime': [ '1.7.0' ],
+202 silly audit   '@emnapi/wasi-threads': [ '1.1.0' ],
+202 silly audit   '@esbuild/aix-ppc64': [ '0.25.12' ],
+202 silly audit   '@esbuild/android-arm': [ '0.25.12' ],
+202 silly audit   '@esbuild/android-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/android-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/darwin-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/darwin-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/freebsd-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/freebsd-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-arm': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-ia32': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-loong64': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-mips64el': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-ppc64': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-riscv64': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-s390x': [ '0.25.12' ],
+202 silly audit   '@esbuild/linux-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/netbsd-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/netbsd-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/openbsd-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/openbsd-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/openharmony-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/sunos-x64': [ '0.25.12' ],
+202 silly audit   '@esbuild/win32-arm64': [ '0.25.12' ],
+202 silly audit   '@esbuild/win32-ia32': [ '0.25.12' ],
+202 silly audit   '@esbuild/win32-x64': [ '0.25.12' ],
+202 silly audit   '@eslint-community/eslint-utils': [ '4.9.0' ],
+202 silly audit   'eslint-visitor-keys': [ '3.4.3', '4.2.1' ],
+202 silly audit   '@eslint-community/regexpp': [ '4.12.2' ],
+202 silly audit   '@eslint/config-array': [ '0.21.1' ],
+202 silly audit   '@eslint/config-helpers': [ '0.4.2' ],
+202 silly audit   '@eslint/core': [ '0.17.0' ],
+202 silly audit   '@eslint/eslintrc': [ '3.3.1' ],
+202 silly audit   '@eslint/js': [ '9.39.1' ],
+202 silly audit   '@eslint/object-schema': [ '2.1.7' ],
+202 silly audit   '@eslint/plugin-kit': [ '0.4.1' ],
+202 silly audit   '@humanfs/core': [ '0.19.1' ],
+202 silly audit   '@humanfs/node': [ '0.16.7' ],
+202 silly audit   '@humanwhocodes/module-importer': [ '1.0.1' ],
+202 silly audit   '@humanwhocodes/retry': [ '0.4.3' ],
+202 silly audit   '@img/colour': [ '1.0.0' ],
+202 silly audit   '@img/sharp-darwin-arm64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-darwin-x64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-libvips-darwin-arm64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-darwin-x64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linux-arm': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linux-arm64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linux-ppc64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linux-s390x': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linux-x64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linuxmusl-arm64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-libvips-linuxmusl-x64': [ '1.2.3' ],
+202 silly audit   '@img/sharp-linux-arm': [ '0.34.4' ],
+202 silly audit   '@img/sharp-linux-arm64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-linux-ppc64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-linux-s390x': [ '0.34.4' ],
+202 silly audit   '@img/sharp-linux-x64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-linuxmusl-arm64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-linuxmusl-x64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-wasm32': [ '0.34.4' ],
+202 silly audit   '@img/sharp-win32-arm64': [ '0.34.4' ],
+202 silly audit   '@img/sharp-win32-ia32': [ '0.34.4' ],
+202 silly audit   '@img/sharp-win32-x64': [ '0.34.4' ],
+202 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+202 silly audit   '@jridgewell/remapping': [ '2.3.5' ],
+202 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+202 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+202 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+202 silly audit   '@mongodb-js/saslprep': [ '1.3.2' ],
+202 silly audit   '@napi-rs/wasm-runtime': [ '0.2.12' ],
+202 silly audit   '@next/env': [ '16.1.1' ],
+202 silly audit   '@next/eslint-plugin-next': [ '16.0.1' ],
+202 silly audit   '@next/swc-darwin-arm64': [ '16.1.1' ],
+202 silly audit   '@next/swc-darwin-x64': [ '16.1.1' ],
+202 silly audit   '@next/swc-linux-arm64-gnu': [ '16.1.1' ],
+202 silly audit   '@next/swc-linux-arm64-musl': [ '16.1.1' ],
+202 silly audit   '@next/swc-linux-x64-gnu': [ '16.1.1' ],
+202 silly audit   '@next/swc-linux-x64-musl': [ '16.1.1' ],
+202 silly audit   '@next/swc-win32-arm64-msvc': [ '16.1.1' ],
+202 silly audit   '@next/swc-win32-x64-msvc': [ '16.1.1' ],
+202 silly audit   '@nodelib/fs.scandir': [ '2.1.5' ],
+202 silly audit   '@nodelib/fs.stat': [ '2.0.5' ],
+202 silly audit   '@nodelib/fs.walk': [ '1.2.8' ],
+202 silly audit   '@nolyfill/is-core-module': [ '1.0.39' ],
+202 silly audit   '@octokit/auth-token': [ '6.0.0' ],
+202 silly audit   '@octokit/core': [ '7.0.6' ],
+202 silly audit   '@octokit/endpoint': [ '11.0.2' ],
+202 silly audit   '@octokit/graphql': [ '9.0.3' ],
+202 silly audit   '@octokit/openapi-types': [ '27.0.0' ],
+202 silly audit   '@octokit/plugin-paginate-rest': [ '14.0.0' ],
+202 silly audit   '@octokit/plugin-request-log': [ '6.0.0' ],
+202 silly audit   '@octokit/plugin-rest-endpoint-methods': [ '17.0.0' ],
+202 silly audit   '@octokit/request': [ '10.0.6' ],
+202 silly audit   '@octokit/request-error': [ '7.0.2' ],
+202 silly audit   '@octokit/rest': [ '22.0.1' ],
+202 silly audit   '@octokit/types': [ '16.0.0' ],
+202 silly audit   '@rtsao/scc': [ '1.1.0' ],
+202 silly audit   '@swc/helpers': [ '0.5.15' ],
+202 silly audit   '@tailwindcss/node': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-android-arm64': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-darwin-arm64': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-darwin-x64': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-freebsd-x64': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-linux-arm-gnueabihf': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-linux-arm64-gnu': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-linux-arm64-musl': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-linux-x64-gnu': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-linux-x64-musl': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-win32-arm64-msvc': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/oxide-win32-x64-msvc': [ '4.1.16' ],
+202 silly audit   '@tailwindcss/postcss': [ '4.1.16' ],
+202 silly audit   '@tybys/wasm-util': [ '0.10.1' ],
+202 silly audit   '@types/estree': [ '1.0.8' ],
+202 silly audit   '@types/json-schema': [ '7.0.15' ],
+202 silly audit   '@types/json5': [ '0.0.29' ],
+202 silly audit   '@types/node': [ '20.19.24' ],
+202 silly audit   '@types/react': [ '19.2.2' ],
+202 silly audit   '@types/react-dom': [ '19.2.2' ],
+202 silly audit   '@types/webidl-conversions': [ '7.0.3' ],
+202 silly audit   '@types/whatwg-url': [ '13.0.0' ],
+202 silly audit   '@typescript-eslint/eslint-plugin': [ '8.46.3' ],
+202 silly audit   ignore: [ '7.0.5', '5.3.2' ],
+202 silly audit   '@typescript-eslint/parser': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/project-service': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/scope-manager': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/tsconfig-utils': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/type-utils': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/types': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/typescript-estree': [ '8.46.3' ],
+202 silly audit   'brace-expansion': [ '2.0.2', '1.1.12' ],
+202 silly audit   'fast-glob': [ '3.3.3', '3.3.1' ],
+202 silly audit   'glob-parent': [ '5.1.2', '6.0.2' ],
+202 silly audit   minimatch: [ '9.0.5', '3.1.2' ],
+202 silly audit   semver: [ '7.7.3', '6.3.1' ],
+202 silly audit   '@typescript-eslint/utils': [ '8.46.3' ],
+202 silly audit   '@typescript-eslint/visitor-keys': [ '8.46.3' ],
+202 silly audit   '@unrs/resolver-binding-android-arm-eabi': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-android-arm64': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-darwin-arm64': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-darwin-x64': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-freebsd-x64': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-arm-gnueabihf': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-arm-musleabihf': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-arm64-gnu': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-arm64-musl': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-ppc64-gnu': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-riscv64-gnu': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-riscv64-musl': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-s390x-gnu': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-x64-gnu': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-linux-x64-musl': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-wasm32-wasi': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-win32-arm64-msvc': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-win32-ia32-msvc': [ '1.11.1' ],
+202 silly audit   '@unrs/resolver-binding-win32-x64-msvc': [ '1.11.1' ],
+202 silly audit   acorn: [ '8.15.0' ],
+202 silly audit   'acorn-jsx': [ '5.3.2' ],
+202 silly audit   ajv: [ '6.12.6' ],
+202 silly audit   'ansi-styles': [ '4.3.0' ],
+202 silly audit   argparse: [ '2.0.1' ],
+202 silly audit   'aria-query': [ '5.3.2' ],
+202 silly audit   'array-buffer-byte-length': [ '1.0.2' ],
+202 silly audit   'array-includes': [ '3.1.9' ],
+202 silly audit   'array.prototype.findlast': [ '1.2.5' ],
+202 silly audit   'array.prototype.findlastindex': [ '1.2.6' ],
+202 silly audit   'array.prototype.flat': [ '1.3.3' ],
+202 silly audit   'array.prototype.flatmap': [ '1.3.3' ],
+202 silly audit   'array.prototype.tosorted': [ '1.1.4' ],
+202 silly audit   'arraybuffer.prototype.slice': [ '1.0.4' ],
+202 silly audit   artplayer: [ '5.3.0' ],
+202 silly audit   'artplayer-plugin-danmuku': [ '5.2.0' ],
+202 silly audit   'ast-types-flow': [ '0.0.8' ],
+202 silly audit   'async-function': [ '1.0.0' ],
+202 silly audit   asynckit: [ '0.4.0' ],
+202 silly audit   'available-typed-arrays': [ '1.0.7' ],
+202 silly audit   'axe-core': [ '4.11.0' ],
+202 silly audit   axios: [ '1.13.2' ],
+202 silly audit   'axobject-query': [ '4.1.0' ],
+202 silly audit   'balanced-match': [ '1.0.2' ],
+202 silly audit   'baseline-browser-mapping': [ '2.8.25' ],
+202 silly audit   'before-after-hook': [ '4.0.0' ],
+202 silly audit   braces: [ '3.0.3' ],
+202 silly audit   browserslist: [ '4.27.0' ],
+202 silly audit   bson: [ '7.0.0' ],
+202 silly audit   'call-bind': [ '1.0.8' ],
+202 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+202 silly audit   'call-bound': [ '1.0.4' ],
+202 silly audit   callsites: [ '3.1.0' ],
+202 silly audit   'caniuse-lite': [ '1.0.30001754' ],
+202 silly audit   chalk: [ '4.1.2' ],
+202 silly audit   'client-only': [ '0.0.1' ],
+202 silly audit   clsx: [ '2.1.1' ],
+202 silly audit   'color-convert': [ '2.0.1' ],
+202 silly audit   'color-name': [ '1.1.4' ],
+202 silly audit   'combined-stream': [ '1.0.8' ],
+202 silly audit   'concat-map': [ '0.0.1' ],
+202 silly audit   'convert-source-map': [ '2.0.0' ],
+202 silly audit   'cross-spawn': [ '7.0.6' ],
+202 silly audit   csstype: [ '3.1.3' ],
+202 silly audit   'damerau-levenshtein': [ '1.0.8' ],
+202 silly audit   'data-view-buffer': [ '1.0.2' ],
+202 silly audit   'data-view-byte-length': [ '1.0.2' ],
+202 silly audit   'data-view-byte-offset': [ '1.0.1' ],
+202 silly audit   debug: [ '4.4.3', '3.2.7' ],
+202 silly audit   'deep-is': [ '0.1.4' ],
+202 silly audit   'define-data-property': [ '1.1.4' ],
+202 silly audit   'define-properties': [ '1.2.1' ],
+202 silly audit   'delayed-stream': [ '1.0.0' ],
+202 silly audit   dequal: [ '2.0.3' ],
+202 silly audit   'detect-libc': [ '2.1.2' ],
+202 silly audit   doctrine: [ '2.1.0' ],
+202 silly audit   dotenv: [ '17.2.3' ],
+202 silly audit   'dunder-proto': [ '1.0.1' ],
+202 silly audit   'electron-to-chromium': [ '1.5.245' ],
+202 silly audit   'emoji-regex': [ '9.2.2' ],
+202 silly audit   'enhanced-resolve': [ '5.18.3' ],
+202 silly audit   'es-abstract': [ '1.24.0' ],
+202 silly audit   'es-define-property': [ '1.0.1' ],
+202 silly audit   'es-errors': [ '1.3.0' ],
+202 silly audit   'es-iterator-helpers': [ '1.2.1' ],
+202 silly audit   'es-object-atoms': [ '1.1.1' ],
+202 silly audit   'es-set-tostringtag': [ '2.1.0' ],
+202 silly audit   'es-shim-unscopables': [ '1.1.0' ],
+202 silly audit   'es-to-primitive': [ '1.3.0' ],
+202 silly audit   esbuild: [ '0.25.12' ],
+202 silly audit   escalade: [ '3.2.0' ],
+202 silly audit   'escape-string-regexp': [ '4.0.0' ],
+202 silly audit   eslint: [ '9.39.1' ],
+202 silly audit   'eslint-config-next': [ '16.0.1' ],
+202 silly audit   globals: [ '16.4.0', '14.0.0' ],
+202 silly audit   'eslint-import-resolver-node': [ '0.3.9' ],
+202 silly audit   'eslint-import-resolver-typescript': [ '3.10.1' ],
+202 silly audit   'eslint-module-utils': [ '2.12.1' ],
+202 silly audit   'eslint-plugin-import': [ '2.32.0' ],
+202 silly audit   'eslint-plugin-jsx-a11y': [ '6.10.2' ],
+202 silly audit   'eslint-plugin-react': [ '7.37.5' ],
+202 silly audit   'eslint-plugin-react-hooks': [ '7.0.1' ],
+202 silly audit   resolve: [ '2.0.0-next.5', '1.22.11' ],
+202 silly audit   'eslint-scope': [ '8.4.0' ],
+202 silly audit   espree: [ '10.4.0' ],
+202 silly audit   esquery: [ '1.6.0' ],
+202 silly audit   esrecurse: [ '4.3.0' ],
+202 silly audit   estraverse: [ '5.3.0' ],
+202 silly audit   esutils: [ '2.0.3' ],
+202 silly audit   'fast-content-type-parse': [ '3.0.0' ],
+202 silly audit   'fast-deep-equal': [ '3.1.3' ],
+202 silly audit   'fast-json-stable-stringify': [ '2.1.0' ],
+202 silly audit   'fast-levenshtein': [ '2.0.6' ],
+202 silly audit   fastq: [ '1.19.1' ],
+202 silly audit   'file-entry-cache': [ '8.0.0' ],
+202 silly audit   'fill-range': [ '7.1.1' ],
+202 silly audit   'find-up': [ '5.0.0' ],
+202 silly audit   'flat-cache': [ '4.0.1' ],
+202 silly audit   flatted: [ '3.3.3' ],
+202 silly audit   'follow-redirects': [ '1.15.11' ],
+202 silly audit   'for-each': [ '0.3.5' ],
+202 silly audit   'form-data': [ '4.0.4' ],
+202 silly audit   fsevents: [ '2.3.3' ],
+202 silly audit   'function-bind': [ '1.1.2' ],
+202 silly audit   'function.prototype.name': [ '1.1.8' ],
+202 silly audit   'functions-have-names': [ '1.2.3' ],
+202 silly audit   'generator-function': [ '2.0.1' ],
+202 silly audit   gensync: [ '1.0.0-beta.2' ],
+202 silly audit   'get-intrinsic': [ '1.3.0' ],
+202 silly audit   'get-proto': [ '1.0.1' ],
+202 silly audit   'get-symbol-description': [ '1.1.0' ],
+202 silly audit   'get-tsconfig': [ '4.13.0' ],
+202 silly audit   globalthis: [ '1.0.4' ],
+202 silly audit   gopd: [ '1.2.0' ],
+202 silly audit   'graceful-fs': [ '4.2.11' ],
+202 silly audit   graphemer: [ '1.4.0' ],
+202 silly audit   'has-bigints': [ '1.1.0' ],
+202 silly audit   'has-flag': [ '4.0.0' ],
+202 silly audit   'has-property-descriptors': [ '1.0.2' ],
+202 silly audit   'has-proto': [ '1.2.0' ],
+202 silly audit   'has-symbols': [ '1.1.0' ],
+202 silly audit   'has-tostringtag': [ '1.0.2' ],
+202 silly audit   hasown: [ '2.0.2' ],
+202 silly audit   'hermes-estree': [ '0.25.1' ],
+202 silly audit   'hermes-parser': [ '0.25.1' ],
+202 silly audit   'hls.js': [ '1.6.14' ],
+202 silly audit   'import-fresh': [ '3.3.1' ],
+202 silly audit   imurmurhash: [ '0.1.4' ],
+202 silly audit   'internal-slot': [ '1.1.0' ],
+202 silly audit   'is-array-buffer': [ '3.0.5' ],
+202 silly audit   'is-async-function': [ '2.1.1' ],
+202 silly audit   'is-bigint': [ '1.1.0' ],
+202 silly audit   'is-boolean-object': [ '1.2.2' ],
+202 silly audit   'is-bun-module': [ '2.0.0' ],
+202 silly audit   'is-callable': [ '1.2.7' ],
+202 silly audit   'is-core-module': [ '2.16.1' ],
+202 silly audit   'is-data-view': [ '1.0.2' ],
+202 silly audit   'is-date-object': [ '1.1.0' ],
+202 silly audit   'is-extglob': [ '2.1.1' ],
+202 silly audit   'is-finalizationregistry': [ '1.1.1' ],
+202 silly audit   'is-generator-function': [ '1.1.2' ],
+202 silly audit   'is-glob': [ '4.0.3' ],
+202 silly audit   'is-map': [ '2.0.3' ],
+202 silly audit   'is-negative-zero': [ '2.0.3' ],
+202 silly audit   'is-number': [ '7.0.0' ],
+202 silly audit   'is-number-object': [ '1.1.1' ],
+202 silly audit   'is-regex': [ '1.2.1' ],
+202 silly audit   'is-set': [ '2.0.3' ],
+202 silly audit   'is-shared-array-buffer': [ '1.0.4' ],
+202 silly audit   'is-string': [ '1.1.1' ],
+202 silly audit   'is-symbol': [ '1.1.1' ],
+202 silly audit   'is-typed-array': [ '1.1.15' ],
+202 silly audit   'is-weakmap': [ '2.0.2' ],
+202 silly audit   'is-weakref': [ '1.1.1' ],
+202 silly audit   'is-weakset': [ '2.0.4' ],
+202 silly audit   isarray: [ '2.0.5' ],
+202 silly audit   isexe: [ '2.0.0' ],
+202 silly audit   'iterator.prototype': [ '1.1.5' ],
+202 silly audit   jiti: [ '2.6.1' ],
+202 silly audit   'js-tokens': [ '4.0.0' ],
+202 silly audit   'js-yaml': [ '4.1.1' ],
+202 silly audit   jsesc: [ '3.1.0' ],
+202 silly audit   'json-buffer': [ '3.0.1' ],
+202 silly audit   'json-schema-traverse': [ '0.4.1' ],
+202 silly audit   'json-stable-stringify-without-jsonify': [ '1.0.1' ],
+202 silly audit   json5: [ '2.2.3', '1.0.2' ],
+202 silly audit   'jsx-ast-utils': [ '3.3.5' ],
+202 silly audit   keyv: [ '4.5.4' ],
+202 silly audit   'kind-of': [ '6.0.3' ],
+202 silly audit   'language-subtag-registry': [ '0.3.23' ],
+202 silly audit   'language-tags': [ '1.0.9' ],
+202 silly audit   levn: [ '0.4.1' ],
+202 silly audit   lightningcss: [ '1.30.2' ],
+202 silly audit   'lightningcss-android-arm64': [ '1.30.2' ],
+202 silly audit   'lightningcss-darwin-arm64': [ '1.30.2' ],
+202 silly audit   'lightningcss-darwin-x64': [ '1.30.2' ],
+202 silly audit   'lightningcss-freebsd-x64': [ '1.30.2' ],
+202 silly audit   'lightningcss-linux-arm-gnueabihf': [ '1.30.2' ],
+202 silly audit   'lightningcss-linux-arm64-gnu': [ '1.30.2' ],
+202 silly audit   'lightningcss-linux-arm64-musl': [ '1.30.2' ],
+202 silly audit   'lightningcss-linux-x64-gnu': [ '1.30.2' ],
+202 silly audit   'lightningcss-linux-x64-musl': [ '1.30.2' ],
+202 silly audit   'lightningcss-win32-arm64-msvc': [ '1.30.2' ],
+202 silly audit   'lightningcss-win32-x64-msvc': [ '1.30.2' ],
+202 silly audit   'locate-path': [ '6.0.0' ],
+202 silly audit   'lodash.merge': [ '4.6.2' ],
+202 silly audit   'loose-envify': [ '1.4.0' ],
+202 silly audit   'lru-cache': [ '5.1.1' ],
+202 silly audit   'lucide-react': [ '0.553.0' ],
+202 silly audit   'magic-string': [ '0.30.21' ],
+202 silly audit   'math-intrinsics': [ '1.1.0' ],
+202 silly audit   'memory-pager': [ '1.5.0' ],
+202 silly audit   merge2: [ '1.4.1' ],
+202 silly audit   micromatch: [ '4.0.8' ],
+202 silly audit   'mime-db': [ '1.52.0' ],
+202 silly audit   'mime-types': [ '2.1.35' ],
+202 silly audit   minimist: [ '1.2.8' ],
+202 silly audit   mongodb: [ '7.0.0' ],
+202 silly audit   'mongodb-connection-string-url': [ '7.0.0' ],
+202 silly audit   ms: [ '2.1.3' ],
+202 silly audit   nanoid: [ '3.3.11' ],
+202 silly audit   'napi-postinstall': [ '0.3.4' ],
+202 silly audit   'natural-compare': [ '1.4.0' ],
+202 silly audit   next: [ '16.1.1' ],
+202 silly audit   postcss: [ '8.4.31', '8.5.6' ],
+202 silly audit   'node-releases': [ '2.0.27' ],
+202 silly audit   'object-assign': [ '4.1.1' ],
+202 silly audit   'object-inspect': [ '1.13.4' ],
+202 silly audit   'object-keys': [ '1.1.1' ],
+202 silly audit   'object.assign': [ '4.1.7' ],
+202 silly audit   'object.entries': [ '1.1.9' ],
+202 silly audit   'object.fromentries': [ '2.0.8' ],
+202 silly audit   'object.groupby': [ '1.0.3' ],
+202 silly audit   'object.values': [ '1.2.1' ],
+202 silly audit   'option-validator': [ '2.0.6' ],
+202 silly audit   optionator: [ '0.9.4' ],
+202 silly audit   'own-keys': [ '1.0.1' ],
+202 silly audit   'p-limit': [ '3.1.0' ],
+202 silly audit   'p-locate': [ '5.0.0' ],
+202 silly audit   'parent-module': [ '1.0.1' ],
+202 silly audit   'path-exists': [ '4.0.0' ],
+202 silly audit   'path-key': [ '3.1.1' ],
+202 silly audit   'path-parse': [ '1.0.7' ],
+202 silly audit   picocolors: [ '1.1.1' ],
+202 silly audit   picomatch: [ '2.3.1', '4.0.3' ],
+202 silly audit   'possible-typed-array-names': [ '1.1.0' ],
+202 silly audit   'prelude-ls': [ '1.2.1' ],
+202 silly audit   'prop-types': [ '15.8.1' ],
+202 silly audit   'proxy-from-env': [ '1.1.0' ],
+202 silly audit   punycode: [ '2.3.1' ],
+202 silly audit   'queue-microtask': [ '1.2.3' ],
+202 silly audit   react: [ '19.2.0' ],
+202 silly audit   'react-dom': [ '19.2.0' ],
+202 silly audit   'react-is': [ '16.13.1' ],
+202 silly audit   'reflect.getprototypeof': [ '1.0.10' ],
+202 silly audit   'regexp.prototype.flags': [ '1.5.4' ],
+202 silly audit   'resolve-from': [ '4.0.0' ],
+202 silly audit   'resolve-pkg-maps': [ '1.0.0' ],
+202 silly audit   reusify: [ '1.1.0' ],
+202 silly audit   'run-parallel': [ '1.2.0' ],
+202 silly audit   'safe-array-concat': [ '1.1.3' ],
+202 silly audit   'safe-push-apply': [ '1.0.0' ],
+202 silly audit   'safe-regex-test': [ '1.1.0' ],
+202 silly audit   scheduler: [ '0.27.0' ],
+202 silly audit   'set-function-length': [ '1.2.2' ],
+202 silly audit   'set-function-name': [ '2.0.2' ],
+202 silly audit   'set-proto': [ '1.0.0' ],
+202 silly audit   sharp: [ '0.34.4' ],
+202 silly audit   'shebang-command': [ '2.0.0' ],
+202 silly audit   'shebang-regex': [ '3.0.0' ],
+202 silly audit   'side-channel': [ '1.1.0' ],
+202 silly audit   'side-channel-list': [ '1.0.0' ],
+202 silly audit   'side-channel-map': [ '1.0.1' ],
+202 silly audit   'side-channel-weakmap': [ '1.0.2' ],
+202 silly audit   'source-map-js': [ '1.2.1' ],
+202 silly audit   'sparse-bitfield': [ '3.0.3' ],
+202 silly audit   'stable-hash': [ '0.0.5' ],
+202 silly audit   'stop-iteration-iterator': [ '1.1.0' ],
+202 silly audit   'string.prototype.includes': [ '2.0.1' ],
+202 silly audit   'string.prototype.matchall': [ '4.0.12' ],
+202 silly audit   'string.prototype.repeat': [ '1.0.0' ],
+202 silly audit   'string.prototype.trim': [ '1.2.10' ],
+202 silly audit   'string.prototype.trimend': [ '1.0.9' ],
+202 silly audit   'string.prototype.trimstart': [ '1.0.8' ],
+202 silly audit   'strip-bom': [ '3.0.0' ],
+202 silly audit   'strip-json-comments': [ '3.1.1' ],
+202 silly audit   'styled-jsx': [ '5.1.6' ],
+202 silly audit   'supports-color': [ '7.2.0' ],
+202 silly audit   'supports-preserve-symlinks-flag': [ '1.0.0' ],
+202 silly audit   swr: [ '2.3.8' ],
+202 silly audit   tailwindcss: [ '4.1.16' ],
+202 silly audit   tapable: [ '2.3.0' ],
+202 silly audit   tinyglobby: [ '0.2.15' ],
+202 silly audit   fdir: [ '6.5.0' ],
+202 silly audit   'to-regex-range': [ '5.0.1' ],
+202 silly audit   tr46: [ '5.1.1' ],
+202 silly audit   'ts-api-utils': [ '2.1.0' ],
+202 silly audit   'tsconfig-paths': [ '3.15.0' ],
+202 silly audit   tslib: [ '2.8.1' ],
+202 silly audit   tsx: [ '4.20.6' ],
+202 silly audit   'type-check': [ '0.4.0' ],
+202 silly audit   'typed-array-buffer': [ '1.0.3' ],
+202 silly audit   'typed-array-byte-length': [ '1.0.3' ],
+202 silly audit   'typed-array-byte-offset': [ '1.0.4' ],
+202 silly audit   'typed-array-length': [ '1.0.7' ],
+202 silly audit   typescript: [ '5.9.3' ],
+202 silly audit   'typescript-eslint': [ '8.46.3' ],
+202 silly audit   'unbox-primitive': [ '1.1.0' ],
+202 silly audit   'undici-types': [ '6.21.0' ],
+202 silly audit   'universal-user-agent': [ '7.0.3' ],
+202 silly audit   'unrs-resolver': [ '1.11.1' ],
+202 silly audit   'update-browserslist-db': [ '1.1.4' ],
+202 silly audit   'uri-js': [ '4.4.1' ],
+202 silly audit   'use-sync-external-store': [ '1.6.0' ],
+202 silly audit   'webidl-conversions': [ '7.0.0' ],
+202 silly audit   'whatwg-url': [ '14.2.0' ],
+202 silly audit   which: [ '2.0.2' ],
+202 silly audit   'which-boxed-primitive': [ '1.1.1' ],
+202 silly audit   'which-builtin-type': [ '1.2.1' ],
+202 silly audit   'which-collection': [ '1.0.2' ],
+202 silly audit   'which-typed-array': [ '1.1.19' ],
+202 silly audit   'word-wrap': [ '1.2.5' ],
+202 silly audit   yallist: [ '3.1.1' ],
+202 silly audit   'yocto-queue': [ '0.1.0' ],
+202 silly audit   zod: [ '4.1.12' ],
+202 silly audit   'zod-validation-error': [ '4.0.2' ],
+202 silly audit   '@tailwindcss/oxide-wasm32-wasi': [ '4.1.16' ]
+202 silly audit }
+203 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-x64-msvc
+204 silly reify mark deleted [
+204 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-x64-msvc'
+204 silly reify ]
+205 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-ia32-msvc
+206 silly reify mark deleted [
+206 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-ia32-msvc'
+206 silly reify ]
+207 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-arm64-msvc
+208 silly reify mark deleted [
+208 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-win32-arm64-msvc'
+208 silly reify ]
+209 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-wasm32-wasi
+210 silly reify mark deleted [
+210 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-wasm32-wasi'
+210 silly reify ]
+211 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-musl
+212 silly reify mark deleted [
+212 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-musl'
+212 silly reify ]
+213 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-gnu
+214 silly reify mark deleted [
+214 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-x64-gnu'
+214 silly reify ]
+215 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-s390x-gnu
+216 silly reify mark deleted [
+216 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-s390x-gnu'
+216 silly reify ]
+217 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-musl
+218 silly reify mark deleted [
+218 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-musl'
+218 silly reify ]
+219 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-gnu
+220 silly reify mark deleted [
+220 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-riscv64-gnu'
+220 silly reify ]
+221 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-ppc64-gnu
+222 silly reify mark deleted [
+222 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-ppc64-gnu'
+222 silly reify ]
+223 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-musl
+224 silly reify mark deleted [
+224 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-musl'
+224 silly reify ]
+225 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-gnu
+226 silly reify mark deleted [
+226 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm64-gnu'
+226 silly reify ]
+227 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-musleabihf
+228 silly reify mark deleted [
+228 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-musleabihf'
+228 silly reify ]
+229 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-gnueabihf
+230 silly reify mark deleted [
+230 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-linux-arm-gnueabihf'
+230 silly reify ]
+231 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-freebsd-x64
+232 silly reify mark deleted [
+232 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-freebsd-x64'
+232 silly reify ]
+233 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-darwin-arm64
+234 silly reify mark deleted [
+234 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-darwin-arm64'
+234 silly reify ]
+235 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm64
+236 silly reify mark deleted [
+236 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm64'
+236 silly reify ]
+237 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm-eabi
+238 silly reify mark deleted [
+238 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@unrs/resolver-binding-android-arm-eabi'
+238 silly reify ]
+239 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-x64-msvc
+240 silly reify mark deleted [
+240 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-x64-msvc'
+240 silly reify ]
+241 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-arm64-msvc
+242 silly reify mark deleted [
+242 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-win32-arm64-msvc'
+242 silly reify ]
+243 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-musl
+244 silly reify mark deleted [
+244 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-musl'
+244 silly reify ]
+245 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-gnu
+246 silly reify mark deleted [
+246 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-x64-gnu'
+246 silly reify ]
+247 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-musl
+248 silly reify mark deleted [
+248 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-musl'
+248 silly reify ]
+249 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-gnu
+250 silly reify mark deleted [
+250 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm64-gnu'
+250 silly reify ]
+251 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm-gnueabihf
+252 silly reify mark deleted [
+252 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-linux-arm-gnueabihf'
+252 silly reify ]
+253 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-freebsd-x64
+254 silly reify mark deleted [
+254 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-freebsd-x64'
+254 silly reify ]
+255 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-darwin-arm64
+256 silly reify mark deleted [
+256 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-darwin-arm64'
+256 silly reify ]
+257 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-android-arm64
+258 silly reify mark deleted [
+258 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@tailwindcss/oxide-android-arm64'
+258 silly reify ]
+259 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-x64-msvc
+260 silly reify mark deleted [
+260 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-x64-msvc'
+260 silly reify ]
+261 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-arm64-msvc
+262 silly reify mark deleted [
+262 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-win32-arm64-msvc'
+262 silly reify ]
+263 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-musl
+264 silly reify mark deleted [
+264 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-musl'
+264 silly reify ]
+265 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-gnu
+266 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-x64-gnu' ]
+267 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-musl
+268 silly reify mark deleted [
+268 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-musl'
+268 silly reify ]
+269 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-gnu
+270 silly reify mark deleted [
+270 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-linux-arm64-gnu'
+270 silly reify ]
+271 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-darwin-arm64
+272 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@next/swc-darwin-arm64' ]
+273 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-x64
+274 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-x64' ]
+275 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-ia32
+276 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-ia32' ]
+277 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-arm64
+278 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-win32-arm64' ]
+279 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-wasm32
+280 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-wasm32' ]
+281 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-x64
+282 silly reify mark deleted [
+282 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-x64'
+282 silly reify ]
+283 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-arm64
+284 silly reify mark deleted [
+284 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linuxmusl-arm64'
+284 silly reify ]
+285 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-x64
+286 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-x64' ]
+287 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-s390x
+288 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-s390x' ]
+289 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-ppc64
+290 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-ppc64' ]
+291 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm64
+292 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm64' ]
+293 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm
+294 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-linux-arm' ]
+295 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-x64
+296 silly reify mark deleted [
+296 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-x64'
+296 silly reify ]
+297 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-arm64
+298 silly reify mark deleted [
+298 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linuxmusl-arm64'
+298 silly reify ]
+299 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-x64
+300 silly reify mark deleted [
+300 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-x64'
+300 silly reify ]
+301 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-s390x
+302 silly reify mark deleted [
+302 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-s390x'
+302 silly reify ]
+303 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-ppc64
+304 silly reify mark deleted [
+304 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-ppc64'
+304 silly reify ]
+305 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm64
+306 silly reify mark deleted [
+306 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm64'
+306 silly reify ]
+307 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm
+308 silly reify mark deleted [
+308 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-linux-arm'
+308 silly reify ]
+309 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-darwin-arm64
+310 silly reify mark deleted [
+310 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-libvips-darwin-arm64'
+310 silly reify ]
+311 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-darwin-arm64
+312 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@img/sharp-darwin-arm64' ]
+313 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-x64
+314 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-x64' ]
+315 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-ia32
+316 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-ia32' ]
+317 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-arm64
+318 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/win32-arm64' ]
+319 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/sunos-x64
+320 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/sunos-x64' ]
+321 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openharmony-arm64
+322 silly reify mark deleted [
+322 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openharmony-arm64'
+322 silly reify ]
+323 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-x64
+324 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-x64' ]
+325 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-arm64
+326 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/openbsd-arm64' ]
+327 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-x64
+328 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-x64' ]
+329 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-arm64
+330 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/netbsd-arm64' ]
+331 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-x64
+332 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-x64' ]
+333 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-s390x
+334 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-s390x' ]
+335 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-riscv64
+336 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-riscv64' ]
+337 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ppc64
+338 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ppc64' ]
+339 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-loong64
+340 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-loong64' ]
+341 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ia32
+342 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-ia32' ]
+343 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-mips64el
+344 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-mips64el' ]
+345 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm64
+346 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm64' ]
+347 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm
+348 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/linux-arm' ]
+349 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-x64
+350 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-x64' ]
+351 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-arm64
+352 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/freebsd-arm64' ]
+353 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/darwin-arm64
+354 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/darwin-arm64' ]
+355 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-x64
+356 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-x64' ]
+357 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm64
+358 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm64' ]
+359 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm
+360 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/android-arm' ]
+361 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/aix-ppc64
+362 silly reify mark deleted [ '/Users/yewuchen/Desktop/宝拓影视/node_modules/@esbuild/aix-ppc64' ]
+363 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-x64-msvc
+364 silly reify mark deleted [
+364 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-x64-msvc'
+364 silly reify ]
+365 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-arm64-msvc
+366 silly reify mark deleted [
+366 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-win32-arm64-msvc'
+366 silly reify ]
+367 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-musl
+368 silly reify mark deleted [
+368 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-musl'
+368 silly reify ]
+369 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-gnu
+370 silly reify mark deleted [
+370 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-x64-gnu'
+370 silly reify ]
+371 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-musl
+372 silly reify mark deleted [
+372 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-musl'
+372 silly reify ]
+373 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-gnu
+374 silly reify mark deleted [
+374 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm64-gnu'
+374 silly reify ]
+375 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm-gnueabihf
+376 silly reify mark deleted [
+376 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-linux-arm-gnueabihf'
+376 silly reify ]
+377 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-freebsd-x64
+378 silly reify mark deleted [
+378 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-freebsd-x64'
+378 silly reify ]
+379 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-darwin-arm64
+380 silly reify mark deleted [
+380 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-darwin-arm64'
+380 silly reify ]
+381 verbose reify failed optional dependency /Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-android-arm64
+382 silly reify mark deleted [
+382 silly reify   '/Users/yewuchen/Desktop/宝拓影视/node_modules/lightningcss-android-arm64'
+382 silly reify ]
+383 silly audit bulk request failed undefined
+384 verbose audit error FetchError: request to https://registry.npmjs.org/-/npm/v1/security/audits/quick failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+384 verbose audit error     at ClientRequest.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/minipass-fetch/lib/index.js:130:14)
+384 verbose audit error     at ClientRequest.emit (node:events:518:28)
+384 verbose audit error     at emitErrorEvent (node:_http_client:104:11)
+384 verbose audit error     at _destroy (node:_http_client:898:9)
+384 verbose audit error     at onSocketNT (node:_http_client:918:5)
+384 verbose audit error     at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+384 verbose audit error   code: 'ENOTFOUND',
+384 verbose audit error   errno: 'ENOTFOUND',
+384 verbose audit error   syscall: 'getaddrinfo',
+384 verbose audit error   hostname: 'registry.npmjs.org',
+384 verbose audit error   type: 'system'
+384 verbose audit error }
+385 silly audit error undefined
+386 silly audit report null
+387 http cache @babel/parser@https://registry.npmjs.org/@babel/parser/-/parser-7.28.5.tgz 1ms (cache hit)
+388 http cache typescript@https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz 0ms (cache hit)
+389 http cache semver@https://registry.npmjs.org/semver/-/semver-6.3.1.tgz 0ms (cache hit)
+390 http cache resolve@https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz 0ms (cache hit)
+391 http cache next@https://registry.npmjs.org/next/-/next-16.1.1.tgz 0ms (cache hit)
+392 http cache nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz 0ms (cache hit)
+393 http cache napi-postinstall@https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz 0ms (cache hit)
+394 http cache loose-envify@https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz 0ms (cache hit)
+395 http cache js-yaml@https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz 0ms (cache hit)
+396 http cache json5@https://registry.npmjs.org/json5/-/json5-2.2.3.tgz 0ms (cache hit)
+397 http cache jsesc@https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz 0ms (cache hit)
+398 http cache esbuild@https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz 0ms (cache hit)
+399 http cache jiti@https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz 0ms (cache hit)
+400 http cache acorn@https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz 0ms (cache hit)
+401 http cache @typescript-eslint/visitor-keys@https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.46.3.tgz 0ms (cache hit)
+402 http cache @typescript-eslint/utils@https://registry.npmjs.org/@typescript-eslint/utils/-/utils-8.46.3.tgz 0ms (cache hit)
+403 http cache @typescript-eslint/typescript-estree@https://registry.npmjs.org/@typescript-eslint/typescript-estree/-/typescript-estree-8.46.3.tgz 0ms (cache hit)
+404 http cache @typescript-eslint/types@https://registry.npmjs.org/@typescript-eslint/types/-/types-8.46.3.tgz 0ms (cache hit)
+405 http cache @typescript-eslint/type-utils@https://registry.npmjs.org/@typescript-eslint/type-utils/-/type-utils-8.46.3.tgz 0ms (cache hit)
+406 http cache @typescript-eslint/tsconfig-utils@https://registry.npmjs.org/@typescript-eslint/tsconfig-utils/-/tsconfig-utils-8.46.3.tgz 0ms (cache hit)
+407 http cache @typescript-eslint/scope-manager@https://registry.npmjs.org/@typescript-eslint/scope-manager/-/scope-manager-8.46.3.tgz 0ms (cache hit)
+408 http cache @typescript-eslint/project-service@https://registry.npmjs.org/@typescript-eslint/project-service/-/project-service-8.46.3.tgz 0ms (cache hit)
+409 http cache @typescript-eslint/eslint-plugin@https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-8.46.3.tgz 0ms (cache hit)
+410 http cache @typescript-eslint/parser@https://registry.npmjs.org/@typescript-eslint/parser/-/parser-8.46.3.tgz 0ms (cache hit)
+411 http cache @types/whatwg-url@https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-13.0.0.tgz 0ms (cache hit)
+412 http cache @types/webidl-conversions@https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.3.tgz 0ms (cache hit)
+413 http cache @types/react-dom@https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.2.tgz 0ms (cache hit)
+414 http cache @types/react@https://registry.npmjs.org/@types/react/-/react-19.2.2.tgz 0ms (cache hit)
+415 http cache @types/node@https://registry.npmjs.org/@types/node/-/node-20.19.24.tgz 0ms (cache hit)
+416 http cache @tailwindcss/postcss@https://registry.npmjs.org/@tailwindcss/postcss/-/postcss-4.1.16.tgz 0ms (cache hit)
+417 http cache @tailwindcss/oxide-darwin-x64@https://registry.npmjs.org/@tailwindcss/oxide-darwin-x64/-/oxide-darwin-x64-4.1.16.tgz 0ms (cache hit)
+418 http cache @tailwindcss/oxide@https://registry.npmjs.org/@tailwindcss/oxide/-/oxide-4.1.16.tgz 0ms (cache hit)
+419 http cache @tailwindcss/node@https://registry.npmjs.org/@tailwindcss/node/-/node-4.1.16.tgz 0ms (cache hit)
+420 http cache @octokit/types@https://registry.npmjs.org/@octokit/types/-/types-16.0.0.tgz 0ms (cache hit)
+421 http cache @octokit/rest@https://registry.npmjs.org/@octokit/rest/-/rest-22.0.1.tgz 1ms (cache hit)
+422 http cache @octokit/request-error@https://registry.npmjs.org/@octokit/request-error/-/request-error-7.0.2.tgz 0ms (cache hit)
+423 http cache @octokit/request@https://registry.npmjs.org/@octokit/request/-/request-10.0.6.tgz 0ms (cache hit)
+424 http cache @octokit/plugin-rest-endpoint-methods@https://registry.npmjs.org/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-17.0.0.tgz 0ms (cache hit)
+425 http cache @octokit/plugin-request-log@https://registry.npmjs.org/@octokit/plugin-request-log/-/plugin-request-log-6.0.0.tgz 0ms (cache hit)
+426 http cache @octokit/plugin-paginate-rest@https://registry.npmjs.org/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-14.0.0.tgz 0ms (cache hit)
+427 http cache @octokit/openapi-types@https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-27.0.0.tgz 0ms (cache hit)
+428 http cache @octokit/graphql@https://registry.npmjs.org/@octokit/graphql/-/graphql-9.0.3.tgz 0ms (cache hit)
+429 http cache @octokit/endpoint@https://registry.npmjs.org/@octokit/endpoint/-/endpoint-11.0.2.tgz 0ms (cache hit)
+430 http cache @octokit/core@https://registry.npmjs.org/@octokit/core/-/core-7.0.6.tgz 0ms (cache hit)
+431 http cache @octokit/auth-token@https://registry.npmjs.org/@octokit/auth-token/-/auth-token-6.0.0.tgz 0ms (cache hit)
+432 http cache @next/eslint-plugin-next@https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-16.0.1.tgz 0ms (cache hit)
+433 http cache @mongodb-js/saslprep@https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.3.2.tgz 0ms (cache hit)
+434 http cache @img/sharp-libvips-darwin-x64@https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.2.3.tgz 0ms (cache hit)
+435 http cache @img/sharp-darwin-x64@https://registry.npmjs.org/@img/sharp-darwin-x64/-/sharp-darwin-x64-0.34.4.tgz 0ms (cache hit)
+436 http cache @eslint/js@https://registry.npmjs.org/@eslint/js/-/js-9.39.1.tgz 0ms (cache hit)
+437 http cache @eslint/eslintrc@https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.3.1.tgz 0ms (cache hit)
+438 http cache @emnapi/runtime@https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.7.0.tgz 0ms (cache hit)
+439 http cache @emnapi/core@https://registry.npmjs.org/@emnapi/core/-/core-1.7.0.tgz 0ms (cache hit)
+440 http cache zod@https://registry.npmjs.org/zod/-/zod-4.1.12.tgz 0ms (cache hit)
+441 http cache whatwg-url@https://registry.npmjs.org/whatwg-url/-/whatwg-url-14.2.0.tgz 0ms (cache hit)
+442 http cache webidl-conversions@https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-7.0.0.tgz 0ms (cache hit)
+443 http cache update-browserslist-db@https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.1.4.tgz 0ms (cache hit)
+444 http cache universal-user-agent@https://registry.npmjs.org/universal-user-agent/-/universal-user-agent-7.0.3.tgz 0ms (cache hit)
+445 http cache typescript-eslint@https://registry.npmjs.org/typescript-eslint/-/typescript-eslint-8.46.3.tgz 0ms (cache hit)
+446 http cache tsx@https://registry.npmjs.org/tsx/-/tsx-4.20.6.tgz 0ms (cache hit)
+447 http cache tr46@https://registry.npmjs.org/tr46/-/tr46-5.1.1.tgz 0ms (cache hit)
+448 http cache tailwindcss@https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.16.tgz 0ms (cache hit)
+449 http cache sparse-bitfield@https://registry.npmjs.org/sparse-bitfield/-/sparse-bitfield-3.0.3.tgz 0ms (cache hit)
+450 http cache sharp@https://registry.npmjs.org/sharp/-/sharp-0.34.4.tgz 0ms (cache hit)
+451 http cache react-dom@https://registry.npmjs.org/react-dom/-/react-dom-19.2.0.tgz 0ms (cache hit)
+452 http cache react@https://registry.npmjs.org/react/-/react-19.2.0.tgz 0ms (cache hit)
+453 http cache option-validator@https://registry.npmjs.org/option-validator/-/option-validator-2.0.6.tgz 0ms (cache hit)
+454 http cache mongodb-connection-string-url@https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-7.0.0.tgz 0ms (cache hit)
+455 http cache mongodb@https://registry.npmjs.org/mongodb/-/mongodb-7.0.0.tgz 0ms (cache hit)
+456 http cache memory-pager@https://registry.npmjs.org/memory-pager/-/memory-pager-1.5.0.tgz 0ms (cache hit)
+457 http cache lucide-react@https://registry.npmjs.org/lucide-react/-/lucide-react-0.553.0.tgz 0ms (cache hit)
+458 http cache kind-of@https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz 0ms (cache hit)
+459 http cache hls.js@https://registry.npmjs.org/hls.js/-/hls.js-1.6.14.tgz 0ms (cache hit)
+460 http cache form-data@https://registry.npmjs.org/form-data/-/form-data-4.0.4.tgz 0ms (cache hit)
+461 http cache fastq@https://registry.npmjs.org/fastq/-/fastq-1.19.1.tgz 0ms (cache hit)
+462 http cache fast-content-type-parse@https://registry.npmjs.org/fast-content-type-parse/-/fast-content-type-parse-3.0.0.tgz 0ms (cache hit)
+463 http cache eslint-config-next@https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-16.0.1.tgz 0ms (cache hit)
+464 http cache eslint@https://registry.npmjs.org/eslint/-/eslint-9.39.1.tgz 0ms (cache hit)
+465 http cache es-iterator-helpers@https://registry.npmjs.org/es-iterator-helpers/-/es-iterator-helpers-1.2.1.tgz 0ms (cache hit)
+466 http cache es-abstract@https://registry.npmjs.org/es-abstract/-/es-abstract-1.24.0.tgz 0ms (cache hit)
+467 http cache enhanced-resolve@https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.18.3.tgz 0ms (cache hit)
+468 http cache caniuse-lite@https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001754.tgz 0ms (cache hit)
+469 http cache electron-to-chromium@https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.245.tgz 0ms (cache hit)
+470 http cache bson@https://registry.npmjs.org/bson/-/bson-7.0.0.tgz 0ms (cache hit)
+471 http cache browserslist@https://registry.npmjs.org/browserslist/-/browserslist-4.27.0.tgz 0ms (cache hit)
+472 http cache before-after-hook@https://registry.npmjs.org/before-after-hook/-/before-after-hook-4.0.0.tgz 0ms (cache hit)
+473 http cache baseline-browser-mapping@https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.8.25.tgz 0ms (cache hit)
+474 http cache artplayer-plugin-danmuku@https://registry.npmjs.org/artplayer-plugin-danmuku/-/artplayer-plugin-danmuku-5.2.0.tgz 0ms (cache hit)
+475 http cache artplayer@https://registry.npmjs.org/artplayer/-/artplayer-5.3.0.tgz 0ms (cache hit)
+476 http cache json5@https://registry.npmjs.org/json5/-/json5-1.0.2.tgz 0ms (cache hit)
+477 http cache semver@https://registry.npmjs.org/semver/-/semver-7.7.3.tgz 0ms (cache hit)
+478 http cache resolve@https://registry.npmjs.org/resolve/-/resolve-2.0.0-next.5.tgz 0ms (cache hit)
+479 http cache semver@https://registry.npmjs.org/semver/-/semver-7.7.3.tgz 0ms (cache hit)
+480 http cache semver@https://registry.npmjs.org/semver/-/semver-7.7.3.tgz 0ms (cache hit)
+481 http cache which@https://registry.npmjs.org/which/-/which-2.0.2.tgz 0ms (cache hit)
+482 silly tarball no local data for @babel/parser@https://registry.npmjs.org/@babel/parser/-/parser-7.28.5.tgz. Extracting by manifest.
+483 silly tarball no local data for typescript@https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz. Extracting by manifest.
+484 silly tarball no local data for semver@https://registry.npmjs.org/semver/-/semver-6.3.1.tgz. Extracting by manifest.
+485 silly tarball no local data for resolve@https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz. Extracting by manifest.
+486 silly tarball no local data for next@https://registry.npmjs.org/next/-/next-16.1.1.tgz. Extracting by manifest.
+487 silly tarball no local data for nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz. Extracting by manifest.
+488 silly tarball no local data for napi-postinstall@https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz. Extracting by manifest.
+489 silly tarball no local data for loose-envify@https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz. Extracting by manifest.
+490 silly tarball no local data for js-yaml@https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz. Extracting by manifest.
+491 silly tarball no local data for json5@https://registry.npmjs.org/json5/-/json5-2.2.3.tgz. Extracting by manifest.
+492 silly tarball no local data for jsesc@https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz. Extracting by manifest.
+493 silly tarball no local data for esbuild@https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz. Extracting by manifest.
+494 silly tarball no local data for jiti@https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz. Extracting by manifest.
+495 silly tarball no local data for acorn@https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz. Extracting by manifest.
+496 silly tarball no local data for @typescript-eslint/visitor-keys@https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.46.3.tgz. Extracting by manifest.
+497 silly tarball no local data for @typescript-eslint/utils@https://registry.npmjs.org/@typescript-eslint/utils/-/utils-8.46.3.tgz. Extracting by manifest.
+498 silly tarball no local data for @typescript-eslint/typescript-estree@https://registry.npmjs.org/@typescript-eslint/typescript-estree/-/typescript-estree-8.46.3.tgz. Extracting by manifest.
+499 silly tarball no local data for @typescript-eslint/types@https://registry.npmjs.org/@typescript-eslint/types/-/types-8.46.3.tgz. Extracting by manifest.
+500 silly tarball no local data for @typescript-eslint/type-utils@https://registry.npmjs.org/@typescript-eslint/type-utils/-/type-utils-8.46.3.tgz. Extracting by manifest.
+501 silly tarball no local data for @typescript-eslint/tsconfig-utils@https://registry.npmjs.org/@typescript-eslint/tsconfig-utils/-/tsconfig-utils-8.46.3.tgz. Extracting by manifest.
+502 silly tarball no local data for @typescript-eslint/scope-manager@https://registry.npmjs.org/@typescript-eslint/scope-manager/-/scope-manager-8.46.3.tgz. Extracting by manifest.
+503 silly tarball no local data for @typescript-eslint/project-service@https://registry.npmjs.org/@typescript-eslint/project-service/-/project-service-8.46.3.tgz. Extracting by manifest.
+504 silly tarball no local data for @typescript-eslint/eslint-plugin@https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-8.46.3.tgz. Extracting by manifest.
+505 silly tarball no local data for @typescript-eslint/parser@https://registry.npmjs.org/@typescript-eslint/parser/-/parser-8.46.3.tgz. Extracting by manifest.
+506 silly tarball no local data for @types/whatwg-url@https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-13.0.0.tgz. Extracting by manifest.
+507 silly tarball no local data for @types/webidl-conversions@https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.3.tgz. Extracting by manifest.
+508 silly tarball no local data for @types/react-dom@https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.2.tgz. Extracting by manifest.
+509 silly tarball no local data for @types/react@https://registry.npmjs.org/@types/react/-/react-19.2.2.tgz. Extracting by manifest.
+510 silly tarball no local data for @types/node@https://registry.npmjs.org/@types/node/-/node-20.19.24.tgz. Extracting by manifest.
+511 silly tarball no local data for @tailwindcss/postcss@https://registry.npmjs.org/@tailwindcss/postcss/-/postcss-4.1.16.tgz. Extracting by manifest.
+512 silly tarball no local data for @tailwindcss/oxide-darwin-x64@https://registry.npmjs.org/@tailwindcss/oxide-darwin-x64/-/oxide-darwin-x64-4.1.16.tgz. Extracting by manifest.
+513 silly tarball no local data for @tailwindcss/oxide@https://registry.npmjs.org/@tailwindcss/oxide/-/oxide-4.1.16.tgz. Extracting by manifest.
+514 silly tarball no local data for @tailwindcss/node@https://registry.npmjs.org/@tailwindcss/node/-/node-4.1.16.tgz. Extracting by manifest.
+515 silly tarball no local data for @octokit/types@https://registry.npmjs.org/@octokit/types/-/types-16.0.0.tgz. Extracting by manifest.
+516 silly tarball no local data for @octokit/rest@https://registry.npmjs.org/@octokit/rest/-/rest-22.0.1.tgz. Extracting by manifest.
+517 silly tarball no local data for @octokit/request-error@https://registry.npmjs.org/@octokit/request-error/-/request-error-7.0.2.tgz. Extracting by manifest.
+518 silly tarball no local data for @octokit/request@https://registry.npmjs.org/@octokit/request/-/request-10.0.6.tgz. Extracting by manifest.
+519 silly tarball no local data for @octokit/plugin-rest-endpoint-methods@https://registry.npmjs.org/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-17.0.0.tgz. Extracting by manifest.
+520 silly tarball no local data for @octokit/plugin-request-log@https://registry.npmjs.org/@octokit/plugin-request-log/-/plugin-request-log-6.0.0.tgz. Extracting by manifest.
+521 silly tarball no local data for @octokit/plugin-paginate-rest@https://registry.npmjs.org/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-14.0.0.tgz. Extracting by manifest.
+522 silly tarball no local data for @octokit/openapi-types@https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-27.0.0.tgz. Extracting by manifest.
+523 silly tarball no local data for @octokit/graphql@https://registry.npmjs.org/@octokit/graphql/-/graphql-9.0.3.tgz. Extracting by manifest.
+524 silly tarball no local data for @octokit/endpoint@https://registry.npmjs.org/@octokit/endpoint/-/endpoint-11.0.2.tgz. Extracting by manifest.
+525 silly tarball no local data for @octokit/core@https://registry.npmjs.org/@octokit/core/-/core-7.0.6.tgz. Extracting by manifest.
+526 silly tarball no local data for @octokit/auth-token@https://registry.npmjs.org/@octokit/auth-token/-/auth-token-6.0.0.tgz. Extracting by manifest.
+527 silly tarball no local data for @next/eslint-plugin-next@https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-16.0.1.tgz. Extracting by manifest.
+528 silly tarball no local data for @mongodb-js/saslprep@https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.3.2.tgz. Extracting by manifest.
+529 silly tarball no local data for @img/sharp-libvips-darwin-x64@https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.2.3.tgz. Extracting by manifest.
+530 silly tarball no local data for @img/sharp-darwin-x64@https://registry.npmjs.org/@img/sharp-darwin-x64/-/sharp-darwin-x64-0.34.4.tgz. Extracting by manifest.
+531 silly tarball no local data for @eslint/js@https://registry.npmjs.org/@eslint/js/-/js-9.39.1.tgz. Extracting by manifest.
+532 silly tarball no local data for @eslint/eslintrc@https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.3.1.tgz. Extracting by manifest.
+533 silly tarball no local data for @emnapi/runtime@https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.7.0.tgz. Extracting by manifest.
+534 silly tarball no local data for @emnapi/core@https://registry.npmjs.org/@emnapi/core/-/core-1.7.0.tgz. Extracting by manifest.
+535 silly tarball no local data for zod@https://registry.npmjs.org/zod/-/zod-4.1.12.tgz. Extracting by manifest.
+536 silly tarball no local data for whatwg-url@https://registry.npmjs.org/whatwg-url/-/whatwg-url-14.2.0.tgz. Extracting by manifest.
+537 silly tarball no local data for webidl-conversions@https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-7.0.0.tgz. Extracting by manifest.
+538 silly tarball no local data for update-browserslist-db@https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.1.4.tgz. Extracting by manifest.
+539 silly tarball no local data for universal-user-agent@https://registry.npmjs.org/universal-user-agent/-/universal-user-agent-7.0.3.tgz. Extracting by manifest.
+540 silly tarball no local data for typescript-eslint@https://registry.npmjs.org/typescript-eslint/-/typescript-eslint-8.46.3.tgz. Extracting by manifest.
+541 silly tarball no local data for tsx@https://registry.npmjs.org/tsx/-/tsx-4.20.6.tgz. Extracting by manifest.
+542 silly tarball no local data for tr46@https://registry.npmjs.org/tr46/-/tr46-5.1.1.tgz. Extracting by manifest.
+543 silly tarball no local data for tailwindcss@https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.16.tgz. Extracting by manifest.
+544 silly tarball no local data for sparse-bitfield@https://registry.npmjs.org/sparse-bitfield/-/sparse-bitfield-3.0.3.tgz. Extracting by manifest.
+545 silly tarball no local data for sharp@https://registry.npmjs.org/sharp/-/sharp-0.34.4.tgz. Extracting by manifest.
+546 silly tarball no local data for react-dom@https://registry.npmjs.org/react-dom/-/react-dom-19.2.0.tgz. Extracting by manifest.
+547 silly tarball no local data for react@https://registry.npmjs.org/react/-/react-19.2.0.tgz. Extracting by manifest.
+548 silly tarball no local data for option-validator@https://registry.npmjs.org/option-validator/-/option-validator-2.0.6.tgz. Extracting by manifest.
+549 silly tarball no local data for mongodb-connection-string-url@https://registry.npmjs.org/mongodb-connection-string-url/-/mongodb-connection-string-url-7.0.0.tgz. Extracting by manifest.
+550 silly tarball no local data for mongodb@https://registry.npmjs.org/mongodb/-/mongodb-7.0.0.tgz. Extracting by manifest.
+551 silly tarball no local data for memory-pager@https://registry.npmjs.org/memory-pager/-/memory-pager-1.5.0.tgz. Extracting by manifest.
+552 silly tarball no local data for lucide-react@https://registry.npmjs.org/lucide-react/-/lucide-react-0.553.0.tgz. Extracting by manifest.
+553 silly tarball no local data for kind-of@https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz. Extracting by manifest.
+554 silly tarball no local data for hls.js@https://registry.npmjs.org/hls.js/-/hls.js-1.6.14.tgz. Extracting by manifest.
+555 silly tarball no local data for form-data@https://registry.npmjs.org/form-data/-/form-data-4.0.4.tgz. Extracting by manifest.
+556 silly tarball no local data for fastq@https://registry.npmjs.org/fastq/-/fastq-1.19.1.tgz. Extracting by manifest.
+557 silly tarball no local data for fast-content-type-parse@https://registry.npmjs.org/fast-content-type-parse/-/fast-content-type-parse-3.0.0.tgz. Extracting by manifest.
+558 silly tarball no local data for eslint-config-next@https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-16.0.1.tgz. Extracting by manifest.
+559 silly tarball no local data for eslint@https://registry.npmjs.org/eslint/-/eslint-9.39.1.tgz. Extracting by manifest.
+560 silly tarball no local data for es-iterator-helpers@https://registry.npmjs.org/es-iterator-helpers/-/es-iterator-helpers-1.2.1.tgz. Extracting by manifest.
+561 silly tarball no local data for es-abstract@https://registry.npmjs.org/es-abstract/-/es-abstract-1.24.0.tgz. Extracting by manifest.
+562 silly tarball no local data for enhanced-resolve@https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.18.3.tgz. Extracting by manifest.
+563 silly tarball no local data for caniuse-lite@https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001754.tgz. Extracting by manifest.
+564 silly tarball no local data for electron-to-chromium@https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.245.tgz. Extracting by manifest.
+565 silly tarball no local data for bson@https://registry.npmjs.org/bson/-/bson-7.0.0.tgz. Extracting by manifest.
+566 silly tarball no local data for browserslist@https://registry.npmjs.org/browserslist/-/browserslist-4.27.0.tgz. Extracting by manifest.
+567 silly tarball no local data for before-after-hook@https://registry.npmjs.org/before-after-hook/-/before-after-hook-4.0.0.tgz. Extracting by manifest.
+568 silly tarball no local data for baseline-browser-mapping@https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.8.25.tgz. Extracting by manifest.
+569 silly tarball no local data for artplayer-plugin-danmuku@https://registry.npmjs.org/artplayer-plugin-danmuku/-/artplayer-plugin-danmuku-5.2.0.tgz. Extracting by manifest.
+570 silly tarball no local data for artplayer@https://registry.npmjs.org/artplayer/-/artplayer-5.3.0.tgz. Extracting by manifest.
+571 silly tarball no local data for json5@https://registry.npmjs.org/json5/-/json5-1.0.2.tgz. Extracting by manifest.
+572 silly tarball no local data for semver@https://registry.npmjs.org/semver/-/semver-7.7.3.tgz. Extracting by manifest.
+573 silly tarball no local data for resolve@https://registry.npmjs.org/resolve/-/resolve-2.0.0-next.5.tgz. Extracting by manifest.
+574 silly tarball no local data for semver@https://registry.npmjs.org/semver/-/semver-7.7.3.tgz. Extracting by manifest.
+575 silly tarball no local data for semver@https://registry.npmjs.org/semver/-/semver-7.7.3.tgz. Extracting by manifest.
+576 silly tarball no local data for which@https://registry.npmjs.org/which/-/which-2.0.2.tgz. Extracting by manifest.
+577 http fetch GET https://registry.npmjs.org/@babel/parser/-/parser-7.28.5.tgz attempt 1 failed with ENOTFOUND
+578 http fetch GET https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz attempt 1 failed with ENOTFOUND
+579 http fetch GET https://registry.npmjs.org/semver/-/semver-6.3.1.tgz attempt 1 failed with ENOTFOUND
+580 http fetch GET https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz attempt 1 failed with ENOTFOUND
+581 http fetch GET https://registry.npmjs.org/next/-/next-16.1.1.tgz attempt 1 failed with ENOTFOUND
+582 http fetch GET https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz attempt 1 failed with ENOTFOUND
+583 http fetch GET https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz attempt 1 failed with ENOTFOUND
+584 http fetch GET https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz attempt 1 failed with ENOTFOUND
+585 http fetch GET https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz attempt 1 failed with ENOTFOUND
+586 http fetch GET https://registry.npmjs.org/json5/-/json5-2.2.3.tgz attempt 1 failed with ENOTFOUND
+587 http fetch GET https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz attempt 1 failed with ENOTFOUND
+588 http fetch GET https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz attempt 1 failed with ENOTFOUND
+589 http fetch GET https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz attempt 1 failed with ENOTFOUND
+590 http fetch GET https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz attempt 1 failed with ENOTFOUND
+591 http fetch GET https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.46.3.tgz attempt 1 failed with ENOTFOUND
+592 http fetch GET https://registry.npmjs.org/npm attempt 2 failed with ENOTFOUND
+593 http fetch GET https://registry.npmjs.org/@babel/parser/-/parser-7.28.5.tgz attempt 2 failed with ENOTFOUND
+594 http fetch GET https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz attempt 2 failed with ENOTFOUND
+595 http fetch GET https://registry.npmjs.org/semver/-/semver-6.3.1.tgz attempt 2 failed with ENOTFOUND
+596 http fetch GET https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz attempt 2 failed with ENOTFOUND
+597 http fetch GET https://registry.npmjs.org/next/-/next-16.1.1.tgz attempt 2 failed with ENOTFOUND
+598 http fetch GET https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz attempt 2 failed with ENOTFOUND
+599 http fetch GET https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz attempt 2 failed with ENOTFOUND
+600 http fetch GET https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz attempt 2 failed with ENOTFOUND
+601 http fetch GET https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz attempt 2 failed with ENOTFOUND
+602 http fetch GET https://registry.npmjs.org/json5/-/json5-2.2.3.tgz attempt 2 failed with ENOTFOUND
+603 http fetch GET https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz attempt 2 failed with ENOTFOUND
+604 http fetch GET https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz attempt 2 failed with ENOTFOUND
+605 http fetch GET https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz attempt 2 failed with ENOTFOUND
+606 http fetch GET https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz attempt 2 failed with ENOTFOUND
+607 http fetch GET https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.46.3.tgz attempt 2 failed with ENOTFOUND
+608 http fetch GET https://registry.npmjs.org/npm attempt 3 failed with ENOTFOUND
+609 http fetch GET https://registry.npmjs.org/@babel/parser/-/parser-7.28.5.tgz attempt 3 failed with ENOTFOUND
+610 http fetch GET https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz attempt 3 failed with ENOTFOUND
+611 http fetch GET https://registry.npmjs.org/semver/-/semver-6.3.1.tgz attempt 3 failed with ENOTFOUND
+612 http fetch GET https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz attempt 3 failed with ENOTFOUND
+613 http fetch GET https://registry.npmjs.org/next/-/next-16.1.1.tgz attempt 3 failed with ENOTFOUND
+614 http fetch GET https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz attempt 3 failed with ENOTFOUND
+615 http fetch GET https://registry.npmjs.org/napi-postinstall/-/napi-postinstall-0.3.4.tgz attempt 3 failed with ENOTFOUND
+616 http fetch GET https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz attempt 3 failed with ENOTFOUND
+617 http fetch GET https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz attempt 3 failed with ENOTFOUND
+618 http fetch GET https://registry.npmjs.org/json5/-/json5-2.2.3.tgz attempt 3 failed with ENOTFOUND
+619 http fetch GET https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz attempt 3 failed with ENOTFOUND
+620 http fetch GET https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz attempt 3 failed with ENOTFOUND
+621 http fetch GET https://registry.npmjs.org/jiti/-/jiti-2.6.1.tgz attempt 3 failed with ENOTFOUND
+622 http fetch GET https://registry.npmjs.org/acorn/-/acorn-8.15.0.tgz attempt 3 failed with ENOTFOUND
+623 http fetch GET https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.46.3.tgz attempt 3 failed with ENOTFOUND
+624 verbose cwd /Users/yewuchen/Desktop/宝拓影视
+625 verbose os Darwin 21.6.0
+626 verbose node v22.16.0
+627 verbose npm  v10.9.2
+628 error Exit handler never called!
+629 error This is an error with npm itself. Please report this error at:
+630 error   <https://github.com/npm/cli/issues>
+631 verbose exit 1
+632 verbose code 1
+633 error A complete log of this run can be found in: /Users/yewuchen/Desktop/宝拓影视/.npm-cache/_logs/2026-03-05T15_10_24_820Z-debug-0.log
