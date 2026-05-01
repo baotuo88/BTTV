@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import type Artplayer from "artplayer";
-import type { Setting } from "artplayer/types/setting";
 import type HlsType from "hls.js";
 import { LocalPlayerSettings } from "@/app/api/player-config/route";
 
@@ -40,6 +39,20 @@ interface DanmakuPluginController {
   config(options: { danmuku: DanmakuItem[] }): void;
   load(): void;
 }
+
+type PlayerSetting = {
+  name?: string;
+  html: string | HTMLElement;
+  tooltip?: string | HTMLElement;
+  selector?: Array<{
+    html: string | HTMLElement;
+    value?: number;
+    default?: boolean;
+    [key: string]: unknown;
+  }>;
+  onSelect?: (item: { value?: unknown; [key: string]: unknown }) => unknown;
+  [key: string]: unknown;
+};
 
 type ArtplayerWithDanmaku = Artplayer & {
   plugins: {
@@ -189,7 +202,7 @@ export function LocalHlsPlayer({
   }, []);
 
   const buildQualitySetting = useCallback(
-    (hls: HlsType): Setting | null => {
+    (hls: HlsType): PlayerSetting | null => {
       const options = qualityOptionsRef.current;
       if (options.length <= 1) return null;
 
