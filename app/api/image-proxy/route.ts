@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertSafeRemoteUrl } from "@/lib/server/safe-remote-url";
+import { assertHostAllowed } from "@/lib/server/proxy-domain-allowlist";
+import {
+  applyProxyRateLimit,
+  buildStrictProxyCorsHeaders,
+  validateFirstPartyProxyRequest,
+} from "@/lib/server/api-security";
 
 export const runtime = "nodejs";
 
@@ -97,6 +103,17 @@ async function fetchImageWithProxy(url: string): Promise<Response> {
 }
 
 export async function GET(request: NextRequest) {
+  const firstPartyError = validateFirstPartyProxyRequest(request);
+  if (firstPartyError) {
+    return NextResponse.json(
+      { code: 403, message: firstPartyError },
+      { status: 403 }
+    );
+  }
+
+  const rateLimitResponse = applyProxyRateLimit(request, "image");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const url = request.nextUrl.searchParams.get('url');
     
@@ -105,6 +122,7 @@ export async function GET(request: NextRequest) {
     }
 
     const safeUrl = await assertSafeRemoteUrl(url);
+    await assertHostAllowed(safeUrl.hostname);
 
     // 使用代理池获取图片
     const response = await fetchImageWithProxy(safeUrl.toString());
@@ -114,13 +132,32 @@ export async function GET(request: NextRequest) {
 
     return new NextResponse(imageBuffer, {
       status: 200,
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000, immutable',
-      },
+      headers: (() => {
+        const headers = buildStrictProxyCorsHeaders(request);
+        headers.set('Content-Type', contentType);
+        headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+        return headers;
+      })(),
     });
   } catch (error) {
     console.error('Image proxy error:', error);
     return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 });
   }
+}
+
+export async function OPTIONS(request: NextRequest) {
+  const firstPartyError = validateFirstPartyProxyRequest(request);
+  if (firstPartyError) {
+    return NextResponse.json(
+      { code: 403, message: firstPartyError },
+      { status: 403 }
+    );
+  }
+
+  const headers = buildStrictProxyCorsHeaders(request, {
+    methods: ['GET', 'OPTIONS'],
+  });
+  headers.set('Access-Control-Max-Age', '86400');
+
+  return new NextResponse(null, { status: 204, headers });
 }

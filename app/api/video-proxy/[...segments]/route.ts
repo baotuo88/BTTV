@@ -1,6 +1,13 @@
 // 视频代理API - 处理CORS和代理视频流
 import { NextRequest, NextResponse } from 'next/server';
 import { assertSafeRemoteUrl } from '@/lib/server/safe-remote-url';
+import { assertHostAllowed } from '@/lib/server/proxy-domain-allowlist';
+import { createProxySignature, verifyProxySignature } from '@/lib/server/proxy-signature';
+import {
+  applyProxyRateLimit,
+  buildStrictProxyCorsHeaders,
+  validateFirstPartyProxyRequest,
+} from '@/lib/server/api-security';
 
 // 使用Node.js Runtime以支持完整的URL处理
 export const runtime = 'nodejs';
@@ -9,6 +16,17 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ segments: string[] }> }
 ) {
+  const firstPartyError = validateFirstPartyProxyRequest(request);
+  if (firstPartyError) {
+    return NextResponse.json(
+      { code: 403, message: firstPartyError },
+      { status: 403 }
+    );
+  }
+
+  const rateLimitResponse = applyProxyRateLimit(request, 'video');
+  if (rateLimitResponse) return rateLimitResponse;
+
   let targetUrl = '';
 
   try {
@@ -23,6 +41,30 @@ export async function GET(
 
     // 安全验证
     targetUrl = (await assertSafeRemoteUrl(targetUrl)).toString();
+
+    const expiresAtRaw = request.nextUrl.searchParams.get('exp');
+    const signature = request.nextUrl.searchParams.get('sig');
+
+    let hasValidSignature = false;
+    if (expiresAtRaw && signature) {
+      const expiresAt = Number.parseInt(expiresAtRaw, 10);
+      hasValidSignature = verifyProxySignature({
+        url: targetUrl,
+        expiresAt,
+        signature,
+      });
+
+      if (!hasValidSignature) {
+        return NextResponse.json(
+          { code: 403, message: '代理签名无效或已过期' },
+          { status: 403 }
+        );
+      }
+    }
+
+    if (!hasValidSignature) {
+      await assertHostAllowed(new URL(targetUrl).hostname);
+    }
 
     // 获取客户端的Range header
     const rangeHeader = request.headers.get('Range');
@@ -195,33 +237,37 @@ export async function GET(
 
       return new NextResponse(processedM3u8, {
         status: 200,
-        headers: {
-          'Content-Type': 'application/vnd.apple.mpegurl',
-          'Cache-Control': 'public, max-age=300',
-          'Access-Control-Allow-Origin': '*',
-        },
+        headers: (() => {
+          const headers = buildStrictProxyCorsHeaders(request, {
+            exposeHeaders: ['Content-Length'],
+          });
+          headers.set('Content-Type', 'application/vnd.apple.mpegurl');
+          headers.set('Cache-Control', 'public, max-age=300');
+          return headers;
+        })(),
       });
     }
 
     // 对于视频流和其他内容，直接转发（支持Range请求）
+    const headers = buildStrictProxyCorsHeaders(request, {
+      exposeHeaders: ['Content-Length', 'Content-Range', 'Accept-Ranges'],
+    });
+    headers.set('Content-Type', contentType);
+    headers.set('Cache-Control', 'public, max-age=3600');
+
+    if (response.headers.get('Content-Range')) {
+      headers.set('Content-Range', response.headers.get('Content-Range') || '');
+    }
+    if (response.headers.get('Content-Length')) {
+      headers.set('Content-Length', response.headers.get('Content-Length') || '');
+    }
+    if (response.headers.get('Accept-Ranges')) {
+      headers.set('Accept-Ranges', response.headers.get('Accept-Ranges') || '');
+    }
+
     return new NextResponse(response.body, {
       status: response.status,
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=3600',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Range, Content-Type',
-        ...(response.headers.get('Content-Range') && {
-          'Content-Range': response.headers.get('Content-Range') || '',
-        }),
-        ...(response.headers.get('Content-Length') && {
-          'Content-Length': response.headers.get('Content-Length') || '',
-        }),
-        ...(response.headers.get('Accept-Ranges') && {
-          'Accept-Ranges': response.headers.get('Accept-Ranges') || '',
-        }),
-      },
+      headers,
     });
 
   } catch (error) {
@@ -295,15 +341,23 @@ export async function GET(
 }
 
 // OPTIONS请求处理（CORS预检）
-export async function OPTIONS() {
+export async function OPTIONS(request: NextRequest) {
+  const firstPartyError = validateFirstPartyProxyRequest(request);
+  if (firstPartyError) {
+    return NextResponse.json(
+      { code: 403, message: firstPartyError },
+      { status: 403 }
+    );
+  }
+
+  const headers = buildStrictProxyCorsHeaders(request, {
+    methods: ['GET', 'OPTIONS'],
+  });
+  headers.set('Access-Control-Max-Age', '86400');
+
   return new NextResponse(null, {
     status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Range, Content-Type',
-      'Access-Control-Max-Age': '86400',
-    },
+    headers,
   });
 }
 
@@ -324,7 +378,8 @@ function processM3u8Content(content: string, baseUrl: string): string {
       } else {
         url = new URL(urlString, base.href);
       }
-      return `/api/video-proxy/${encodeURIComponent(url.href)}`;
+      const signed = createProxySignature(url.href);
+      return `/api/video-proxy/${encodeURIComponent(url.href)}?exp=${signed.expiresAt}&sig=${encodeURIComponent(signed.signature)}`;
     } catch (e) {
       console.error(`❌ URL解析失败: "${urlString}"`, e);
       return urlString;

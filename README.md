@@ -173,7 +173,7 @@ cd ~/bttv
 
 | 变量名                        | 说明           | 默认值                               |
 | ----------------------------- | -------------- | ------------------------------------ |
-| `ADMIN_PASSWORD`              | 后台管理密码   | `admin123`                           |
+| `ADMIN_PASSWORD`              | 后台管理密码   | 必填（无默认值）                     |
 | `MONGODB_DB_NAME`             | 数据库名称     | `bttv`                          |
 | `SITE_NAME`                   | 站点名称（用于导航品牌） | `宝拓影视`                   |
 | `SITE_TITLE`                  | 浏览器标题（SEO title） | `宝拓影视 - 免费影视在线观看` |
@@ -181,6 +181,8 @@ cd ~/bttv
 | `NEXT_PUBLIC_SITE_NAME`       | 前端回退站点名称（可选） | -                              |
 | `NEXT_PUBLIC_SITE_TITLE`      | 前端回退标题（可选）   | -                                |
 | `NEXT_PUBLIC_SITE_DESCRIPTION`| 前端回退描述（可选）   | -                                |
+| `PROXY_SIGN_SECRET`           | 代理 URL 签名密钥（建议设置） | 自动回退到 `ADMIN_PASSWORD` |
+| `PROXY_ALLOWED_HOSTS`         | 代理域名白名单（逗号分隔，支持 `*.example.com`） | - |
 | `NEXT_PUBLIC_DANMU_API_URL`   | 弹幕 API 地址  | `https://danmuapi1-eight.vercel.app` |
 | `NEXT_PUBLIC_DANMU_API_TOKEN` | 弹幕 API Token | -                                    |
 | `RESEND_API_KEY`              | Resend 邮件 Key（找回密码） | -                     |

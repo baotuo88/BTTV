@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSession, validatePassword } from "@/lib/auth";
 import { isAdminPasswordConfigured } from "@/lib/admin-session";
+import { applyJsonRateLimit } from "@/lib/server/api-security";
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: "auth:admin-login",
+    max: 8,
+    windowMs: 10 * 60_000,
+    message: "登录尝试过于频繁，请 10 分钟后重试",
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { password } = await request.json();
 

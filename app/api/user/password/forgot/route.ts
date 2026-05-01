@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestPasswordReset } from "@/lib/user-password-reset";
+import { applyJsonRateLimit } from "@/lib/server/api-security";
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: "auth:password-forgot",
+    max: 6,
+    windowMs: 10 * 60_000,
+    message: "请求过于频繁，请稍后再试",
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const email = String(body?.email || "").trim().toLowerCase();

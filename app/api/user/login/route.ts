@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createUserSession, loginUser } from '@/lib/user-auth';
+import { applyJsonRateLimit } from '@/lib/server/api-security';
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: 'auth:user-login',
+    max: 12,
+    windowMs: 10 * 60_000,
+    message: '登录尝试过于频繁，请稍后重试',
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const account = String(body?.account || '');

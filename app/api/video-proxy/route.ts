@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertSafeRemoteUrl } from "@/lib/server/safe-remote-url";
+import { assertHostAllowed } from "@/lib/server/proxy-domain-allowlist";
+import { createProxySignature, verifyProxySignature } from "@/lib/server/proxy-signature";
+import {
+  applyProxyRateLimit,
+  buildStrictProxyCorsHeaders,
+  validateFirstPartyProxyRequest,
+} from "@/lib/server/api-security";
 
 export const dynamic = 'force-dynamic';
 export const runtime = "nodejs";
@@ -9,6 +16,17 @@ export const runtime = "nodejs";
  * 支持 m3u8 播放列表重写
  */
 export async function GET(request: NextRequest) {
+  const firstPartyError = validateFirstPartyProxyRequest(request);
+  if (firstPartyError) {
+    return NextResponse.json(
+      { code: 403, message: firstPartyError },
+      { status: 403 }
+    );
+  }
+
+  const rateLimitResponse = applyProxyRateLimit(request, "video");
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const videoUrl = searchParams.get('url');
@@ -22,6 +40,29 @@ export async function GET(request: NextRequest) {
 
     const safeVideoUrl = await assertSafeRemoteUrl(videoUrl);
     const safeVideoUrlString = safeVideoUrl.toString();
+    const expiresAtRaw = searchParams.get("exp");
+    const signature = searchParams.get("sig");
+
+    let hasValidSignature = false;
+    if (expiresAtRaw && signature) {
+      const expiresAt = Number.parseInt(expiresAtRaw, 10);
+      hasValidSignature = verifyProxySignature({
+        url: safeVideoUrlString,
+        expiresAt,
+        signature,
+      });
+
+      if (!hasValidSignature) {
+        return NextResponse.json(
+          { code: 403, message: "代理签名无效或已过期" },
+          { status: 403 }
+        );
+      }
+    }
+
+    if (!hasValidSignature) {
+      await assertHostAllowed(safeVideoUrl.hostname);
+    }
 
     console.log(`🎬 代理视频请求: ${safeVideoUrlString}`);
 
@@ -103,13 +144,14 @@ export async function GET(request: NextRequest) {
       // 返回重写后的 m3u8
       return new NextResponse(rewrittenContent, {
         status: 200,
-        headers: {
-          'Content-Type': 'application/vnd.apple.mpegurl',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
-          'Access-Control-Expose-Headers': 'Content-Length',
-          'Cache-Control': 'no-cache',
-        }
+        headers: (() => {
+          const headers = buildStrictProxyCorsHeaders(request, {
+            exposeHeaders: ["Content-Length"],
+          });
+          headers.set("Content-Type", "application/vnd.apple.mpegurl");
+          headers.set("Cache-Control", "no-cache");
+          return headers;
+        })(),
       });
     }
 
@@ -130,10 +172,10 @@ export async function GET(request: NextRequest) {
       if (value) headers.set(header, value);
     });
 
-    headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Range, Content-Type');
-    headers.set('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Accept-Ranges');
+    const corsHeaders = buildStrictProxyCorsHeaders(request, {
+      exposeHeaders: ["Content-Length", "Content-Range", "Accept-Ranges"],
+    });
+    corsHeaders.forEach((value, key) => headers.set(key, value));
 
     return new NextResponse(videoResponse.body, {
       status: videoResponse.status,
@@ -177,7 +219,8 @@ function rewriteM3U8(content: string, baseUrl: string, proxyOrigin: string): str
       if (uriMatch && uriMatch[1]) {
         const originalUri = uriMatch[1];
         const absoluteUri = resolveUrl(originalUri);
-        const proxiedUri = `${proxyOrigin}/api/video-proxy?url=${encodeURIComponent(absoluteUri)}`;
+        const signed = createProxySignature(absoluteUri);
+        const proxiedUri = `${proxyOrigin}/api/video-proxy?url=${encodeURIComponent(absoluteUri)}&exp=${signed.expiresAt}&sig=${encodeURIComponent(signed.signature)}`;
         // 替换原始URI为代理URI
         return line.replace(/URI=["']?[^"',]+["']?/, `URI="${proxiedUri}"`);
       }
@@ -191,7 +234,8 @@ function rewriteM3U8(content: string, baseUrl: string, proxyOrigin: string): str
     
     // 处理资源 URL（.ts 片段等）
     const resourceUrl = resolveUrl(line.trim());
-    const proxiedUrl = `${proxyOrigin}/api/video-proxy?url=${encodeURIComponent(resourceUrl)}`;
+    const signed = createProxySignature(resourceUrl);
+    const proxiedUrl = `${proxyOrigin}/api/video-proxy?url=${encodeURIComponent(resourceUrl)}&exp=${signed.expiresAt}&sig=${encodeURIComponent(signed.signature)}`;
     
     return proxiedUrl;
   });
@@ -199,11 +243,16 @@ function rewriteM3U8(content: string, baseUrl: string, proxyOrigin: string): str
   return rewrittenLines.join('\n');
 }
 
-export async function OPTIONS() {
-  const headers = new Headers();
-  headers.set('Access-Control-Allow-Origin', '*');
-  headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
-  headers.set('Access-Control-Allow-Headers', 'Range, Content-Type');
+export async function OPTIONS(request: NextRequest) {
+  const firstPartyError = validateFirstPartyProxyRequest(request);
+  if (firstPartyError) {
+    return NextResponse.json(
+      { code: 403, message: firstPartyError },
+      { status: 403 }
+    );
+  }
+
+  const headers = buildStrictProxyCorsHeaders(request);
   headers.set('Access-Control-Max-Age', '86400');
   
   return new NextResponse(null, {

@@ -51,15 +51,7 @@ function constantTimeEqualStrings(left: string, right: string): boolean {
 
 function getAdminPassword(): string | null {
   const configuredPassword = process.env.ADMIN_PASSWORD?.trim();
-  if (configuredPassword) {
-    return configuredPassword;
-  }
-
-  if (process.env.NODE_ENV !== "production") {
-    return "admin123";
-  }
-
-  return null;
+  return configuredPassword || null;
 }
 
 async function getSigningKey(): Promise<CryptoKey> {
