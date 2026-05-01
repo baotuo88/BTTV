@@ -39,6 +39,11 @@ interface SourceServerQuality {
   stallCount: number;
   autoSwitchCount: number;
 }
+
+interface SourceAdaptiveCapability {
+  supportsAdaptiveBitrate: boolean;
+  checkedAt: number;
+}
 interface SourceLockPrefs {
   globalSourceKey: string;
   dramaLocks: Record<string, string>;
@@ -119,7 +124,8 @@ const reportSourceMetric = (
 const computeSourceScore = (
   source: AvailableSource,
   metrics: Record<string, SourceRuntimeMetric>,
-  serverQuality: Record<string, SourceServerQuality>
+  serverQuality: Record<string, SourceServerQuality>,
+  adaptiveCapability: Record<string, SourceAdaptiveCapability>
 ) => {
   const confidenceScore = { high: 100, medium: 70, low: 40 }[
     source.match_confidence
@@ -148,7 +154,17 @@ const computeSourceScore = (
     runtime?.lastSuccessAt && Date.now() - runtime.lastSuccessAt < 24 * 3600 * 1000
       ? 5
       : 0;
-  return confidenceScore + priorityScore + runtimeScore + recencyBoost + remoteScore;
+  const adaptiveBoost = adaptiveCapability[source.source_key]?.supportsAdaptiveBitrate
+    ? 120
+    : 0;
+  return (
+    confidenceScore +
+    priorityScore +
+    runtimeScore +
+    recencyBoost +
+    remoteScore +
+    adaptiveBoost
+  );
 };
 
 interface LibraryStatus {
@@ -209,6 +225,9 @@ export default function PlayPage() {
   const [serverQualityMap, setServerQualityMap] = useState<
     Record<string, SourceServerQuality>
   >({});
+  const [adaptiveCapabilityMap, setAdaptiveCapabilityMap] = useState<
+    Record<string, SourceAdaptiveCapability>
+  >({});
   const progressInitRef = useRef(false);
   const lastProgressSyncAtRef = useRef(0);
   const actionMessageTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -225,10 +244,10 @@ export default function PlayPage() {
     const metrics = readSourceMetrics();
     return [...availableSources].sort(
       (a, b) =>
-        computeSourceScore(b, metrics, serverQualityMap) -
-        computeSourceScore(a, metrics, serverQualityMap)
+        computeSourceScore(b, metrics, serverQualityMap, adaptiveCapabilityMap) -
+        computeSourceScore(a, metrics, serverQualityMap, adaptiveCapabilityMap)
     );
-  }, [availableSources, serverQualityMap]);
+  }, [availableSources, serverQualityMap, adaptiveCapabilityMap]);
 
   useEffect(() => {
     setSourceLockPrefs(readSourceLockPrefs());
@@ -363,6 +382,72 @@ export default function PlayPage() {
         // ignore server quality failures
       });
   }, [availableSources]);
+
+  useEffect(() => {
+    if (!dramaId || availableSources.length === 0 || vodSources.length === 0) return;
+
+    let cancelled = false;
+    const checkedCache = new Set(
+      Object.entries(adaptiveCapabilityMap)
+        .filter(([, v]) => Date.now() - v.checkedAt < 30 * 60 * 1000)
+        .map(([k]) => k)
+    );
+
+    const detectAdaptiveSupport = async () => {
+      const candidates = availableSources
+        .filter((s) => !checkedCache.has(s.source_key))
+        .slice(0, 3);
+      if (candidates.length === 0) return;
+
+      const updates: Record<string, SourceAdaptiveCapability> = {};
+
+      for (const candidate of candidates) {
+        const source = vodSources.find((v) => v.key === candidate.source_key);
+        if (!source) continue;
+
+        let supportsAdaptiveBitrate = false;
+        try {
+          const detailRes = await fetch("/api/drama/detail", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ids: dramaId,
+              source,
+              vodName: candidate.vod_name,
+              _t: Date.now(),
+            }),
+          });
+          const detailJson = await detailRes.json();
+          const firstEpisodeUrl: string | undefined = detailJson?.data?.episodes?.[0]?.url;
+          if (typeof firstEpisodeUrl === "string" && firstEpisodeUrl.includes(".m3u8")) {
+            const proxyUrl = `/api/video-proxy/${encodeURIComponent(firstEpisodeUrl)}`;
+            const m3u8Res = await fetch(proxyUrl, { cache: "no-store" });
+            if (m3u8Res.ok) {
+              const text = await m3u8Res.text();
+              supportsAdaptiveBitrate = /#EXT-X-STREAM-INF/i.test(text);
+            }
+          }
+        } catch {
+          supportsAdaptiveBitrate = false;
+        }
+
+        updates[candidate.source_key] = {
+          supportsAdaptiveBitrate,
+          checkedAt: Date.now(),
+        };
+      }
+
+      if (!cancelled && Object.keys(updates).length > 0) {
+        setAdaptiveCapabilityMap((prev) => ({ ...prev, ...updates }));
+      }
+    };
+
+    detectAdaptiveSupport();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dramaId, availableSources, vodSources, adaptiveCapabilityMap]);
 
   // 加载播放器配置
   useEffect(() => {
