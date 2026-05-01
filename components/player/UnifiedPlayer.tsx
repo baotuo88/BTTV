@@ -51,6 +51,7 @@ interface UnifiedPlayerProps {
   onQueueNext?: () => void;
   onSaveIntroOutro?: (payload: { opEnd?: number; edStart?: number }) => void;
   introOutroPoints?: { opEnd?: number; edStart?: number };
+  onPlaybackFailure?: () => void;
 }
 
 export function UnifiedPlayer({
@@ -71,6 +72,7 @@ export function UnifiedPlayer({
   onQueueNext,
   onSaveIntroOutro,
   introOutroPoints,
+  onPlaybackFailure,
 }: UnifiedPlayerProps) {
   const [playerConfig, setPlayerConfig] = useState<PlayerConfig | null>(null);
   const [currentMode, setCurrentMode] = useState<"iframe" | "local" | null>(
@@ -89,10 +91,12 @@ export function UnifiedPlayer({
 
   // 使用 ref 保存回调，避免频繁重建
   const onIframePlayerSwitchRef = useRef(onIframePlayerSwitch);
+  const onPlaybackFailureRef = useRef(onPlaybackFailure);
 
   // 更新回调 ref
   useEffect(() => {
     onIframePlayerSwitchRef.current = onIframePlayerSwitch;
+    onPlaybackFailureRef.current = onPlaybackFailure;
   });
 
   useEffect(() => {
@@ -157,12 +161,14 @@ export function UnifiedPlayer({
           const errorMsg = result.msg || result.data?.error || "视频解析失败";
           console.warn("[Video Parse]", errorMsg);
           setParseError(errorMsg);
+          onPlaybackFailureRef.current?.();
           // 不设置 parsedVideoUrl，保持 null 状态
         }
       } catch (error) {
         if (!isMountedRef.current) return;
         console.warn("[Video Parse] 请求失败:", error);
         setParseError("视频解析请求失败，请检查网络连接");
+        onPlaybackFailureRef.current?.();
       } finally {
         parsingCacheKeyRef.current = null;
         if (isMountedRef.current) {
@@ -266,6 +272,7 @@ export function UnifiedPlayer({
     // 使用 setCurrentMode 的函数式更新，避免依赖 currentMode
     setCurrentMode((prevMode) => {
       if (prevMode === "local") {
+        onPlaybackFailureRef.current?.();
         return "iframe";
       }
       return prevMode;
@@ -383,6 +390,7 @@ export function UnifiedPlayer({
           onProgress={onProgress}
           onEnded={onEnded}
           onPlayerSwitch={handlePlayerSwitch}
+          onError={onPlaybackFailure}
         />
       )}
 

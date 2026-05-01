@@ -12,6 +12,7 @@ interface IframePlayerProps {
   onProgress?: (time: number) => void;
   onEnded?: () => void;
   onPlayerSwitch?: (playerIndex: number) => void;
+  onError?: () => void;
 }
 
 export function IframePlayer({ 
@@ -21,7 +22,8 @@ export function IframePlayer({
   vodSource,
   onProgress,
   onEnded,
-  onPlayerSwitch 
+  onPlayerSwitch,
+  onError,
 }: IframePlayerProps) {
   const [internalPlayerIndex, setInternalPlayerIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,12 +43,14 @@ export function IframePlayer({
   const onProgressRef = useRef(onProgress);
   const onEndedRef = useRef(onEnded);
   const onPlayerSwitchRef = useRef(onPlayerSwitch);
+  const onErrorRef = useRef(onError);
 
   // 更新回调 ref
   useEffect(() => {
     onProgressRef.current = onProgress;
     onEndedRef.current = onEnded;
     onPlayerSwitchRef.current = onPlayerSwitch;
+    onErrorRef.current = onError;
   });
 
   // 通用解析播放器列表
@@ -137,6 +141,7 @@ export function IframePlayer({
     if (loadAttempts >= maxAttempts - 1) {
       setPlayerError(true);
       setIsLoading(false);
+      onErrorRef.current?.();
       return;
     }
 
@@ -258,6 +263,7 @@ export function IframePlayer({
 
   // 当没有可用播放器且不是直接播放模式时，显示错误
   if (!currentPlayer && !disableParseUrl) {
+    onErrorRef.current?.();
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-black">
         <p className="text-white">没有可用的播放器</p>
