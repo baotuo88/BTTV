@@ -41,9 +41,11 @@ interface UnifiedPlayerProps {
   vodSource?: VodSource | null;
   externalDanmaku?: import("@/lib/player/danmaku-service").DanmakuItem[];
   initialProgressSeconds?: number;
+  retryToken?: number;
   onDanmakuCountChange?: (count: number) => void;
   onProgress?: (time: number) => void;
   onEnded?: () => void;
+  onStall?: (time: number) => void;
   onIframePlayerSwitch?: (playerIndex: number) => void;
 }
 
@@ -55,9 +57,11 @@ export function UnifiedPlayer({
   vodSource,
   externalDanmaku,
   initialProgressSeconds = 0,
+  retryToken = 0,
   onDanmakuCountChange,
   onProgress,
   onEnded,
+  onStall,
   onIframePlayerSwitch,
 }: UnifiedPlayerProps) {
   const [playerConfig, setPlayerConfig] = useState<PlayerConfig | null>(null);
@@ -359,7 +363,7 @@ export function UnifiedPlayer({
 
       {currentMode === "local" && (
         <LocalHlsPlayer
-          key={`local-${finalVideoUrl}`}
+          key={`local-${finalVideoUrl}-${retryToken}`}
           videoUrl={finalVideoUrl}
           title={title}
           settings={playerConfig.localPlayerSettings}
@@ -368,6 +372,7 @@ export function UnifiedPlayer({
           onDanmakuCountChange={onDanmakuCountChange}
           onProgress={onProgress}
           onEnded={onEnded}
+          onStall={onStall}
           onError={handlePlayerError}
         />
       )}

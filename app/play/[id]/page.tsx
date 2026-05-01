@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { DramaDetail, VodSource } from "@/types/drama";
 import { UnifiedPlayer } from "@/components/player/UnifiedPlayer";
@@ -17,9 +17,81 @@ interface AvailableSource {
   vod_id: string | number;
   vod_name: string;
   match_confidence: "high" | "medium" | "low";
+  priority?: number;
 }
 
 type LibraryType = "favorite" | "follow" | "watch_later";
+type SwitchReason = "manual" | "stall";
+
+interface SourceRuntimeMetric {
+  successCount: number;
+  failCount: number;
+  stallCount: number;
+  firstFrameTotalMs: number;
+  firstFrameSamples: number;
+  lastSuccessAt: number;
+  lastFailAt: number;
+}
+
+const SOURCE_METRICS_KEY = "source_runtime_metrics_v2";
+const SOURCE_SWITCH_RESUME_KEY = "source_switch_resume_v2";
+const SOURCE_AUTOSWITCH_CONTROL_KEY = "source_autoswitch_control_v1";
+const AUTO_SWITCH_COOLDOWN_MS = 3 * 60 * 1000;
+const AUTO_SWITCH_MAX_COUNT = 3;
+
+const createDefaultMetric = (): SourceRuntimeMetric => ({
+  successCount: 0,
+  failCount: 0,
+  stallCount: 0,
+  firstFrameTotalMs: 0,
+  firstFrameSamples: 0,
+  lastSuccessAt: 0,
+  lastFailAt: 0,
+});
+
+const readSourceMetrics = (): Record<string, SourceRuntimeMetric> => {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(SOURCE_METRICS_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+
+const writeSourceMetrics = (metrics: Record<string, SourceRuntimeMetric>) => {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(SOURCE_METRICS_KEY, JSON.stringify(metrics));
+};
+
+const computeSourceScore = (
+  source: AvailableSource,
+  metrics: Record<string, SourceRuntimeMetric>
+) => {
+  const confidenceScore = { high: 100, medium: 70, low: 40 }[
+    source.match_confidence
+  ];
+  const priorityScore = 30 - Math.min(source.priority ?? 99, 30);
+  const runtime = metrics[source.source_key];
+  const playableRate = runtime
+    ? runtime.successCount / Math.max(runtime.successCount + runtime.failCount, 1)
+    : 0.5;
+  const playableScore = Math.round(playableRate * 50);
+  const avgFirstFrameMs =
+    runtime && runtime.firstFrameSamples > 0
+      ? runtime.firstFrameTotalMs / runtime.firstFrameSamples
+      : 1800;
+  const firstFrameScore = Math.max(0, Math.round((3000 - avgFirstFrameMs) / 80));
+  const stabilityPenalty = runtime ? runtime.stallCount * 8 : 0;
+  const runtimeScore = playableScore + firstFrameScore - stabilityPenalty;
+  const recencyBoost =
+    runtime?.lastSuccessAt && Date.now() - runtime.lastSuccessAt < 24 * 3600 * 1000
+      ? 5
+      : 0;
+  return confidenceScore + priorityScore + runtimeScore + recencyBoost;
+};
 
 interface LibraryStatus {
   favorite: boolean;
@@ -75,11 +147,64 @@ export default function PlayPage() {
   const progressInitRef = useRef(false);
   const lastProgressSyncAtRef = useRef(0);
   const actionMessageTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const currentPlaybackTimeRef = useRef(0);
+  const autoSwitchTriedSourcesRef = useRef<Set<string>>(new Set());
+  const sourceStableMarkedRef = useRef<string>("");
+  const stallRetryTriedRef = useRef<Set<string>>(new Set());
+  const sourceBootAtRef = useRef<number>(Date.now());
+  const firstFrameMarkedSourceRef = useRef<string>("");
+  const localRetryTokenRef = useRef(0);
+  const [localRetryToken, setLocalRetryToken] = useState(0);
+
+  const rankedSources = useMemo(() => {
+    const metrics = readSourceMetrics();
+    return [...availableSources].sort(
+      (a, b) => computeSourceScore(b, metrics) - computeSourceScore(a, metrics)
+    );
+  }, [availableSources]);
 
   useEffect(() => {
     progressInitRef.current = false;
     lastProgressSyncAtRef.current = 0;
     setInitialProgressTime(0);
+    currentPlaybackTimeRef.current = 0;
+    autoSwitchTriedSourcesRef.current.clear();
+    stallRetryTriedRef.current.clear();
+    sourceStableMarkedRef.current = "";
+    sourceBootAtRef.current = Date.now();
+    firstFrameMarkedSourceRef.current = "";
+  }, [dramaId, currentSourceKey]);
+
+  useEffect(() => {
+    sourceBootAtRef.current = Date.now();
+    firstFrameMarkedSourceRef.current = "";
+  }, [dramaId, currentSourceKey, currentEpisode]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = sessionStorage.getItem(SOURCE_SWITCH_RESUME_KEY);
+    if (!raw) return;
+    try {
+      const payload = JSON.parse(raw) as {
+        dramaId: string;
+        sourceKey: string;
+        episodeIndex: number;
+        resumeTime: number;
+        timestamp: number;
+      };
+      if (
+        payload.dramaId === dramaId &&
+        payload.sourceKey === (currentSourceKey || "") &&
+        Date.now() - payload.timestamp < 5 * 60 * 1000
+      ) {
+        setCurrentEpisode(Math.max(0, Number(payload.episodeIndex || 0)));
+        setInitialProgressTime(Math.max(0, Number(payload.resumeTime || 0)));
+      }
+    } catch {
+      // ignore
+    } finally {
+      sessionStorage.removeItem(SOURCE_SWITCH_RESUME_KEY);
+    }
   }, [dramaId, currentSourceKey]);
 
   useEffect(() => {
@@ -181,8 +306,8 @@ export default function PlayPage() {
         setError(null);
 
         let sourceKey = currentSourceKey;
-        if (!sourceKey && availableSources.length > 0) {
-          sourceKey = availableSources[0].source_key;
+        if (!sourceKey && rankedSources.length > 0) {
+          sourceKey = rankedSources[0].source_key;
         }
 
         if (!sourceKey && selectedVodSource) {
@@ -276,6 +401,7 @@ export default function PlayPage() {
     dramaId,
     currentSourceKey,
     availableSources,
+    rankedSources,
     vodSources,
     selectedVodSource,
   ]);
@@ -441,11 +567,84 @@ export default function PlayPage() {
 
   // 切换视频源
   const switchSource = useCallback(
-    (newSourceKey: string, newVodId: string | number) => {
+    (
+      newSourceKey: string,
+      newVodId: string | number,
+      reason: SwitchReason = "manual",
+      options?: { episodeIndex?: number; resumeTime?: number }
+    ) => {
+      if (typeof window !== "undefined") {
+        const metrics = readSourceMetrics();
+        const currentKey = currentVodSource?.key || currentSourceKey || "";
+        if (currentKey) {
+          const runtime = metrics[currentKey] || createDefaultMetric();
+          if (reason === "stall") {
+            runtime.stallCount += 1;
+            runtime.failCount += 1;
+            runtime.lastFailAt = Date.now();
+          }
+          metrics[currentKey] = runtime;
+          writeSourceMetrics(metrics);
+        }
+
+        const switchResume = {
+          dramaId: String(newVodId),
+          sourceKey: newSourceKey,
+          episodeIndex: options?.episodeIndex ?? currentEpisode,
+          resumeTime: options?.resumeTime ?? currentPlaybackTimeRef.current,
+          timestamp: Date.now(),
+        };
+        sessionStorage.setItem(
+          SOURCE_SWITCH_RESUME_KEY,
+          JSON.stringify(switchResume)
+        );
+      }
+
       const url = `/play/${newVodId}?source=${newSourceKey}`;
       router.push(url);
     },
-    [router]
+    [router, currentEpisode, currentVodSource?.key, currentSourceKey]
+  );
+
+  const handleAutoSwitchByStall = useCallback(
+    (positionSeconds: number) => {
+      if (!currentSourceKey || rankedSources.length <= 1) return;
+
+      const retryKey = `${currentSourceKey}:${currentEpisode}`;
+      if (!stallRetryTriedRef.current.has(retryKey)) {
+        stallRetryTriedRef.current.add(retryKey);
+        setInitialProgressTime(positionSeconds);
+        localRetryTokenRef.current += 1;
+        setLocalRetryToken(localRetryTokenRef.current);
+        showActionMessage("检测到卡顿，正在重试当前线路...");
+        return;
+      }
+
+      const control = readAutoSwitchControl();
+      const now = Date.now();
+      const inWindow = now - control.startedAt < AUTO_SWITCH_COOLDOWN_MS;
+      const nextCount = inWindow ? control.count + 1 : 1;
+      const startedAt = inWindow ? control.startedAt : now;
+      if (nextCount > AUTO_SWITCH_MAX_COUNT) {
+        showActionMessage("线路波动较大，请稍后手动切换播放源");
+        return;
+      }
+      writeAutoSwitchControl(startedAt, nextCount);
+
+      autoSwitchTriedSourcesRef.current.add(currentSourceKey);
+      const next = rankedSources.find(
+        (s) => !autoSwitchTriedSourcesRef.current.has(s.source_key)
+      );
+      if (!next) return;
+
+      currentPlaybackTimeRef.current = Math.max(
+        currentPlaybackTimeRef.current,
+        positionSeconds
+      );
+      showActionMessage("当前线路持续卡顿，已自动切换到备用线路");
+      switchSource(next.source_key, next.vod_id, "stall");
+    },
+    [currentSourceKey, rankedSources, switchSource, currentEpisode, showActionMessage]
   );
 
   // 选择集数
@@ -611,7 +810,7 @@ export default function PlayPage() {
           <div className="flex max-w-[65%] md:max-w-none flex-wrap items-center justify-end gap-2 md:gap-4">
             {/* 多源选择器 */}
             <SourceSelector
-              sources={availableSources}
+              sources={rankedSources}
               currentSourceKey={currentSourceKey}
               onSourceChange={switchSource}
             />
@@ -676,12 +875,59 @@ export default function PlayPage() {
                 externalDanmaku={danmakuList}
                 initialProgressSeconds={initialProgressTime}
                 onDanmakuCountChange={setDanmakuCount}
-                onProgress={(time) => syncCloudProgress(time)}
+                onProgress={(time) => {
+                  currentPlaybackTimeRef.current = time;
+                  syncCloudProgress(time);
+                  if (
+                    currentSourceKey &&
+                    !firstFrameMarkedSourceRef.current &&
+                    time > 0.8
+                  ) {
+                    const metrics = readSourceMetrics();
+                    const runtime = metrics[currentSourceKey] || createDefaultMetric();
+                    runtime.firstFrameSamples += 1;
+                    runtime.firstFrameTotalMs += Math.max(
+                      0,
+                      Date.now() - sourceBootAtRef.current
+                    );
+                    metrics[currentSourceKey] = runtime;
+                    writeSourceMetrics(metrics);
+                    firstFrameMarkedSourceRef.current = currentSourceKey;
+                  }
+                  if (
+                    currentSourceKey &&
+                    !sourceStableMarkedRef.current &&
+                    time >= 15
+                  ) {
+                    const metrics = readSourceMetrics();
+                    const runtime = metrics[currentSourceKey] || createDefaultMetric();
+                    runtime.successCount += 1;
+                    runtime.lastSuccessAt = Date.now();
+                    metrics[currentSourceKey] = runtime;
+                    writeSourceMetrics(metrics);
+                    sourceStableMarkedRef.current = currentSourceKey;
+                  }
+                }}
                 onEnded={() => {
+                  const best = rankedSources[0];
+                  if (
+                    best &&
+                    currentSourceKey &&
+                    currentEpisode < dramaDetail.episodes.length - 1 &&
+                    best.source_key !== currentSourceKey
+                  ) {
+                    switchSource(best.source_key, best.vod_id, "manual", {
+                      episodeIndex: currentEpisode + 1,
+                      resumeTime: 0,
+                    });
+                    return;
+                  }
                   if (currentEpisode < dramaDetail.episodes.length - 1) {
                     selectEpisode(currentEpisode + 1);
                   }
                 }}
+                retryToken={localRetryToken}
+                onStall={handleAutoSwitchByStall}
                 onIframePlayerSwitch={(index) => {
                   setCurrentIframePlayerIndex(index);
                 }}
@@ -1064,3 +1310,25 @@ export default function PlayPage() {
     </div>
   );
 }
+  const readAutoSwitchControl = () => {
+    if (typeof window === "undefined") return { startedAt: Date.now(), count: 0 };
+    try {
+      const raw = sessionStorage.getItem(SOURCE_AUTOSWITCH_CONTROL_KEY);
+      if (!raw) return { startedAt: Date.now(), count: 0 };
+      const parsed = JSON.parse(raw);
+      return {
+        startedAt: Number(parsed.startedAt || Date.now()),
+        count: Number(parsed.count || 0),
+      };
+    } catch {
+      return { startedAt: Date.now(), count: 0 };
+    }
+  };
+
+  const writeAutoSwitchControl = (startedAt: number, count: number) => {
+    if (typeof window === "undefined") return;
+    sessionStorage.setItem(
+      SOURCE_AUTOSWITCH_CONTROL_KEY,
+      JSON.stringify({ startedAt, count })
+    );
+  };

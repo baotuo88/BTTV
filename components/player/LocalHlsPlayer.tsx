@@ -26,6 +26,7 @@ interface LocalHlsPlayerProps {
   onDanmakuCountChange?: (count: number) => void;
   onProgress?: (time: number) => void;
   onEnded?: () => void;
+  onStall?: (time: number) => void;
   onError?: () => void;
 }
 
@@ -56,6 +57,7 @@ export function LocalHlsPlayer({
   onDanmakuCountChange,
   onProgress,
   onEnded,
+  onStall,
   onError,
 }: LocalHlsPlayerProps) {
   // 状态
@@ -88,10 +90,15 @@ export function LocalHlsPlayer({
   const mediaRetryCount = useRef<number>(0);
   const keyErrorCount = useRef<number>(0);
   const timersRef = useRef<Set<NodeJS.Timeout>>(new Set());
+  const stallCheckTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTimeUpdateAtRef = useRef<number>(0);
+  const lastPlayedTimeRef = useRef<number>(0);
+  const stallReportedRef = useRef(false);
 
   // 回调 refs
   const onProgressRef = useRef(onProgress);
   const onEndedRef = useRef(onEnded);
+  const onStallRef = useRef(onStall);
   const onErrorRef = useRef(onError);
   const settingsRef = useRef(settings);
   const titleRef = useRef(title);
@@ -101,6 +108,7 @@ export function LocalHlsPlayer({
   useEffect(() => {
     onProgressRef.current = onProgress;
     onEndedRef.current = onEnded;
+    onStallRef.current = onStall;
     onErrorRef.current = onError;
     settingsRef.current = settings;
     titleRef.current = title;
@@ -150,6 +158,10 @@ export function LocalHlsPlayer({
   const cleanupPlayer = useCallback(() => {
     timersRef.current.forEach((timer) => clearTimeout(timer));
     timersRef.current.clear();
+    if (stallCheckTimerRef.current) {
+      clearTimeout(stallCheckTimerRef.current);
+      stallCheckTimerRef.current = null;
+    }
 
     if (hlsRef.current) {
       try {
@@ -459,6 +471,9 @@ export function LocalHlsPlayer({
 
         art.on("video:timeupdate", () => {
           const currentTime = art.currentTime;
+          lastPlayedTimeRef.current = currentTime;
+          lastTimeUpdateAtRef.current = Date.now();
+          stallReportedRef.current = false;
           onProgressRef.current?.(currentTime);
 
           const currentSettings = settingsRef.current;
@@ -484,6 +499,28 @@ export function LocalHlsPlayer({
           console.log("[Video Error]", err);
           setPlayerError("media", "视频播放失败", false);
         });
+
+        const scheduleStallCheck = () => {
+          if (stallCheckTimerRef.current) {
+            clearTimeout(stallCheckTimerRef.current);
+          }
+          const anchorTime = lastPlayedTimeRef.current;
+          stallCheckTimerRef.current = setTimeout(() => {
+            const stagnantFor = Date.now() - lastTimeUpdateAtRef.current;
+            if (
+              !stallReportedRef.current &&
+              anchorTime > 5 &&
+              Math.abs(lastPlayedTimeRef.current - anchorTime) < 0.3 &&
+              stagnantFor > 8000
+            ) {
+              stallReportedRef.current = true;
+              onStallRef.current?.(anchorTime);
+            }
+          }, 8500);
+        };
+
+        art.on("video:waiting", scheduleStallCheck);
+        art.on("video:stalled", scheduleStallCheck);
       } catch (err) {
         console.log("[Player Init Failed]", err);
         setPlayerError("unknown", "播放器加载失败，请刷新重试", true);
