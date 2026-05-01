@@ -23,6 +23,8 @@ export const COLLECTIONS = {
   PLAYER_CONFIG: 'player_config',
   /** 视频源健康统计 */
   VOD_SOURCE_HEALTH: 'vod_source_health',
+  /** 视频源质量事件明细 */
+  VOD_SOURCE_METRIC_EVENTS: 'vod_source_metric_events',
   /** 运营配置中心 */
   OPERATIONS_CONFIG: 'operations_config',
   /** 前台用户 */

@@ -33,6 +33,13 @@ interface SourceRuntimeMetric {
   lastFailAt: number;
 }
 
+interface SourceServerQuality {
+  successRatePct: number;
+  avgFirstFrameMs: number;
+  stallCount: number;
+  autoSwitchCount: number;
+}
+
 const SOURCE_METRICS_KEY = "source_runtime_metrics_v2";
 const SOURCE_SWITCH_RESUME_KEY = "source_switch_resume_v2";
 const SOURCE_AUTOSWITCH_CONTROL_KEY = "source_autoswitch_control_v1";
@@ -66,9 +73,26 @@ const writeSourceMetrics = (metrics: Record<string, SourceRuntimeMetric>) => {
   localStorage.setItem(SOURCE_METRICS_KEY, JSON.stringify(metrics));
 };
 
+const reportSourceMetric = (
+  key: string,
+  eventType: "first_frame" | "playback_success" | "stall" | "auto_switch" | "retry",
+  valueMs?: number
+) => {
+  if (!key) return;
+  fetch("/api/player/source-metrics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ events: [{ key, eventType, valueMs }] }),
+    keepalive: true,
+  }).catch(() => {
+    // ignore metric failures
+  });
+};
+
 const computeSourceScore = (
   source: AvailableSource,
-  metrics: Record<string, SourceRuntimeMetric>
+  metrics: Record<string, SourceRuntimeMetric>,
+  serverQuality: Record<string, SourceServerQuality>
 ) => {
   const confidenceScore = { high: 100, medium: 70, low: 40 }[
     source.match_confidence
@@ -86,11 +110,18 @@ const computeSourceScore = (
   const firstFrameScore = Math.max(0, Math.round((3000 - avgFirstFrameMs) / 80));
   const stabilityPenalty = runtime ? runtime.stallCount * 8 : 0;
   const runtimeScore = playableScore + firstFrameScore - stabilityPenalty;
+  const remote = serverQuality[source.source_key];
+  const remoteScore = remote
+    ? remote.successRatePct * 0.2 -
+      Math.min(remote.avgFirstFrameMs / 120, 20) -
+      remote.stallCount * 0.8 -
+      remote.autoSwitchCount * 0.8
+    : 0;
   const recencyBoost =
     runtime?.lastSuccessAt && Date.now() - runtime.lastSuccessAt < 24 * 3600 * 1000
       ? 5
       : 0;
-  return confidenceScore + priorityScore + runtimeScore + recencyBoost;
+  return confidenceScore + priorityScore + runtimeScore + recencyBoost + remoteScore;
 };
 
 interface LibraryStatus {
@@ -144,6 +175,9 @@ export default function PlayPage() {
   const [libraryLoading, setLibraryLoading] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
   const [initialProgressTime, setInitialProgressTime] = useState(0);
+  const [serverQualityMap, setServerQualityMap] = useState<
+    Record<string, SourceServerQuality>
+  >({});
   const progressInitRef = useRef(false);
   const lastProgressSyncAtRef = useRef(0);
   const actionMessageTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -159,9 +193,11 @@ export default function PlayPage() {
   const rankedSources = useMemo(() => {
     const metrics = readSourceMetrics();
     return [...availableSources].sort(
-      (a, b) => computeSourceScore(b, metrics) - computeSourceScore(a, metrics)
+      (a, b) =>
+        computeSourceScore(b, metrics, serverQualityMap) -
+        computeSourceScore(a, metrics, serverQualityMap)
     );
-  }, [availableSources]);
+  }, [availableSources, serverQualityMap]);
 
   useEffect(() => {
     progressInitRef.current = false;
@@ -236,6 +272,35 @@ export default function PlayPage() {
     };
     fetchVodSources();
   }, []);
+
+  useEffect(() => {
+    if (!availableSources.length) return;
+    const keys = availableSources.map((source) => source.source_key);
+    fetch("/api/source-quality", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keys }),
+      cache: "no-store",
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result?.code !== 200 || !Array.isArray(result?.data)) return;
+        const map: Record<string, SourceServerQuality> = {};
+        for (const item of result.data) {
+          if (!item?.key) continue;
+          map[item.key] = {
+            successRatePct: Number(item.successRatePct || 0),
+            avgFirstFrameMs: Number(item.avgFirstFrameMs || 0),
+            stallCount: Number(item.stallCount || 0),
+            autoSwitchCount: Number(item.autoSwitchCount || 0),
+          };
+        }
+        setServerQualityMap(map);
+      })
+      .catch(() => {
+        // ignore server quality failures
+      });
+  }, [availableSources]);
 
   // 加载播放器配置
   useEffect(() => {
@@ -616,6 +681,7 @@ export default function PlayPage() {
         setInitialProgressTime(positionSeconds);
         localRetryTokenRef.current += 1;
         setLocalRetryToken(localRetryTokenRef.current);
+        reportSourceMetric(currentSourceKey, "retry");
         showActionMessage("检测到卡顿，正在重试当前线路...");
         return;
       }
@@ -641,6 +707,8 @@ export default function PlayPage() {
         currentPlaybackTimeRef.current,
         positionSeconds
       );
+      reportSourceMetric(currentSourceKey, "stall");
+      reportSourceMetric(currentSourceKey, "auto_switch");
       showActionMessage("当前线路持续卡顿，已自动切换到备用线路");
       switchSource(next.source_key, next.vod_id, "stall");
     },
@@ -893,6 +961,11 @@ export default function PlayPage() {
                     metrics[currentSourceKey] = runtime;
                     writeSourceMetrics(metrics);
                     firstFrameMarkedSourceRef.current = currentSourceKey;
+                    reportSourceMetric(
+                      currentSourceKey,
+                      "first_frame",
+                      Math.max(0, Date.now() - sourceBootAtRef.current)
+                    );
                   }
                   if (
                     currentSourceKey &&
@@ -906,6 +979,7 @@ export default function PlayPage() {
                     metrics[currentSourceKey] = runtime;
                     writeSourceMetrics(metrics);
                     sourceStableMarkedRef.current = currentSourceKey;
+                    reportSourceMetric(currentSourceKey, "playback_success");
                   }
                 }}
                 onEnded={() => {

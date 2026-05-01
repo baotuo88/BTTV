@@ -19,3 +19,16 @@ export interface SourceProbeResult {
   statusCode?: number;
   error?: string;
 }
+
+export type SourcePlaybackEventType =
+  | "first_frame"
+  | "playback_success"
+  | "stall"
+  | "auto_switch"
+  | "retry";
+
+export interface SourcePlaybackMetricEvent {
+  key: string;
+  eventType: SourcePlaybackEventType;
+  valueMs?: number;
+}

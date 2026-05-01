@@ -155,6 +155,16 @@ async function initializeDatabase(db: Db) {
     const vodSourceHealthCollection = db.collection(COLLECTIONS.VOD_SOURCE_HEALTH);
     await vodSourceHealthCollection.createIndex({ key: 1 }, { unique: true });
     await vodSourceHealthCollection.createIndex({ updated_at: -1 });
+    // 创建 vod_source_metric_events 集合索引
+    const sourceMetricEventsCollection = db.collection(
+      COLLECTIONS.VOD_SOURCE_METRIC_EVENTS
+    );
+    await sourceMetricEventsCollection.createIndex({ key: 1, created_at: -1 });
+    await sourceMetricEventsCollection.createIndex({ event_type: 1, created_at: -1 });
+    await sourceMetricEventsCollection.createIndex(
+      { created_at: 1 },
+      { expireAfterSeconds: 60 * 60 * 24 * 60 }
+    );
 
     // 创建 operations_config 集合索引
     const operationsConfigCollection = db.collection(COLLECTIONS.OPERATIONS_CONFIG);

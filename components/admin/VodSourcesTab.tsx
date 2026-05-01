@@ -31,6 +31,28 @@ interface RecommendedSourceOrder {
   priority: number;
 }
 
+interface SourceQualityItem {
+  key: string;
+  name: string;
+  successRatePct: number;
+  avgLatencyMs: number;
+  avgFirstFrameMs: number;
+  playbackSuccessCount: number;
+  stallCount: number;
+  autoSwitchCount: number;
+  retryCount: number;
+  updatedAt?: string;
+}
+
+interface SourceQualityTrendPoint {
+  date: string;
+  firstFrameCount: number;
+  playbackSuccessCount: number;
+  stallCount: number;
+  autoSwitchCount: number;
+  retryCount: number;
+}
+
 export function VodSourcesTab({
   sources,
   selectedKey,
@@ -70,6 +92,14 @@ export function VodSourcesTab({
   const [recommendedOrder, setRecommendedOrder] = useState<
     RecommendedSourceOrder[] | null
   >(null);
+  const [qualityLoading, setQualityLoading] = useState(false);
+  const [qualityItems, setQualityItems] = useState<SourceQualityItem[] | null>(
+    null
+  );
+  const [qualityTrends, setQualityTrends] = useState<SourceQualityTrendPoint[] | null>(
+    null
+  );
+  const [qualityWindowDays, setQualityWindowDays] = useState(7);
   // 导入模式: "replace" = 替换全部, "merge" = 保留并合并
   const [importMode, setImportMode] = useState<"replace" | "merge">("merge");
 
@@ -549,6 +579,69 @@ export function VodSourcesTab({
     }
   };
 
+  const handleLoadSourceQuality = async () => {
+    if (qualityLoading) return;
+    setQualityLoading(true);
+    try {
+      const response = await fetch(
+        `/api/admin/source-quality?windowDays=${qualityWindowDays}`,
+        {
+        cache: "no-store",
+        }
+      );
+      const result = await response.json();
+      if (!response.ok || result.code !== 200) {
+        throw new Error(result.message || "加载质量看板失败");
+      }
+      const items = Array.isArray(result?.data?.rows)
+        ? (result.data.rows as SourceQualityItem[])
+        : [];
+      const trends = Array.isArray(result?.data?.trends)
+        ? (result.data.trends as SourceQualityTrendPoint[])
+        : [];
+      setQualityItems(items);
+      setQualityTrends(trends);
+      onShowToast({
+        type: "success",
+        message: `质量看板已更新（${items.length} 条线路，窗口 ${qualityWindowDays} 天）`,
+      });
+    } catch (error) {
+      onShowToast({
+        type: "error",
+        message: error instanceof Error ? error.message : "加载质量看板失败",
+      });
+    } finally {
+      setQualityLoading(false);
+    }
+  };
+
+  const handleResetSourceQuality = () => {
+    onShowConfirm({
+      title: "重置质量统计",
+      message: "确定要清空所有线路的质量统计和趋势数据吗？",
+      danger: true,
+      onConfirm: async () => {
+        try {
+          const response = await fetch("/api/admin/source-quality", {
+            method: "DELETE",
+          });
+          const result = await response.json();
+          if (!response.ok || result.code !== 200) {
+            throw new Error(result.message || "重置失败");
+          }
+          setQualityItems(null);
+          setQualityTrends(null);
+          onShowToast({ type: "success", message: "质量统计已重置" });
+        } catch (error) {
+          onShowToast({
+            type: "error",
+            message: error instanceof Error ? error.message : "重置失败",
+          });
+        }
+      },
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Edit/Add Modal */}
@@ -713,6 +806,28 @@ export function VodSourcesTab({
             >
               {healthLoading ? "检测中..." : "健康检测"}
             </button>
+            <button
+              onClick={handleLoadSourceQuality}
+              disabled={qualityLoading}
+              className="px-4 py-2 bg-[#333] hover:bg-[#444] disabled:bg-[#2a2a2a] disabled:text-slate-500 text-slate-200 rounded-lg transition font-medium text-sm flex items-center gap-2"
+            >
+              {qualityLoading ? "加载中..." : "质量看板"}
+            </button>
+            <select
+              value={qualityWindowDays}
+              onChange={(e) => setQualityWindowDays(Number(e.target.value))}
+              className="px-3 py-2 bg-[#222] border border-[#444] text-slate-200 rounded-lg text-sm"
+            >
+              <option value={1}>最近24小时</option>
+              <option value={7}>最近7天</option>
+              <option value={30}>最近30天</option>
+            </select>
+            <button
+              onClick={handleResetSourceQuality}
+              className="px-4 py-2 bg-[#333] hover:bg-red-600 text-slate-200 rounded-lg transition font-medium text-sm"
+            >
+              重置统计
+            </button>
             {sources.length > 0 && (
               <button
                 onClick={handleDeleteAll}
@@ -777,6 +892,72 @@ export function VodSourcesTab({
                       {item.latencyMs}ms
                       {item.statusCode ? ` · ${item.statusCode}` : ""}
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {qualityItems && qualityItems.length > 0 && (
+          <div className="mb-4 bg-[#141414] border border-[#333] rounded-lg overflow-hidden">
+            <div className="px-3 py-2 border-b border-[#333] text-sm text-slate-300 font-medium">
+              播放质量看板
+            </div>
+            <div className="max-h-72 overflow-auto">
+              {qualityItems.map((item) => (
+                <div
+                  key={item.key}
+                  className="px-3 py-2 border-b border-[#2a2a2a] last:border-0 text-xs"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="text-white truncate">
+                        {item.name} ({item.key})
+                      </div>
+                      <div className="text-slate-500 mt-0.5">
+                        更新时间:{" "}
+                        {item.updatedAt
+                          ? new Date(item.updatedAt).toLocaleString("zh-CN")
+                          : "-"}
+                      </div>
+                    </div>
+                    <div className="text-right text-slate-300">
+                      成功率 {item.successRatePct}%
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 text-slate-400">
+                    <div>首帧: {item.avgFirstFrameMs || 0}ms</div>
+                    <div>探活延迟: {item.avgLatencyMs || 0}ms</div>
+                    <div>稳定播放: {item.playbackSuccessCount}</div>
+                    <div>卡顿: {item.stallCount}</div>
+                    <div>自动切源: {item.autoSwitchCount}</div>
+                    <div>重试: {item.retryCount}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {qualityTrends && qualityTrends.length > 0 && (
+          <div className="mb-4 bg-[#141414] border border-[#333] rounded-lg overflow-hidden">
+            <div className="px-3 py-2 border-b border-[#333] text-sm text-slate-300 font-medium">
+              质量趋势（{qualityWindowDays === 1 ? "24小时" : `${qualityWindowDays}天`}）
+            </div>
+            <div className="max-h-64 overflow-auto">
+              {qualityTrends.map((point) => (
+                <div
+                  key={point.date}
+                  className="px-3 py-2 border-b border-[#2a2a2a] last:border-0 text-xs text-slate-300"
+                >
+                  <div className="font-medium text-white">{point.date}</div>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mt-1 text-slate-400">
+                    <div>首帧: {point.firstFrameCount}</div>
+                    <div>稳定: {point.playbackSuccessCount}</div>
+                    <div>卡顿: {point.stallCount}</div>
+                    <div>切源: {point.autoSwitchCount}</div>
+                    <div>重试: {point.retryCount}</div>
                   </div>
                 </div>
               ))}
