@@ -53,6 +53,7 @@ const SOURCE_METRICS_KEY = "source_runtime_metrics_v2";
 const SOURCE_SWITCH_RESUME_KEY = "source_switch_resume_v2";
 const SOURCE_AUTOSWITCH_CONTROL_KEY = "source_autoswitch_control_v1";
 const SOURCE_LOCK_PREFS_KEY = "source_lock_prefs_v1";
+const INTRO_OUTRO_POINTS_KEY = "intro_outro_points_v1";
 const AUTO_SWITCH_COOLDOWN_MS = 3 * 60 * 1000;
 const AUTO_SWITCH_MAX_COUNT = 3;
 
@@ -173,6 +174,11 @@ interface LibraryStatus {
   watch_later: boolean;
 }
 
+interface IntroOutroPoint {
+  opEnd?: number;
+  edStart?: number;
+}
+
 export default function PlayPage() {
   const params = useParams();
   const router = useRouter();
@@ -239,6 +245,9 @@ export default function PlayPage() {
   const firstFrameMarkedSourceRef = useRef<string>("");
   const localRetryTokenRef = useRef(0);
   const [localRetryToken, setLocalRetryToken] = useState(0);
+  const [queueEnabled, setQueueEnabled] = useState(true);
+  const [queuedNextIndex, setQueuedNextIndex] = useState<number | null>(null);
+  const [introOutroMap, setIntroOutroMap] = useState<Record<string, IntroOutroPoint>>({});
 
   const rankedSources = useMemo(() => {
     const metrics = readSourceMetrics();
@@ -251,6 +260,20 @@ export default function PlayPage() {
 
   useEffect(() => {
     setSourceLockPrefs(readSourceLockPrefs());
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = localStorage.getItem(INTRO_OUTRO_POINTS_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") {
+        setIntroOutroMap(parsed);
+      }
+    } catch {
+      // ignore
+    }
   }, []);
 
   useEffect(() => {
@@ -941,6 +964,26 @@ export default function PlayPage() {
     }
   }, [dramaDetail, currentEpisode, selectEpisode]);
 
+  const preloadEpisodeAsset = useCallback(
+    (episodeIndex: number) => {
+      if (!dramaDetail?.episodes?.[episodeIndex]) return;
+      const nextUrl = dramaDetail.episodes[episodeIndex].url;
+      if (!nextUrl) return;
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.as = "fetch";
+      link.href = `/api/video-proxy/${encodeURIComponent(nextUrl)}`;
+      link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+      setTimeout(() => {
+        if (document.head.contains(link)) {
+          document.head.removeChild(link);
+        }
+      }, 15000);
+    },
+    [dramaDetail]
+  );
+
   // 返回列表
   const goBack = useCallback(() => {
     router.push("/");
@@ -1105,6 +1148,17 @@ export default function PlayPage() {
                 }}
               />
             )}
+            <button
+              onClick={() => setQueueEnabled((prev) => !prev)}
+              className={`px-3 py-2 rounded-full text-xs border transition ${
+                queueEnabled
+                  ? "bg-emerald-500/20 border-emerald-400/50 text-emerald-200"
+                  : "bg-white/10 border-white/20 text-gray-300"
+              }`}
+              title="下一集连续播放队列"
+            >
+              连播队列 {queueEnabled ? "开" : "关"}
+            </button>
             {/* 展开侧边栏按钮 */}
             {!isRightPanelOpen && (
               <button
@@ -1184,6 +1238,16 @@ export default function PlayPage() {
                   }
                 }}
                 onEnded={() => {
+                  if (
+                    queueEnabled &&
+                    queuedNextIndex !== null &&
+                    queuedNextIndex > currentEpisode &&
+                    queuedNextIndex < dramaDetail.episodes.length
+                  ) {
+                    selectEpisode(queuedNextIndex);
+                    setQueuedNextIndex(null);
+                    return;
+                  }
                   const best = rankedSources[0];
                   if (
                     best &&
@@ -1201,6 +1265,38 @@ export default function PlayPage() {
                     selectEpisode(currentEpisode + 1);
                   }
                 }}
+                onPreloadNext={() => {
+                  if (currentEpisode < dramaDetail.episodes.length - 1) {
+                    preloadEpisodeAsset(currentEpisode + 1);
+                  }
+                }}
+                onQueueNext={() => {
+                  if (queueEnabled && currentEpisode < dramaDetail.episodes.length - 1) {
+                    setQueuedNextIndex(currentEpisode + 1);
+                  }
+                }}
+                onSaveIntroOutro={(payload) => {
+                  const sourceKey = currentSourceKey || currentVodSource?.key || "default";
+                  const mapKey = `${dramaDetail.id}:${sourceKey}:${currentEpisode}`;
+                  setIntroOutroMap((prev) => {
+                    const next = {
+                      ...prev,
+                      [mapKey]: {
+                        opEnd: payload.opEnd ?? prev[mapKey]?.opEnd,
+                        edStart: payload.edStart ?? prev[mapKey]?.edStart,
+                      },
+                    };
+                    if (typeof window !== "undefined") {
+                      localStorage.setItem(INTRO_OUTRO_POINTS_KEY, JSON.stringify(next));
+                    }
+                    return next;
+                  });
+                }}
+                introOutroPoints={
+                  introOutroMap[
+                    `${dramaDetail.id}:${currentSourceKey || currentVodSource?.key || "default"}:${currentEpisode}`
+                  ]
+                }
                 retryToken={localRetryToken}
                 onStall={handleAutoSwitchByStall}
                 onIframePlayerSwitch={(index) => {

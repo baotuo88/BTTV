@@ -47,6 +47,10 @@ interface UnifiedPlayerProps {
   onEnded?: () => void;
   onStall?: (time: number) => void;
   onIframePlayerSwitch?: (playerIndex: number) => void;
+  onPreloadNext?: () => void;
+  onQueueNext?: () => void;
+  onSaveIntroOutro?: (payload: { opEnd?: number; edStart?: number }) => void;
+  introOutroPoints?: { opEnd?: number; edStart?: number };
 }
 
 export function UnifiedPlayer({
@@ -63,6 +67,10 @@ export function UnifiedPlayer({
   onEnded,
   onStall,
   onIframePlayerSwitch,
+  onPreloadNext,
+  onQueueNext,
+  onSaveIntroOutro,
+  introOutroPoints,
 }: UnifiedPlayerProps) {
   const [playerConfig, setPlayerConfig] = useState<PlayerConfig | null>(null);
   const [currentMode, setCurrentMode] = useState<"iframe" | "local" | null>(
@@ -374,6 +382,10 @@ export function UnifiedPlayer({
           onEnded={onEnded}
           onStall={onStall}
           onError={handlePlayerError}
+          onPreloadNext={onPreloadNext}
+          onQueueNext={onQueueNext}
+          onSaveIntroOutro={onSaveIntroOutro}
+          introOutroPoints={introOutroPoints}
         />
       )}
     </div>

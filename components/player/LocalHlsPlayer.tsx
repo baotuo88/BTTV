@@ -28,6 +28,10 @@ interface LocalHlsPlayerProps {
   onEnded?: () => void;
   onStall?: (time: number) => void;
   onError?: () => void;
+  onPreloadNext?: () => void;
+  onQueueNext?: () => void;
+  onSaveIntroOutro?: (payload: { opEnd?: number; edStart?: number }) => void;
+  introOutroPoints?: { opEnd?: number; edStart?: number };
 }
 
 // 常量
@@ -73,6 +77,10 @@ export function LocalHlsPlayer({
   onEnded,
   onStall,
   onError,
+  onPreloadNext,
+  onQueueNext,
+  onSaveIntroOutro,
+  introOutroPoints,
 }: LocalHlsPlayerProps) {
   type QualityOption = {
     value: number;
@@ -91,6 +99,13 @@ export function LocalHlsPlayer({
   const [qualityOptions, setQualityOptions] = useState<QualityOption[]>([]);
   const [selectedQuality, setSelectedQuality] = useState<number>(-1);
   const [activeQualityLabel, setActiveQualityLabel] = useState<string>("自动");
+  const [subtitleOffset, setSubtitleOffset] = useState<number>(0);
+  const [opEndPoint, setOpEndPoint] = useState<number | null>(
+    typeof introOutroPoints?.opEnd === "number" ? introOutroPoints.opEnd : null
+  );
+  const [edStartPoint, setEdStartPoint] = useState<number | null>(
+    typeof introOutroPoints?.edStart === "number" ? introOutroPoints.edStart : null
+  );
 
   // 弹幕状态
   const [autoLoadStatus, setAutoLoadStatus] = useState<{
@@ -116,18 +131,29 @@ export function LocalHlsPlayer({
   const lastTimeUpdateAtRef = useRef<number>(0);
   const lastPlayedTimeRef = useRef<number>(0);
   const stallReportedRef = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const queueTriggeredRef = useRef(false);
+  const preloadTriggeredRef = useRef(false);
+  const skipOpOnceRef = useRef(false);
+  const skipEdOnceRef = useRef(false);
 
   // 回调 refs
   const onProgressRef = useRef(onProgress);
   const onEndedRef = useRef(onEnded);
   const onStallRef = useRef(onStall);
   const onErrorRef = useRef(onError);
+  const onPreloadNextRef = useRef(onPreloadNext);
+  const onQueueNextRef = useRef(onQueueNext);
+  const onSaveIntroOutroRef = useRef(onSaveIntroOutro);
   const settingsRef = useRef(settings);
   const titleRef = useRef(title);
   const initialTimeRef = useRef(initialTime);
   const qualityOptionsRef = useRef<QualityOption[]>([]);
   const selectedQualityRef = useRef<number>(-1);
   const activeQualityLabelRef = useRef<string>("自动");
+  const subtitleOffsetRef = useRef<number>(0);
+  const opEndPointRef = useRef<number | null>(null);
+  const edStartPointRef = useRef<number | null>(null);
 
   // 更新回调 ref
   useEffect(() => {
@@ -135,12 +161,18 @@ export function LocalHlsPlayer({
     onEndedRef.current = onEnded;
     onStallRef.current = onStall;
     onErrorRef.current = onError;
+    onPreloadNextRef.current = onPreloadNext;
+    onQueueNextRef.current = onQueueNext;
+    onSaveIntroOutroRef.current = onSaveIntroOutro;
     settingsRef.current = settings;
     titleRef.current = title;
     initialTimeRef.current = initialTime;
     qualityOptionsRef.current = qualityOptions;
     selectedQualityRef.current = selectedQuality;
     activeQualityLabelRef.current = activeQualityLabel;
+    subtitleOffsetRef.current = subtitleOffset;
+    opEndPointRef.current = opEndPoint;
+    edStartPointRef.current = edStartPoint;
   });
 
   // 确保在客户端执行
@@ -183,7 +215,24 @@ export function LocalHlsPlayer({
     setQualityOptions([]);
     setSelectedQuality(-1);
     setActiveQualityLabel("自动");
+    queueTriggeredRef.current = false;
+    preloadTriggeredRef.current = false;
+    skipOpOnceRef.current = false;
+    skipEdOnceRef.current = false;
   }, []);
+
+  useEffect(() => {
+    setOpEndPoint(
+      typeof introOutroPoints?.opEnd === "number" ? introOutroPoints.opEnd : null
+    );
+    setEdStartPoint(
+      typeof introOutroPoints?.edStart === "number" ? introOutroPoints.edStart : null
+    );
+    queueTriggeredRef.current = false;
+    preloadTriggeredRef.current = false;
+    skipOpOnceRef.current = false;
+    skipEdOnceRef.current = false;
+  }, [videoUrl, introOutroPoints?.opEnd, introOutroPoints?.edStart]);
 
   const buildQualityLabel = useCallback((level: { height?: number; bitrate?: number }) => {
     const height = level.height;
@@ -530,6 +579,100 @@ export function LocalHlsPlayer({
                 }
               },
             },
+            {
+              name: "subtitleTools",
+              html: "字幕工具",
+              tooltip: `偏移 ${
+                subtitleOffsetRef.current >= 0 ? "+" : ""
+              }${subtitleOffsetRef.current.toFixed(1)}s`,
+              selector: [
+                { html: "上传外挂字幕", value: "upload" },
+                { html: "偏移 -0.5s", value: "offset_-0.5" },
+                { html: "偏移 +0.5s", value: "offset_0.5" },
+                { html: "偏移重置", value: "offset_reset" },
+              ],
+              onSelect: function (item) {
+                if (!("value" in item) || typeof item.value !== "string") return item;
+                if (item.value === "upload") {
+                  fileInputRef.current?.click();
+                  return item;
+                }
+                const video = art.video;
+                const tracks = Array.from(video.textTracks || []);
+                if (item.value === "offset_reset") {
+                  setSubtitleOffset(0);
+                  tracks.forEach((track) => {
+                    const cues = track.cues ? Array.from(track.cues) : [];
+                    cues.forEach((cue) => {
+                      const vttCue = cue as VTTCue;
+                      if (typeof vttCue.startTime === "number" && typeof vttCue.endTime === "number") {
+                        const baseStart = Number(vttCue.id?.split("|")[0] || vttCue.startTime);
+                        const baseEnd = Number(vttCue.id?.split("|")[1] || vttCue.endTime);
+                        vttCue.startTime = Math.max(0, baseStart);
+                        vttCue.endTime = Math.max(vttCue.startTime + 0.01, baseEnd);
+                      }
+                    });
+                  });
+                  return item;
+                }
+                const delta = item.value === "offset_0.5" ? 0.5 : -0.5;
+                setSubtitleOffset((prev) => {
+                  const next = Math.max(-10, Math.min(10, prev + delta));
+                  tracks.forEach((track) => {
+                    const cues = track.cues ? Array.from(track.cues) : [];
+                    cues.forEach((cue) => {
+                      const vttCue = cue as VTTCue;
+                      const baseStart = Number(vttCue.id?.split("|")[0] || vttCue.startTime);
+                      const baseEnd = Number(vttCue.id?.split("|")[1] || vttCue.endTime);
+                      vttCue.startTime = Math.max(0, baseStart + next);
+                      vttCue.endTime = Math.max(vttCue.startTime + 0.01, baseEnd + next);
+                    });
+                  });
+                  return next;
+                });
+                return item;
+              },
+            },
+            {
+              name: "introOutro",
+              html: "片头片尾",
+              tooltip:
+                opEndPointRef.current || edStartPointRef.current
+                  ? `OP ${opEndPointRef.current ? `${Math.round(opEndPointRef.current)}s` : "-"} / ED ${edStartPointRef.current ? `${Math.round(edStartPointRef.current)}s` : "-"}`
+                  : "未设置",
+              selector: [
+                { html: "标记片头结束(OP)", value: "mark_op" },
+                { html: "标记片尾开始(ED)", value: "mark_ed" },
+                { html: "跳过片头", value: "skip_op" },
+                { html: "跳过片尾", value: "skip_ed" },
+              ],
+              onSelect: function (item) {
+                if (!("value" in item) || typeof item.value !== "string") return item;
+                const now = Math.max(0, Math.floor(art.currentTime || 0));
+                if (item.value === "mark_op") {
+                  setOpEndPoint(now);
+                  onSaveIntroOutroRef.current?.({
+                    opEnd: now,
+                    edStart: edStartPointRef.current ?? undefined,
+                  });
+                } else if (item.value === "mark_ed") {
+                  setEdStartPoint(now);
+                  onSaveIntroOutroRef.current?.({
+                    opEnd: opEndPointRef.current ?? undefined,
+                    edStart: now,
+                  });
+                } else if (
+                  item.value === "skip_op" &&
+                  opEndPointRef.current &&
+                  art.currentTime < opEndPointRef.current
+                ) {
+                  art.currentTime = opEndPointRef.current;
+                } else if (item.value === "skip_ed" && edStartPointRef.current) {
+                  art.currentTime = edStartPointRef.current;
+                }
+                return item;
+              },
+            },
           ],
           plugins: [danmakuPlugin],
         });
@@ -620,6 +763,47 @@ export function LocalHlsPlayer({
           lastTimeUpdateAtRef.current = Date.now();
           stallReportedRef.current = false;
           onProgressRef.current?.(currentTime);
+
+          if (
+            opEndPointRef.current &&
+            !skipOpOnceRef.current &&
+            currentTime > 1 &&
+            currentTime < opEndPointRef.current
+          ) {
+            art.currentTime = opEndPointRef.current;
+            skipOpOnceRef.current = true;
+          }
+
+          if (
+            edStartPointRef.current &&
+            !skipEdOnceRef.current &&
+            currentTime >= edStartPointRef.current &&
+            Number.isFinite(art.duration) &&
+            art.duration > 0
+          ) {
+            art.currentTime = Math.max(edStartPointRef.current, art.duration - 0.3);
+            skipEdOnceRef.current = true;
+          }
+
+          if (
+            !preloadTriggeredRef.current &&
+            Number.isFinite(art.duration) &&
+            art.duration > 0 &&
+            art.duration - currentTime <= 45
+          ) {
+            preloadTriggeredRef.current = true;
+            onPreloadNextRef.current?.();
+          }
+
+          if (
+            !queueTriggeredRef.current &&
+            Number.isFinite(art.duration) &&
+            art.duration > 0 &&
+            art.duration - currentTime <= 12
+          ) {
+            queueTriggeredRef.current = true;
+            onQueueNextRef.current?.();
+          }
 
           const currentSettings = settingsRef.current;
           if (
@@ -859,6 +1043,32 @@ export function LocalHlsPlayer({
   return (
     <div className="relative w-full h-full bg-black">
       <div ref={containerRef} className="w-full h-full" />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".vtt,.srt"
+        className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file || !artRef.current) return;
+          const text = await file.text();
+          const isSrt = file.name.toLowerCase().endsWith(".srt");
+          const toVtt = (content: string) => {
+            if (!isSrt) return content;
+            const body = content
+              .replace(/\r/g, "")
+              .replace(/^\d+\n/gm, "")
+              .replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, "$1.$2");
+            return `WEBVTT\n\n${body}`;
+          };
+          const blob = new Blob([toVtt(text)], { type: "text/vtt" });
+          const url = URL.createObjectURL(blob);
+          artRef.current.subtitle.switch(url).catch(() => {
+            setPlayerError("unknown", "字幕加载失败", true);
+          });
+          e.currentTarget.value = "";
+        }}
+      />
 
       {/* 自动加载弹幕状态提示 */}
       {autoLoadStatus.loading && autoLoadStatus.message && (
