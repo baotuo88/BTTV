@@ -1,6 +1,5 @@
 // 视频代理API - 处理CORS和代理视频流
 import { NextRequest, NextResponse } from 'next/server';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 import { assertSafeRemoteUrl } from '@/lib/server/safe-remote-url';
 
 // 使用Node.js Runtime以支持完整的URL处理
@@ -10,9 +9,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ segments: string[] }> }
 ) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   let targetUrl = '';
 
   try {

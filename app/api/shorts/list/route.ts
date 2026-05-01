@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getShortsSourcesFromDB, getShortsSourceByKey } from "@/lib/shorts-sources-db";
 import type { ShortDramaSource } from "@/types/shorts-source";
-import { ensureUserOrAdminApiAuth } from "@/lib/api-auth";
 
 export interface ShortDrama {
   vod_id: number;
@@ -40,9 +39,6 @@ export interface ShortsListResponse {
 }
 
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const searchParams = request.nextUrl.searchParams;
     const page = searchParams.get("pg") || "1";

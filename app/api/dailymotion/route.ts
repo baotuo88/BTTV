@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600; // 缓存 1 小时
@@ -59,9 +58,6 @@ interface GraphQLResponse {
 
 
 export async function GET(request: Request) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   const { searchParams } = new URL(request.url);
   const username = searchParams.get('username') || 'kchow125';
   const page = parseInt(searchParams.get('page') || '1', 10);

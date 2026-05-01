@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ensureUserOrAdminApiAuth } from "@/lib/api-auth";
 import { assertSafeRemoteUrl } from "@/lib/server/safe-remote-url";
 
 export const dynamic = 'force-dynamic';
@@ -10,9 +9,6 @@ export const runtime = "nodejs";
  * 支持 m3u8 播放列表重写
  */
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const searchParams = request.nextUrl.searchParams;
     const videoUrl = searchParams.get('url');

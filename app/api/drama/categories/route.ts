@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, Category } from '@/types/drama';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 interface CategoryResponse {
   code: number;
@@ -13,9 +12,6 @@ interface CategoryResponse {
 }
 
 export async function POST(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const body = await request.json();
 

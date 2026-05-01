@@ -7,18 +7,18 @@ import {
   saveSelectedVodSourceToDB,
 } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
-import { ensureAdminApiAuth, ensureUserOrAdminApiAuth } from '@/lib/api-auth';
+import { ensureAdminApiAuth } from '@/lib/api-auth';
 
 // GET - 获取视频源列表
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const { searchParams } = request.nextUrl;
     const includeDisabled = searchParams.get('all') === 'true';
     
     if (includeDisabled) {
+      const authError = await ensureAdminApiAuth();
+      if (authError) return authError;
+
       const allSources = await getAllVodSourcesFromDB();
       return NextResponse.json({
         code: 200,

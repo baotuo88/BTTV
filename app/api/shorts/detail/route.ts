@@ -4,7 +4,6 @@ import {
   getShortsSourceByKey,
 } from "@/lib/shorts-sources-db";
 import type { ShortDramaSource } from "@/types/shorts-source";
-import { ensureUserOrAdminApiAuth } from "@/lib/api-auth";
 
 export interface Episode {
   name: string;
@@ -46,9 +45,6 @@ function parsePlayUrl(playUrl: string): Episode[] {
 }
 
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const searchParams = request.nextUrl.searchParams;
     const ids = searchParams.get("ids");

@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 import { recordSourceProbeResults, sortVodSourcesByHealth } from '@/lib/vod-source-health';
 
 interface VodItem {
@@ -159,9 +158,6 @@ async function searchSingleSource(
 }
 
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   const searchParams = request.nextUrl.searchParams;
   const title = searchParams.get('title');
   const doubanId = searchParams.get('douban_id');

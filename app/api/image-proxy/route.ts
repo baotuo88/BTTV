@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ensureUserOrAdminApiAuth } from "@/lib/api-auth";
 import { assertSafeRemoteUrl } from "@/lib/server/safe-remote-url";
 
 export const runtime = "nodejs";
@@ -98,9 +97,6 @@ async function fetchImageWithProxy(url: string): Promise<Response> {
 }
 
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const url = request.nextUrl.searchParams.get('url');
     

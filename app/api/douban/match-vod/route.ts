@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 import { recordSourceProbeResults, sortVodSourcesByHealth } from '@/lib/vod-source-health';
 
 interface VodItem {
@@ -178,9 +177,6 @@ function getMatchConfidence(vodName: string, title: string): 'high' | 'medium' |
 
 // 根据豆瓣影片信息匹配所有VOD播放源
 export async function POST(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const body = await request.json();
     const { douban_id, title, year } = body;

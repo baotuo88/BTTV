@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { VodSource } from '@/types/drama';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 
 interface ParseResponse {
   code: number;
@@ -19,9 +18,6 @@ function generateRandomToken(): string {
 }
 
 export async function POST(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   try {
     const body = await request.json();
     const { url, source } = body as { url: string; source: VodSource };

@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
-import { ensureUserOrAdminApiAuth } from '@/lib/api-auth';
 import {
   recordSourceProbeResults,
   sortVodSourcesByHealth,
@@ -180,9 +179,6 @@ async function searchSingleSource(source: VodSource, keyword: string) {
 
 // 流式搜索 API - 使用 Server-Sent Events
 export async function GET(request: NextRequest) {
-  const authError = await ensureUserOrAdminApiAuth();
-  if (authError) return authError;
-
   const searchParams = request.nextUrl.searchParams;
   const keyword = searchParams.get('q');
 
