@@ -243,6 +243,9 @@ export default function PlayPage() {
   const stallRetryTriedRef = useRef<Set<string>>(new Set());
   const sourceBootAtRef = useRef<number>(Date.now());
   const firstFrameMarkedSourceRef = useRef<string>("");
+  const rankedSourcesRef = useRef<AvailableSource[]>([]);
+  const lastDetailFetchKeyRef = useRef<string>("");
+  const detailFetchInFlightRef = useRef(false);
   const localRetryTokenRef = useRef(0);
   const [localRetryToken, setLocalRetryToken] = useState(0);
   const [queueEnabled, setQueueEnabled] = useState(true);
@@ -257,6 +260,10 @@ export default function PlayPage() {
         computeSourceScore(a, metrics, serverQualityMap, adaptiveCapabilityMap)
     );
   }, [availableSources, serverQualityMap, adaptiveCapabilityMap]);
+
+  useEffect(() => {
+    rankedSourcesRef.current = rankedSources;
+  }, [rankedSources]);
 
   useEffect(() => {
     setSourceLockPrefs(readSourceLockPrefs());
@@ -541,8 +548,8 @@ export default function PlayPage() {
         setError(null);
 
         let sourceKey = currentSourceKey || effectiveLockedSourceKey;
-        if (!sourceKey && rankedSources.length > 0) {
-          sourceKey = rankedSources[0].source_key;
+        if (!sourceKey && rankedSourcesRef.current.length > 0) {
+          sourceKey = rankedSourcesRef.current[0].source_key;
         }
 
         if (!sourceKey && selectedVodSource) {
@@ -558,6 +565,13 @@ export default function PlayPage() {
           setLoading(false);
           return;
         }
+
+        const fetchKey = `${dramaId}:${source.key}`;
+        if (detailFetchInFlightRef.current || fetchKey === lastDetailFetchKeyRef.current) {
+          return;
+        }
+        detailFetchInFlightRef.current = true;
+        lastDetailFetchKeyRef.current = fetchKey;
 
         // 保存当前使用的视频源
         setCurrentVodSource(source);
@@ -625,6 +639,7 @@ export default function PlayPage() {
         }
         setError("获取影视详情失败，请稍后重试");
       } finally {
+        detailFetchInFlightRef.current = false;
         setLoading(false);
       }
     };
@@ -637,7 +652,6 @@ export default function PlayPage() {
     currentSourceKey,
     effectiveLockedSourceKey,
     availableSources,
-    rankedSources,
     vodSources,
     selectedVodSource,
   ]);
