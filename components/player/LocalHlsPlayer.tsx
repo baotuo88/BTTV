@@ -926,7 +926,8 @@ export function LocalHlsPlayer({
         errorMsg = "视频链接已过期或无效（403），请返回重新选择";
       } else if (statusCode) {
         errorMsg = `视频清单加载失败 (HTTP ${statusCode})`;
-        canRetry = true;
+        // 5xx 代表线路服务端异常，优先触发外层自动切源
+        canRetry = statusCode < 500;
       } else {
         errorMsg = "视频清单加载失败，请检查网络连接";
         canRetry = true;
