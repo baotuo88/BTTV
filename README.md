@@ -12,9 +12,34 @@
 
 🌐 **项目地址**: [https://github.com/baotuo88/BTTV](https://github.com/baotuo88/BTTV)
 
-[功能特性](#-功能特性) • [部署方式](#-部署方式) • [环境变量](#-环境变量) • [本地开发](#-本地开发)
+[功能特性](#-功能特性) • [架构说明](#-架构说明) • [部署方式](#-部署方式) • [环境变量](#-环境变量) • [本地开发](#-本地开发)
 
 </div>
+
+---
+
+## 🧩 架构说明
+
+本项目由**两个独立部分**组成，部署前请务必理解它们的关系：
+
+```
+用户浏览器
+   │
+   ├── 前端 + API（本仓库）           → Vercel / Docker / VPS
+   │      · Next.js 应用、播放器、用户系统、后台管理
+   │      · 内置图片代理、视频代理、鉴权中间件
+   │      · 数据持久化到 MongoDB
+   │
+   └── 豆瓣数据微服务（独立项目，需自行部署）
+          · 提供首页 Hero、分类、搜索、详情、追剧日历等数据
+          · 通过 NEXT_PUBLIC_DOUBAN_API_URL 环境变量接入
+          · 参考：unilei/kerkerker-douban-service（Go + Redis）
+```
+
+> ⚠️ **重要**：首页封面、豆瓣评分等数据来自**豆瓣数据微服务**，不是本仓库自带的。
+> 如果不配置 `NEXT_PUBLIC_DOUBAN_API_URL` 指向一个可用的后端，首页会报 `Failed to fetch`。
+> 你需要自行部署一份豆瓣数据服务（推荐用 Docker 部署到自己的 VPS / 小主机 / Fly.io 等），
+> 并在其 CORS 白名单中放行你的前端域名，或用同源反代规避跨域。
 
 ---
 
@@ -69,16 +94,31 @@
 **步骤：**
 
 1. 点击上方按钮，Fork 项目到 Vercel
-2. 在 Vercel 控制台设置环境变量：
-   ```
-   STORAGE_DRIVER=mongodb
-   MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/bttv
-   ADMIN_PASSWORD=your_password
-   ALLOW_REGISTER=true
-   ```
-3. 部署完成！
+2. 在 Vercel 控制台 **Settings → Environment Variables** 设置以下环境变量（Production / Preview / Development 都勾选）：
 
-> 💡 **提示**：Vercel 部署需要使用云端 MongoDB（如 [MongoDB Atlas](https://www.mongodb.com/atlas) 免费版）
+   **必配：**
+   ```
+   MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/
+   MONGODB_DB_NAME=bttv
+   ADMIN_PASSWORD=你的后台密码
+   PROXY_SIGN_SECRET=用 openssl rand -hex 32 生成的随机串
+   NEXT_PUBLIC_DOUBAN_API_URL=https://你的豆瓣数据服务域名
+   ```
+
+   **建议配（品牌信息）：**
+   ```
+   NEXT_PUBLIC_SITE_NAME=宝拓影视
+   NEXT_PUBLIC_SITE_TITLE=宝拓影视
+   NEXT_PUBLIC_SITE_DESCRIPTION=你的站点简介
+   ```
+
+3. 保存后 **Redeploy** 一次使环境变量生效。
+
+> ⚠️ **Vercel 部署注意事项：**
+> - **不要**设置 `STORAGE_DRIVER=local`。Vercel serverless 文件系统是临时的，每次冷启动清空，会导致用户、视频源、配置全部丢失。**Vercel 上必须用 MongoDB**（不设 `STORAGE_DRIVER` 即默认走 MongoDB）。
+> - `PROXY_SIGN_SECRET` **必须显式配置**且保持稳定，否则 serverless 各冷启动实例签名不一致，视频播放会随机 403。
+> - `NEXT_PUBLIC_DOUBAN_API_URL` 不配则首页无数据（见[架构说明](#-架构说明)）。
+> - 需要使用云端 MongoDB（如 [MongoDB Atlas](https://www.mongodb.com/atlas) 免费版），记得在 Atlas 网络白名单放行 `0.0.0.0/0`（Vercel 出口 IP 不固定）。
 
 ---
 
@@ -161,33 +201,38 @@ cd ~/bttv
 
 ## ⚙️ 环境变量
 
-### 存储变量
+### 🔴 必配变量
 
-| 变量名           | 说明                                      | 默认值        |
+| 变量名           | 说明                                      | 默认值 / 备注 |
 | ---------------- | ----------------------------------------- | ------------- |
-| `STORAGE_DRIVER` | 存储模式，`local` 为服务器本地文件，`mongodb` 为 MongoDB | `local` |
-| `LOCAL_DATA_DIR` | 本地文件存储目录（Docker Compose 会覆盖为 `/app/data`） | `./data` |
-| `MONGODB_URI`    | MongoDB 连接字符串，仅 `STORAGE_DRIVER=mongodb` 时需要 | - |
+| `MONGODB_URI`    | MongoDB 连接字符串。**Vercel 部署下数据的唯一持久化方案**，不配数据会丢 | 无（本地/Docker 可用 `STORAGE_DRIVER=local` 替代） |
 | `MONGODB_DB_NAME`| MongoDB 数据库名称                         | `bttv`        |
+| `ADMIN_PASSWORD` | 后台管理密码（`/login` 登录）。不配则后台进不去 | 无 |
+| `PROXY_SIGN_SECRET` | 视频代理 URL 签名密钥。**必须显式配置且保持稳定**，建议 `openssl rand -hex 32`。不配会抛错、播放随机 403 | 无（可回退 `ADMIN_PASSWORD`，但强烈建议独立配置） |
+| `NEXT_PUBLIC_DOUBAN_API_URL` | 豆瓣数据微服务地址（见[架构说明](#-架构说明)）。不配则首页无数据 | 无 |
 
-### 可选变量
+### 🟡 存储变量（本地 / Docker）
+
+| 变量名           | 说明                                      | 默认值 |
+| ---------------- | ----------------------------------------- | ------ |
+| `STORAGE_DRIVER` | 存储模式，`local` 为本地 JSON 文件，其它值走 MongoDB。**Vercel 上禁用 `local`** | `local` |
+| `LOCAL_DATA_DIR` | 本地文件存储目录（Docker Compose 会覆盖为 `/app/data`） | `./data` |
+
+### 🟢 可选变量
 
 | 变量名                        | 说明           | 默认值                               |
 | ----------------------------- | -------------- | ------------------------------------ |
-| `ADMIN_PASSWORD`              | 后台管理密码   | 必填（无默认值）                     |
 | `ALLOW_REGISTER`              | 是否允许新用户注册（支持 `true/false/1/0/on/off`） | `true` |
-| `SITE_NAME`                   | 站点名称（用于导航品牌） | `宝拓影视`                   |
-| `SITE_TITLE`                  | 浏览器标题（SEO title） | `宝拓影视 - 免费影视在线观看` |
-| `SITE_DESCRIPTION`            | 站点描述（SEO description） | -                           |
-| `NEXT_PUBLIC_SITE_NAME`       | 前端回退站点名称（可选） | -                              |
-| `NEXT_PUBLIC_SITE_TITLE`      | 前端回退标题（可选）   | -                                |
-| `NEXT_PUBLIC_SITE_DESCRIPTION`| 前端回退描述（可选）   | -                                |
-| `PROXY_SIGN_SECRET`           | 代理 URL 签名密钥（建议设置） | 自动回退到 `ADMIN_PASSWORD` |
+| `SITE_NAME` / `NEXT_PUBLIC_SITE_NAME` | 站点名称（用于导航品牌）        | `宝拓影视` |
+| `SITE_TITLE` / `NEXT_PUBLIC_SITE_TITLE` | 浏览器标题（SEO title）       | `宝拓影视 - 免费影视在线观看` |
+| `SITE_DESCRIPTION` / `NEXT_PUBLIC_SITE_DESCRIPTION` | 站点描述（SEO description） | - |
+| `NEXT_PUBLIC_GA_ID`           | Google Analytics 衡量 ID（形如 `G-XXXX`）。不配则不注入 GA 统计脚本 | 无 |
 | `PROXY_ALLOWED_HOSTS`         | 代理域名白名单（逗号分隔，支持 `*.example.com`） | - |
-| `NEXT_PUBLIC_DANMU_API_URL`   | 弹幕 API 地址  | `https://danmuapi1-eight.vercel.app` |
-| `NEXT_PUBLIC_DANMU_API_TOKEN` | 弹幕 API Token | -                                    |
-| `RESEND_API_KEY`              | Resend 邮件 Key（找回密码） | -                     |
+| `NEXT_PUBLIC_DANMU_API_URL`   | 弹幕 API 地址（默认值为第三方公共服务，建议自建后替换） | `https://danmuapi1-eight.vercel.app` |
+| `NEXT_PUBLIC_DANMU_API_TOKEN` | 弹幕 API Token（默认值为公共服务示例值，建议替换） | `woshinidie` |
+| `RESEND_API_KEY`              | Resend 邮件 Key（找回密码功能，不配则该功能不可用） | - |
 | `RESEND_FROM_EMAIL`           | 发件人邮箱（找回密码）      | -                     |
+| `BUILD_TARGET`                | 设为 `docker` 时启用 Next.js standalone 输出（仅 Docker 构建需要，Vercel 无需设置） | - |
 
 ### 注册开关优先级说明
 
