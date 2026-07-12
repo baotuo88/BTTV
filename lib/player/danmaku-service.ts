@@ -1,9 +1,13 @@
 "use client";
 
 // 弹幕 API 配置
-const DANMU_API_URL =
-  process.env.NEXT_PUBLIC_DANMU_API_URL || "https://danmuapi1-eight.vercel.app";
-const DANMU_API_TOKEN = process.env.NEXT_PUBLIC_DANMU_API_TOKEN || "woshinidie";
+// 未配置 URL / TOKEN 时禁用弹幕功能，避免打到第三方公共部署上带来隐私和滥用风险。
+const DANMU_API_URL = process.env.NEXT_PUBLIC_DANMU_API_URL || "";
+const DANMU_API_TOKEN = process.env.NEXT_PUBLIC_DANMU_API_TOKEN || "";
+
+export function isDanmakuEnabled(): boolean {
+  return Boolean(DANMU_API_URL && DANMU_API_TOKEN);
+}
 
 // 类型定义
 export interface Anime {
@@ -114,6 +118,7 @@ export async function searchAnime(keyword: string): Promise<Anime[]> {
   if (!keyword || keyword.trim() === "") {
     return [];
   }
+  if (!isDanmakuEnabled()) return [];
 
   try {
     const url = `${getApiBaseUrl()}/api/v2/search/anime?keyword=${encodeURIComponent(
@@ -143,6 +148,7 @@ export async function searchAnime(keyword: string): Promise<Anime[]> {
  * 获取动漫详情（包含剧集列表）
  */
 export async function getBangumi(animeId: number): Promise<Bangumi | null> {
+  if (!isDanmakuEnabled()) return null;
   try {
     const url = `${getApiBaseUrl()}/api/v2/bangumi/${animeId}`;
     const response = await fetch(url);
@@ -169,6 +175,7 @@ export async function getBangumi(animeId: number): Promise<Bangumi | null> {
  * 获取弹幕数据
  */
 export async function getComments(episodeId: number): Promise<DanmakuItem[]> {
+  if (!isDanmakuEnabled()) return [];
   try {
     const url = `${getApiBaseUrl()}/api/v2/comment/${episodeId}?format=json`;
     const response = await fetch(url);
@@ -197,6 +204,7 @@ export async function getComments(episodeId: number): Promise<DanmakuItem[]> {
 export async function matchAnime(
   fileName: string
 ): Promise<MatchResponse | null> {
+  if (!isDanmakuEnabled()) return null;
   try {
     const url = `${getApiBaseUrl()}/api/v2/match`;
     const response = await fetch(url, {
@@ -312,6 +320,14 @@ export async function autoLoadDanmaku(videoTitle: string): Promise<AutoLoadResul
       success: false,
       danmaku: [],
       message: "视频标题为空",
+    };
+  }
+
+  if (!isDanmakuEnabled()) {
+    return {
+      success: false,
+      danmaku: [],
+      message: "弹幕服务未配置",
     };
   }
 

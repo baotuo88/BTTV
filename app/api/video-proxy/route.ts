@@ -68,7 +68,10 @@ export async function GET(request: NextRequest) {
       await assertHostAllowed(safeVideoUrl.hostname);
     }
 
-    console.log(`🎬 代理视频请求: ${safeVideoUrlString}`);
+    const IS_DEV = process.env.NODE_ENV !== "production";
+    if (IS_DEV) {
+      console.log(`🎬 代理视频请求: ${safeVideoUrlString}`);
+    }
 
     // 准备请求头 - 模拟真实浏览器
     const fetchHeaders: HeadersInit = {
@@ -96,24 +99,28 @@ export async function GET(request: NextRequest) {
       fetchHeaders['Range'] = rangeHeader;
     }
     
-    console.log('🔧 请求headers:', JSON.stringify(fetchHeaders, null, 2));
-    
+    if (IS_DEV) {
+      console.log('🔧 请求headers:', JSON.stringify(fetchHeaders, null, 2));
+    }
+
     const videoResponse = await fetch(safeVideoUrlString, {
       headers: fetchHeaders,
       signal: AbortSignal.timeout(30000)
     });
 
     if (!videoResponse.ok && videoResponse.status !== 206) {
-      console.error(`❌ 视频请求失败: ${videoResponse.status} ${videoResponse.statusText}`);
-      console.error('❌ 目标URL:', safeVideoUrlString);
-      console.error('❌ 响应headers:', JSON.stringify(Object.fromEntries(videoResponse.headers.entries()), null, 2));
-      
-      // 尝试读取错误响应体
-      try {
-        const errorText = await videoResponse.text();
-        console.error('❌ 错误响应内容:', errorText.substring(0, 500));
-      } catch (e) {
-        console.error('❌ 无法读取错误响应:', e);
+      console.warn(`❌ 视频请求失败: ${videoResponse.status} ${videoResponse.statusText}`);
+      if (IS_DEV) {
+        console.warn('❌ 目标URL:', safeVideoUrlString);
+        console.warn('❌ 响应headers:', JSON.stringify(Object.fromEntries(videoResponse.headers.entries()), null, 2));
+
+        // 尝试读取错误响应体
+        try {
+          const errorText = await videoResponse.text();
+          console.warn('❌ 错误响应内容:', errorText.substring(0, 500));
+        } catch (e) {
+          console.warn('❌ 无法读取错误响应:', e);
+        }
       }
       
       return NextResponse.json(

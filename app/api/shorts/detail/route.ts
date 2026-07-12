@@ -4,6 +4,9 @@ import {
   getShortsSourceByKey,
 } from "@/lib/shorts-sources-db";
 import type { ShortDramaSource } from "@/types/shorts-source";
+import { ensurePlaybackApiAuth } from "@/lib/api-auth";
+import { applyJsonRateLimit } from "@/lib/server/api-security";
+import { assertSafeSourceApi } from "@/lib/server/vod-source-security";
 
 export interface Episode {
   name: string;
@@ -44,7 +47,20 @@ function parsePlayUrl(playUrl: string): Episode[] {
   return episodes;
 }
 
+// 只允许数字/逗号，避免拼进 URL 变成路径注入
+const SHORTS_IDS_REGEX = /^[0-9]+(,[0-9]+)*$/;
+
 export async function GET(request: NextRequest) {
+  const playbackAuthError = await ensurePlaybackApiAuth();
+  if (playbackAuthError) return playbackAuthError;
+
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: "shorts:detail",
+    max: 60,
+    windowMs: 60_000,
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const ids = searchParams.get("ids");
@@ -53,6 +69,13 @@ export async function GET(request: NextRequest) {
     if (!ids) {
       return NextResponse.json(
         { code: 400, msg: "缺少 ids 参数", data: null },
+        { status: 400 }
+      );
+    }
+
+    if (!SHORTS_IDS_REGEX.test(ids)) {
+      return NextResponse.json(
+        { code: 400, msg: "ids 参数格式不合法", data: null },
         { status: 400 }
       );
     }
@@ -76,7 +99,18 @@ export async function GET(request: NextRequest) {
       source = sources[0];
     }
 
-    const apiUrl = `${source.api}?ac=detail&ids=${ids}`;
+    // 校验源 API 地址，避免历史脏数据触发 SSRF
+    try {
+      await assertSafeSourceApi(source.api);
+    } catch (err) {
+      console.warn("[Shorts Detail API] 源地址被拒绝:", err instanceof Error ? err.message : err);
+      return NextResponse.json(
+        { code: 400, msg: "短剧源地址不合法", data: null },
+        { status: 400 }
+      );
+    }
+
+    const apiUrl = `${source.api}?ac=detail&ids=${encodeURIComponent(ids)}`;
 
     const response = await fetch(apiUrl, {
       headers: {

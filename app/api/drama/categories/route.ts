@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, Category } from '@/types/drama';
+import { ensurePlaybackApiAuth } from '@/lib/api-auth';
+import { assertSafeVodSource } from '@/lib/server/vod-source-security';
 
 interface CategoryResponse {
   code: number;
@@ -12,8 +14,24 @@ interface CategoryResponse {
 }
 
 export async function POST(request: NextRequest) {
+  const playbackAuthError = await ensurePlaybackApiAuth();
+  if (playbackAuthError) return playbackAuthError;
+
   try {
     const body = await request.json();
+
+    try {
+      await assertSafeVodSource(body?.source);
+    } catch (err) {
+      return NextResponse.json<ApiResponse<Category[]>>(
+        {
+          code: 400,
+          msg: err instanceof Error ? err.message : '视频源地址不合法',
+          data: [],
+        },
+        { status: 400 }
+      );
+    }
 
     // 构建API请求参数
     const apiParams = new URLSearchParams({

@@ -13,6 +13,10 @@ import {
 // 使用Node.js Runtime以支持完整的URL处理
 export const runtime = 'nodejs';
 
+// 视频代理会被 m3u8 的每一个 TS/密钥分片调用，一部剧几千次；
+// 生产环境完整打印 URL/header/m3u8 摘要会把 Vercel 日志额度烧光。
+const IS_DEV = process.env.NODE_ENV !== 'production';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ segments: string[] }> }
@@ -42,8 +46,10 @@ export async function GET(
     // 重建目标URL
     targetUrl = decodeURIComponent(resolvedParams.segments.join('/'));
 
-    console.log('🔄 代理请求 segments:', resolvedParams.segments);
-    console.log('🔄 代理请求 targetUrl:', targetUrl);
+    if (IS_DEV) {
+      console.log('🔄 代理请求 segments:', resolvedParams.segments);
+      console.log('🔄 代理请求 targetUrl:', targetUrl);
+    }
 
     // 安全验证
     targetUrl = (await assertSafeRemoteUrl(targetUrl)).toString();
@@ -132,13 +138,17 @@ export async function GET(
     for (let i = 0; i < strategies.length; i++) {
       const remaining = deadline - Date.now();
       if (remaining < MIN_ATTEMPT_MS) {
-        console.log(`⏱️ 剩余预算不足 (${remaining}ms)，跳过策略${i + 1}`);
+        if (IS_DEV) {
+          console.log(`⏱️ 剩余预算不足 (${remaining}ms)，跳过策略${i + 1}`);
+        }
         break;
       }
       const attemptTimeout = Math.min(PER_STRATEGY_CAP_MS, remaining);
 
       const fetchHeaders = strategies[i]();
-      console.log(`🔧 策略${i + 1} 超时 ${attemptTimeout}ms:`, JSON.stringify(fetchHeaders, null, 2));
+      if (IS_DEV) {
+        console.log(`🔧 策略${i + 1} 超时 ${attemptTimeout}ms:`, JSON.stringify(fetchHeaders, null, 2));
+      }
 
       try {
         response = await fetch(targetUrl, {
@@ -154,12 +164,16 @@ export async function GET(
 
         // 403 或 5xx 且还有下一个策略，继续尝试
         if (i < strategies.length - 1) {
-          console.log(`⚠️ 策略${i + 1} 返回 ${response.status}，尝试下一策略`);
+          if (IS_DEV) {
+            console.log(`⚠️ 策略${i + 1} 返回 ${response.status}，尝试下一策略`);
+          }
           continue;
         }
       } catch (error) {
         lastError = error as Error;
-        console.error(`❌ 策略${i + 1}网络请求失败:`, error);
+        if (IS_DEV) {
+          console.warn(`策略${i + 1}网络请求失败:`, error instanceof Error ? error.message : error);
+        }
         // 继续下一策略，除非预算不够
       }
     }
@@ -225,19 +239,19 @@ export async function GET(
     // 获取响应内容类型
     const contentType = response.headers.get('Content-Type') || 'application/octet-stream';
 
-    console.log('📌 Content-Type:', contentType);
-    console.log('📌 targetUrl:', targetUrl);
-    console.log('📌 是否m3u8:', targetUrl.endsWith('.m3u8'));
+    if (IS_DEV) {
+      console.log('📌 Content-Type:', contentType, '| is m3u8:', targetUrl.endsWith('.m3u8'));
+    }
 
     // 先处理m3u8文件（优先级最高）
     if (contentType.includes('mpegurl') || contentType.includes('m3u8') || targetUrl.endsWith('.m3u8')) {
-      console.log('✅ 开始处理m3u8文件');
       const text = await response.text();
-      console.log('📄 原始m3u8内容 (前200字符):', text.substring(0, 200));
 
       // 处理m3u8中的相对路径
       const processedM3u8 = processM3u8Content(text, targetUrl);
-      console.log('📄 处理后m3u8内容 (前200字符):', processedM3u8.substring(0, 200));
+      if (IS_DEV) {
+        console.log('📄 m3u8 已重写', text.length, '->', processedM3u8.length, '字节');
+      }
 
       return new NextResponse(processedM3u8, {
         status: 200,
@@ -370,8 +384,9 @@ function processM3u8Content(content: string, baseUrl: string): string {
   const lines = content.split('\n');
   const base = new URL(baseUrl);
 
-  console.log('📝 processM3u8Content baseUrl:', baseUrl);
-  console.log('📝 processM3u8Content base.href:', base.href);
+  if (IS_DEV) {
+    console.log('📝 processM3u8Content baseUrl:', baseUrl);
+  }
 
   // 辅助函数：解析并代理URL
   const resolveAndProxy = (urlString: string): string => {
@@ -385,7 +400,9 @@ function processM3u8Content(content: string, baseUrl: string): string {
       const signed = createProxySignature(url.href);
       return `/api/video-proxy/${encodeURIComponent(url.href)}?exp=${signed.expiresAt}&sig=${encodeURIComponent(signed.signature)}`;
     } catch (e) {
-      console.error(`❌ URL解析失败: "${urlString}"`, e);
+      if (IS_DEV) {
+        console.error(`❌ URL解析失败: "${urlString}"`, e);
+      }
       return urlString;
     }
   };
@@ -397,7 +414,6 @@ function processM3u8Content(content: string, baseUrl: string): string {
       if (uriMatch && uriMatch[1]) {
         const originalUri = uriMatch[1];
         const proxiedUri = resolveAndProxy(originalUri);
-        console.log(`🔑 密钥URI: "${originalUri}" => "${proxiedUri}"`);
         return line.replace(/URI=["']?[^"',]+["']?/, `URI="${proxiedUri}"`);
       }
       return line;
@@ -410,9 +426,7 @@ function processM3u8Content(content: string, baseUrl: string): string {
 
     // 处理片段URL
     const trimmedLine = line.trim();
-    const proxiedUrl = resolveAndProxy(trimmedLine);
-    console.log(`📝 片段: "${trimmedLine}" => "${proxiedUrl}"`);
-    return proxiedUrl;
+    return resolveAndProxy(trimmedLine);
   });
 
   return processedLines.join('\n');

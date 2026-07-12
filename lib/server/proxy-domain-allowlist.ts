@@ -12,14 +12,12 @@ const STATIC_ALLOWED_HOSTS = [
   "img3.doubanio.com",
   "img9.doubanio.com",
   "image.tmdb.org",
-  "wsrv.link0.me",
   "api.dailymotion.com",
   "graphql.api.dailymotion.com",
   "geo.dailymotion.com",
   "www.dailymotion.com",
   "www.dmcdn.net",
   "dmcdn.net",
-  "danmuapi1-eight.vercel.app",
 ];
 
 interface PlayerConfigDocument {

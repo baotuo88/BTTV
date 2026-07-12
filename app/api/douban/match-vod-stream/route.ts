@@ -3,6 +3,9 @@ import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource } from '@/types/drama';
 import { recordSourceProbeResults, sortVodSourcesByHealth } from '@/lib/vod-source-health';
 import { searchDramaList } from '@/lib/drama-search';
+import { ensurePlaybackApiAuth } from '@/lib/api-auth';
+import { applyJsonRateLimit } from '@/lib/server/api-security';
+import { assertSafeVodSource } from '@/lib/server/vod-source-security';
 
 interface MatchResult {
   source_key: string;
@@ -120,18 +123,38 @@ async function searchSingleSource(
 }
 
 export async function GET(request: NextRequest) {
+  const playbackAuthError = await ensurePlaybackApiAuth();
+  if (playbackAuthError) return playbackAuthError;
+
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: 'douban:match-vod-stream',
+    max: 30,
+    windowMs: 60_000,
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   const searchParams = request.nextUrl.searchParams;
   const title = searchParams.get('title');
   const doubanId = searchParams.get('douban_id');
-  
+
   if (!title) {
     return new Response('Missing title parameter', { status: 400 });
   }
-  
-  // 获取所有视频源
+
+  // 获取所有视频源，二次校验以过滤 DB 中被写入了内网 / 本机地址的历史配置
   const allSources = await getVodSourcesFromDB();
-  const orderedSources = await sortVodSourcesByHealth(allSources);
-  
+  const orderedSourcesAll = await sortVodSourcesByHealth(allSources);
+
+  const orderedSources: VodSource[] = [];
+  for (const source of orderedSourcesAll) {
+    try {
+      await assertSafeVodSource(source);
+      orderedSources.push(source);
+    } catch (error) {
+      console.warn(`[douban/match-vod-stream] 跳过不安全的视频源 ${source.key}:`, error instanceof Error ? error.message : error);
+    }
+  }
+
   if (orderedSources.length === 0) {
     return new Response('No video sources configured', { status: 404 });
   }

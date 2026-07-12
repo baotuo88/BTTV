@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, DramaDetail, Episode, VodSource } from '@/types/drama';
 import { ensurePlaybackApiAuth } from '@/lib/api-auth';
+import { assertSafeVodSource } from '@/lib/server/vod-source-security';
 
 interface DetailItem {
   vod_id: number;
@@ -103,7 +104,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const source: VodSource = body.source;
     const vodName: string = body.vodName; // 用于代理搜索
-    
+
+    try {
+      await assertSafeVodSource(source);
+    } catch (err) {
+      return errorResponse(err instanceof Error ? err.message : '视频源地址不合法', 400);
+    }
+
     let response: Response;
 
     // 如果有搜索代理，使用代理搜索获取详情

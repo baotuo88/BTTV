@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getShortsSourcesFromDB, getShortsSourceByKey } from "@/lib/shorts-sources-db";
 import type { ShortDramaSource } from "@/types/shorts-source";
+import { ensurePlaybackApiAuth } from "@/lib/api-auth";
+import { applyJsonRateLimit } from "@/lib/server/api-security";
+import { assertSafeSourceApi } from "@/lib/server/vod-source-security";
 
 export interface ShortDrama {
   vod_id: number;
@@ -39,9 +42,27 @@ export interface ShortsListResponse {
 }
 
 export async function GET(request: NextRequest) {
+  const playbackAuthError = await ensurePlaybackApiAuth();
+  if (playbackAuthError) return playbackAuthError;
+
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: "shorts:list",
+    max: 60,
+    windowMs: 60_000,
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const searchParams = request.nextUrl.searchParams;
-    const page = searchParams.get("pg") || "1";
+    const pageRaw = searchParams.get("pg") || "1";
+    const pageNum = Number.parseInt(pageRaw, 10);
+    if (!Number.isFinite(pageNum) || pageNum < 1 || pageNum > 500) {
+      return NextResponse.json(
+        { code: 400, msg: "分页参数不合法", data: null },
+        { status: 400 }
+      );
+    }
+    const page = String(pageNum);
     const sourceKey = searchParams.get("source");
 
     // 从数据库获取短剧源配置
@@ -76,6 +97,17 @@ export async function GET(request: NextRequest) {
       source = sources[0];
     }
 
+    // 校验源地址是否安全（防止历史数据里塞入内网 / 本机地址）
+    try {
+      await assertSafeSourceApi(source.api);
+    } catch (err) {
+      console.warn(`[shorts/list] 短剧源 ${source.key} 地址不安全:`, err instanceof Error ? err.message : err);
+      return NextResponse.json(
+        { code: 400, msg: "短剧源地址不合法", data: null },
+        { status: 400 }
+      );
+    }
+
     // 构建 API URL
     let apiUrl = `${source.api}?pg=${page}`;
     if (source.typeId) {
@@ -87,6 +119,7 @@ export async function GET(request: NextRequest) {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
       },
       next: { revalidate: 300 }, // 5分钟缓存
+      signal: AbortSignal.timeout(15_000),
     });
 
     if (!response.ok) {

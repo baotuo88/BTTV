@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { VodSource } from '@/types/drama';
 import { ensurePlaybackApiAuth } from '@/lib/api-auth';
+import { assertSafeRemoteUrl } from '@/lib/server/safe-remote-url';
 
 interface ParseResponse {
   code: number;
@@ -40,6 +41,17 @@ export async function POST(request: NextRequest) {
         msg: 'success',
         data: { url },
       });
+    }
+
+    // 校验 parseProxy 的地址，避免 SSRF
+    try {
+      await assertSafeRemoteUrl(source.parseProxy);
+    } catch (error) {
+      console.warn('[Parse API] 解析代理地址被拒绝:', error instanceof Error ? error.message : error);
+      return NextResponse.json(
+        { code: 400, msg: '解析代理地址不合法', data: null },
+        { status: 400 }
+      );
     }
 
     // 构建解析请求URL

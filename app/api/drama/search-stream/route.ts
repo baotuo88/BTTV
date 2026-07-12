@@ -5,6 +5,9 @@ import {
   recordSourceProbeResults,
   sortVodSourcesByHealth,
 } from '@/lib/vod-source-health';
+import { ensurePlaybackApiAuth } from '@/lib/api-auth';
+import { assertSafeVodSource } from '@/lib/server/vod-source-security';
+import { applyJsonRateLimit } from '@/lib/server/api-security';
 
 interface DramaListItem {
   vod_id: number;
@@ -179,6 +182,16 @@ async function searchSingleSource(source: VodSource, keyword: string) {
 
 // 流式搜索 API - 使用 Server-Sent Events
 export async function GET(request: NextRequest) {
+  const playbackAuthError = await ensurePlaybackApiAuth();
+  if (playbackAuthError) return playbackAuthError;
+
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: 'drama:search-stream',
+    max: 30,
+    windowMs: 60_000,
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   const searchParams = request.nextUrl.searchParams;
   const keyword = searchParams.get('q');
 
@@ -192,8 +205,19 @@ export async function GET(request: NextRequest) {
   // 获取所有视频源
   const allSources = await getVodSourcesFromDB();
   const orderedSources = await sortVodSourcesByHealth(allSources);
-  
-  if (orderedSources.length === 0) {
+
+  // 视频源来自 DB 由管理员配置，但仍二次校验，防止历史数据里塞入内网地址
+  const safeSources: VodSource[] = [];
+  for (const source of orderedSources) {
+    try {
+      await assertSafeVodSource(source);
+      safeSources.push(source);
+    } catch (error) {
+      console.warn(`[drama/search-stream] 跳过不安全的视频源 ${source.key}:`, error instanceof Error ? error.message : error);
+    }
+  }
+
+  if (safeSources.length === 0) {
     return new Response(JSON.stringify({ error: '未配置视频源' }), {
       status: 404,
       headers: { 'Content-Type': 'application/json' },
@@ -204,13 +228,13 @@ export async function GET(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
-      
+
       // 发送初始信息
       controller.enqueue(encoder.encode(
-        `data: ${JSON.stringify({ 
-          type: 'init', 
-          totalSources: orderedSources.length,
-          sources: orderedSources.map((s, index) => ({
+        `data: ${JSON.stringify({
+          type: 'init',
+          totalSources: safeSources.length,
+          sources: safeSources.map((s, index) => ({
             key: s.key,
             name: s.name,
             rank: index + 1,
@@ -219,7 +243,7 @@ export async function GET(request: NextRequest) {
       ));
 
       // 并行搜索所有源，但每个完成就立即推送
-      const searchPromises = orderedSources.map(async (source) => {
+      const searchPromises = safeSources.map(async (source) => {
         const result = await searchSingleSource(source, keyword);
         
         // 每个源完成后立即推送结果

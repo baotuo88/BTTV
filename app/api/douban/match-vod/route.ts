@@ -3,6 +3,9 @@ import { getVodSourcesFromDB } from '@/lib/vod-sources-db';
 import { VodSource, Drama } from '@/types/drama';
 import { recordSourceProbeResults, sortVodSourcesByHealth } from '@/lib/vod-source-health';
 import { searchDramaList } from '@/lib/drama-search';
+import { ensurePlaybackApiAuth } from '@/lib/api-auth';
+import { applyJsonRateLimit } from '@/lib/server/api-security';
+import { assertSafeVodSource } from '@/lib/server/vod-source-security';
 
 type VodItem = Drama;
 
@@ -135,6 +138,16 @@ function getMatchConfidence(vodName: string, title: string): 'high' | 'medium' |
 
 // 根据豆瓣影片信息匹配所有VOD播放源
 export async function POST(request: NextRequest) {
+  const playbackAuthError = await ensurePlaybackApiAuth();
+  if (playbackAuthError) return playbackAuthError;
+
+  const rateLimitResponse = applyJsonRateLimit(request, {
+    scope: 'douban:match-vod',
+    max: 30,
+    windowMs: 60_000,
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const { douban_id, title, year } = body;
@@ -146,12 +159,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`\n🔍 开始搜索所有视频源: ${title}`);
-
     // 从数据库读取视频源配置
     const allSources: VodSource[] = await getVodSourcesFromDB();
-    const orderedSources: VodSource[] = await sortVodSourcesByHealth(allSources);
-    
+    const orderedSourcesAll: VodSource[] = await sortVodSourcesByHealth(allSources);
+
+    // 二次校验：过滤掉配置里被写入了内网 / 本机地址的历史源
+    const orderedSources: VodSource[] = [];
+    for (const source of orderedSourcesAll) {
+      try {
+        await assertSafeVodSource(source);
+        orderedSources.push(source);
+      } catch (error) {
+        console.warn(`[douban/match-vod] 跳过不安全的视频源 ${source.key}:`, error instanceof Error ? error.message : error);
+      }
+    }
+
     if (orderedSources.length === 0) {
       return NextResponse.json(
         { code: 404, message: '未配置视频源，请先在后台管理中配置', data: null },
@@ -161,7 +183,6 @@ export async function POST(request: NextRequest) {
     
     // 并行搜索所有源
     const matchPromises = orderedSources.map(async (source, index) => {
-      console.log(`  ⏳ 搜索源: ${source.name}...`);
       const matchResult = await matchSingleSource(
         source,
         title,

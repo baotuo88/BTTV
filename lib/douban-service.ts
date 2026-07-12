@@ -11,7 +11,7 @@ const DOUBAN_API_URL = process.env.NEXT_PUBLIC_DOUBAN_API_URL || ''
 
 if (typeof window !== 'undefined' && !DOUBAN_API_URL) {
   console.error(
-    '[douban-service] 未配置 NEXT_PUBLIC_DOUBAN_API_URL。请在 Vercel 环境变量中设置为你的豆瓣后端地址（例如 https://doban.baotuo.qzz.io），并重新部署。'
+    '[douban-service] 未配置 NEXT_PUBLIC_DOUBAN_API_URL。请在部署环境变量中设置为你的豆瓣数据服务地址，并重新部署。'
   )
 }
 

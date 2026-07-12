@@ -57,10 +57,36 @@ interface GraphQLResponse {
 }
 
 
+// Dailymotion 用户名 / channel handle 只允许字母数字与常见分隔符，
+// 用来阻止 `../` 之类字符切换到 dailymotion.com 上其它路径。
+const DAILYMOTION_USERNAME_REGEX = /^[A-Za-z0-9_.-]{1,64}$/;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const username = searchParams.get('username') || 'kchow125';
-  const page = parseInt(searchParams.get('page') || '1', 10);
+  const username = searchParams.get('username');
+  const pageRaw = searchParams.get('page') || '1';
+  const page = Number.parseInt(pageRaw, 10);
+
+  if (!username) {
+    return NextResponse.json(
+      { error: 'Missing username parameter' },
+      { status: 400 }
+    );
+  }
+
+  if (!DAILYMOTION_USERNAME_REGEX.test(username)) {
+    return NextResponse.json(
+      { error: 'Invalid username format' },
+      { status: 400 }
+    );
+  }
+
+  if (!Number.isFinite(page) || page < 1 || page > 500) {
+    return NextResponse.json(
+      { error: 'Invalid page parameter' },
+      { status: 400 }
+    );
+  }
 
   try {
     // 先尝试使用 REST API（无需认证）
@@ -68,10 +94,10 @@ export async function GET(request: Request) {
       const channelData = await fetchChannelDataFromRestAPI(username, page);
       return NextResponse.json(channelData);
     } catch (restError) {
-      console.log('REST API failed, trying GraphQL:', restError);
+      console.warn('[Dailymotion] REST API 失败，尝试 GraphQL:', restError instanceof Error ? restError.message : restError);
       // 如果 REST API 失败，尝试 GraphQL
       const channelData = await fetchChannelDataFromGraphQL(username, page);
-      
+
       if (!channelData.videos || channelData.videos.length === 0) {
         return NextResponse.json(
           { error: 'No videos found for this channel' },
@@ -82,11 +108,11 @@ export async function GET(request: Request) {
       return NextResponse.json(channelData);
     }
   } catch (error) {
-    console.error('Error fetching Dailymotion data:', error);
+    console.warn('[Dailymotion] 获取数据失败:', error instanceof Error ? error.message : error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to fetch Dailymotion data';
     return NextResponse.json(
       { error: errorMessage },
-      { status: 500 }
+      { status: 502 }
     );
   }
 }
@@ -115,20 +141,22 @@ async function fetchChannelDataFromRestAPI(
   
   // 获取用户信息
   const userResponse = await fetch(
-    `https://api.dailymotion.com/user/${channelName}?fields=id,screenname,avatar_240_url`
+    `https://api.dailymotion.com/user/${encodeURIComponent(channelName)}?fields=id,screenname,avatar_240_url`,
+    { signal: AbortSignal.timeout(10_000) }
   );
-  
+
   if (!userResponse.ok) {
     throw new Error(`Failed to fetch user: ${userResponse.status}`);
   }
-  
+
   const userData = await userResponse.json();
-  
+
   // 获取视频列表
   const videosResponse = await fetch(
-    `https://api.dailymotion.com/user/${channelName}/videos?fields=id,title,thumbnail_240_url,duration,created_time&limit=${limit}&page=${page}`
+    `https://api.dailymotion.com/user/${encodeURIComponent(channelName)}/videos?fields=id,title,thumbnail_240_url,duration,created_time&limit=${limit}&page=${page}`,
+    { signal: AbortSignal.timeout(10_000) }
   );
-  
+
   if (!videosResponse.ok) {
     throw new Error(`Failed to fetch videos: ${videosResponse.status}`);
   }
@@ -160,6 +188,15 @@ async function fetchChannelDataFromRestAPI(
 }
 
 async function getAccessToken(): Promise<string> {
+  const clientId = process.env.DAILYMOTION_CLIENT_ID;
+  const clientSecret = process.env.DAILYMOTION_CLIENT_SECRET;
+
+  // 官方要求 client_credentials 必须带 client_id / client_secret，
+  // 未配置时直接跳过 GraphQL，避免打空请求打爆响应时间
+  if (!clientId || !clientSecret) {
+    throw new Error('Dailymotion GraphQL 未配置 client_id/client_secret');
+  }
+
   try {
     const response = await fetch('https://graphql.api.dailymotion.com/oauth/token', {
       method: 'POST',
@@ -168,12 +205,15 @@ async function getAccessToken(): Promise<string> {
       },
       body: new URLSearchParams({
         grant_type: 'client_credentials',
+        client_id: clientId,
+        client_secret: clientSecret,
       }),
+      signal: AbortSignal.timeout(10_000),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OAuth token error:', response.status, errorText);
+      console.warn('[Dailymotion] OAuth token 请求失败:', response.status, errorText.slice(0, 200));
       throw new Error(`Failed to get access token: ${response.status}`);
     }
 
@@ -181,10 +221,10 @@ async function getAccessToken(): Promise<string> {
     if (!data.access_token) {
       throw new Error('No access token in response');
     }
-    
+
     return data.access_token;
   } catch (error) {
-    console.error('Failed to get OAuth token:', error);
+    console.warn('[Dailymotion] 获取 OAuth token 失败:', error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -254,6 +294,7 @@ async function fetchChannelDataFromGraphQL(
       variables,
       query,
     }),
+    signal: AbortSignal.timeout(10_000),
   });
 
   if (!response.ok) {
