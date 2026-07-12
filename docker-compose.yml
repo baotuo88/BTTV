@@ -1,0 +1,33 @@
+name: bttv
+
+services:
+  # Next.js 应用（生产环境）
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bttv-app
+    ports:
+      - "3008:3000"
+    environment:
+      - NODE_ENV=production
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - ALLOW_REGISTER=${ALLOW_REGISTER:-true}
+      - STORAGE_DRIVER=${STORAGE_DRIVER:-local}
+      - LOCAL_DATA_DIR=/app/data
+      - MONGODB_URI=${MONGODB_URI:-}
+      - MONGODB_DB_NAME=${MONGODB_DB_NAME:-}
+      - NEXT_PUBLIC_DOUBAN_API_URL=${NEXT_PUBLIC_DOUBAN_API_URL:-}
+    volumes:
+      - bttv-data:/app/data
+    networks:
+      - bttv-network
+    restart: unless-stopped
+
+networks:
+  bttv-network:
+    driver: bridge
+
+volumes:
+  bttv-data:
+    driver: local
